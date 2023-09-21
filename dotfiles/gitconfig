@@ -1,0 +1,10 @@
+[user]
+	name = Weifeng Zeng
+	email = 13025291859@163.com
+[core]
+	editor = vim
+        longpaths = true
+[pull]
+	rebase = false
+[http]
+	postBuffer = 524288000

@@ -1,0 +1,32 @@
+[colors]
+primary.background= "#1E1E2E"
+primary.foreground= "0xd6d6d6"
+
+cursor = {text = "#CDD6F4", cursor = "#D9D9D9"}
+
+normal.black= '#181A1F'
+normal.red= '#E86671'
+normal.green= '#98C379'
+normal.yellow= '#E5C07B'
+normal.blue= '#61AFEF'
+normal.magenta= '#C678DD'
+normal.cyan= '#54AFBC'
+normal.white= '#ABB2BF'
+
+bright.black= '#5C6370'
+bright.red= '#E86671'
+bright.green= '#98C379'
+bright.yellow= '#E5C07B'
+bright.blue= '#61AFEF'
+bright.magenta= '#C678DD'
+bright.cyan= '#54AFBC'
+bright.white= '0xf7f7f7'
+
+dim.black= '#5C6370'
+dim.red= '0x74423f'
+dim.green= '#98C379'
+dim.yellow= '#E5C07B'
+dim.blue= '#61AFEF'
+dim.magenta= '0x6e4962'
+dim.cyan= '0x5c8482'
+dim.white= '0x828282'

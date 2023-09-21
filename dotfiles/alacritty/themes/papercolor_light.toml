@@ -1,0 +1,26 @@
+[colors]
+primary.background= "0xeeeeee"
+primary.foreground= "0x444444"
+
+cursor = {text = "0xeeeeee", cursor = "0x444444"}
+
+# normal colors
+normal.black=   '0xeeeeee'
+normal.red=     '0xaf0000'
+normal.green=   '0x008700'
+normal.yellow=  '0x5f8700'
+normal.blue=    '0x0087af'
+normal.magenta= '0x878787'
+normal.cyan=    '0x005f87'
+normal.white=   '0x444444'
+
+# bright colors
+bright.black=   '0xbcbcbc'
+bright.red=     '0xd70000'
+bright.green=   '0xd70087'
+bright.yellow=  '0x8700af'
+bright.blue=    '0xd75f00'
+bright.magenta= '0xd75f00'
+bright.cyan=    '0x005faf'
+bright.white=   '0x005f87'
+

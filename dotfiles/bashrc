@@ -1,0 +1,72 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+PS1='[\u@\h \W]\$ '
+
+# bob
+export PATH=${PATH}:~/.local/share/bob/nvim-bin
+
+# neofetch
+neofetch
+
+# proxy
+function proxy_on() {
+	export https_proxy=http://127.0.0.1:7890
+	export http_proxy=http://127.0.0.1:7890
+	export all_proxy=socks5://127.0.0.1:7890
+	export ftp_proxy=$http_proxy
+	export rsync_proxy=$http_proxy
+	export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+	echo "Proxy environment variable set."
+}
+
+function proxy_off(){
+	unset http_proxy https_proxy ftp_proxy rsync_proxy all_proxy no_proxy \
+		HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY
+			echo -e "Proxy environment variable removed."
+		}
+
+# Toggle Proxy
+# function proxy_on() {
+#     export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+#
+#     if (( $# > 0 )); then
+#         valid=$(echo $@ | sed -n 's/\([0-9]\{1,3\}.\?\)\{4\}:\([0-9]\+\)/&/p')
+#         if [[ $valid != $@ ]]; then
+#             >&2 echo "Invalid address"
+#             return 1
+#         fi
+#         local proxy=$1
+#         export http_proxy="$proxy" \
+#                https_proxy=$proxy \
+#                ftp_proxy=$proxy \
+#                rsync_proxy=$proxy
+#         echo "Proxy environment variable set."
+#         return 0
+#     fi
+#
+#     echo -n "username: "; read username
+#     if [[ $username != "" ]]; then
+#         echo -n "password: "
+#         read -es password
+#         local pre="$username:$password@"
+#     fi
+#
+#     echo -n "server: "; read server
+#     echo -n "port: "; read port
+#     local proxy=$pre$server:$port
+#     export http_proxy="$proxy" \
+#            https_proxy=$proxy \
+#            ftp_proxy=$proxy \
+#            rsync_proxy=$proxy \
+#            HTTP_PROXY=$proxy \
+#            HTTPS_PROXY=$proxy \
+#            FTP_PROXY=$proxy \
+#            RSYNC_PROXY=$proxy
+# }

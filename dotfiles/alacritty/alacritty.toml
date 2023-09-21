@@ -1,0 +1,59 @@
+# import font, theme and other
+# import = ["~/.config/alacritty/themes/papercolor_light.toml"]
+# import = ["~/.config/alacritty/themes/catppuccin.toml"]
+import = ["~/.config/alacritty/themes/tokyonight_storm.toml"]
+
+# reload configuration automatically
+live_config_reload = true
+
+# environment variables
+[env]
+TERM="alacritty" # default
+# TERM="screen-256color"
+# TERM = "tmux-256color"
+
+[window]
+# dimensions.columns=
+dimensions = { columns = 120 ,lines = 35}
+# padding = {x=10 ,y=10}
+# Spread additional padding evenly around the terminal content.
+dynamic_padding= true
+decorations= "Full" # "Full" or "None" for Linux and windows
+opacity= 0.95 # 0.0 < opacity < 1.0
+startup_mode= "Windowed" # "Windowed" | "Maximized" | "Fullscreen" | "SimpleFullscreen"
+# title="Alacritty"
+dynamic_title=false
+# decoration_theme_variant= "Light" # "Dark" | "Light" | "None"(defalut) WARN: unused
+resize_increments=true # Prefer resizing window by discrete steps equal to cell dimensions.
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+normal = {family =  "JetBrainsMono Nerd Font", style = "Regular"}
+# normal = {family =  "JetBrainsMono Nerd Font Mono", style = "Regular"}
+# normal = {family =  "ComicShannsMono Nerd Font Mono", style = "Regular"}
+bold = {family =  "JetBrainsMono Nerd Font",style = "Bold"}
+italic = {family =  "JetBrainsMono Nerd Font",style = "Italic"}
+bold_italic = {family =  "JetBrainsMono Nerd Font",style = "Bold Italic"}
+size=12.0
+builtin_box_drawing=true # When _true_, Alacritty will use a custom built-in font for box drawing
+
+[bell]
+animation="EaseOutExpo"
+duration=100
+color="#ffffff"
+
+[cursor]
+style.shape = "Block"
+style.blinking = "Off"
+
+vi_mode_style.shape = "Block"
+vi_mode_style.blinking = "Off"
+
+[mouse]
+hide_when_typing = true
+bindings = [
+        {mouse="Right", action="Paste"}
+]
