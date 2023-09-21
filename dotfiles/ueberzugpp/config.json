@@ -1,0 +1,8 @@
+{
+    "layer": {
+        "silent": true,
+        "use-escape-codes": true,
+        "no-stdin": true,
+        "output": "wayland"
+    }
+}
