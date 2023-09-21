@@ -3,6 +3,7 @@
 <!--toc:start-->
 - [dotfiles](#dotfiles)
   - [Softwares](#softwares)
+  - [Todo](#todo)
 <!--toc:end-->
 
 my personal dotfiles
@@ -19,3 +20,8 @@ my personal dotfiles
 - [x] zsh
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
+
+## Todo
+
+- [ ] yazi and Überzug++
+- [ ] eww
