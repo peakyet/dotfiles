@@ -24,4 +24,12 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
 ## Todo
 
 - [ ] yazi and Überzug++
+    - [ ] ffmpegthumbnailer
+    - [ ] unar
+    - [ ] jq
+    - [ ] poppler
+    - [ ] fd
+    - [x] rg
+    - [ ] fzf (optional)
+    - [ ] zoxide (optional)
 - [ ] eww
