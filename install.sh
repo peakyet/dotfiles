@@ -1,7 +1,7 @@
 #!/bin/bash
 
 allDotfiles=$(ls $HOME/dotfiles/dotfiles)
-path=$(pwd)
+path="$(pwd)/dotfiles"
 excludeConfigs=(
 	"alacritty"
 	"bob"
@@ -16,6 +16,7 @@ excludeConfigs=(
 	"xinitrc"
 	"xprofile"
 	"zshrc"
+	"zshrc_omz"
 	"p10k.zsh"
 )
 
@@ -54,7 +55,7 @@ linkDotfiles(){
                         continue
                 fi
 
-                sourcefile="$2/dotfiles/$file"
+                sourcefile="$2/$file"
                 if [ -d $sourcefile ]
                 then
 			if [ $file = "zsh" ]
@@ -66,7 +67,12 @@ linkDotfiles(){
 				linkFile $sourcefile $toFile $3
 			fi
                 else
-			toFile="$HOME/.${file}"
+			if [ $file = "zshrc_omz" ]
+			then
+				toFile="$HOME/.zshrc"
+			else
+				toFile="$HOME/.${file}"
+			fi
 			linkFile $sourcefile $toFile $3
                 fi
 		echo "-------------------------"
