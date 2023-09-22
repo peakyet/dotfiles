@@ -33,3 +33,6 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
     - [ ] fzf (optional)
     - [ ] zoxide (optional)
 - [ ] eww
+- [ ] hyprpaper
+- [ ] pipewire
+- [ ] wireplumber
