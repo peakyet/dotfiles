@@ -9,6 +9,7 @@ excludeConfigs=(
 	"eww"
 	# "hypr"
 	"joshuto"
+	# "tofi"
 	"ueberzugpp"
 	# "wluma"
 	# "yazi"

@@ -37,3 +37,4 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
     - [ ] zoxide (optional)
 - [ ] eww
 - [ ] hyprpaper
+- [ ] tofi
