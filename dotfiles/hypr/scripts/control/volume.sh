@@ -14,14 +14,14 @@ mute="$(amixer -c 0 get Master | tail -1 | awk '{print $6}' | sed 's/[^a-z]*//g'
 
 if [[ $volume == 0 || "$mute" == "off" ]]; then
     # Show the sound muted notification
-    dunstify -a "Volume" -u low -i $HOME/.config/dunst/imgs/volume/volume-off.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: " 
+    dunstify -a "Volume" -u low -i $HOME/.config/dunst/icons/volume/volume-off.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: " 
 else
     # Show the volume notification
     if [ $volumeBefore -lt $volume ]
     then
-	    dunstify -a "Volume" -u low -i $HOME/.config/dunst/imgs/volume/volume-plus.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
+	    dunstify -a "Volume" -u low -i $HOME/.config/dunst/icons/volume/volume-plus.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
     else
-	    dunstify -a "Volume" -u low -i $HOME/.config/dunst/imgs/volume/volume-minus.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
+	    dunstify -a "Volume" -u low -i $HOME/.config/dunst/icons/volume/volume-minus.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
     fi
 fi
 
