@@ -109,7 +109,7 @@
     #  * foreground: use the same color as the foreground;
     #  * frame: use the same color as the frame;
     #  * anything else will be interpreted as a X color.
-    separator_color = frame
+    separator_color = auto
 
     # Sort messages by urgency.
     sort = yes
@@ -314,20 +314,26 @@
     per_monitor_dpi = true
 
 [urgency_low]
-    background = "#faffffaa"
-    foreground = "#002b36"
-    frame_color = "#f5ffffaa"
-    timeout = 10
+    background = "#e5f9ff"
+    foreground = "#000000"
+    frame_color = "#ff9999"
+    highlight = "#99b4ff"
+    timeout = 5
+
 [urgency_normal]
     background = "#f7fff7aa"
     foreground = "#002b36"
     frame_color = "#f2fff2aa"
-    timeout = 10
+    # highlight = "#f2fff2aa"
+    timeout = 5
+
 [urgency_critical]
     background = "#fff2f2aa"
     foreground = "#002b36"
     frame_color = "#fcebebaa"
-    timeout = 0
+    # highlight = "#f2fff2aa"
+    timeout = 5
+
 # [urgency_low]
 #     # IMPORTANT: colors have to be defined in quotation marks.
 #     # Otherwise the "#" and following would be interpreted as a comment.
