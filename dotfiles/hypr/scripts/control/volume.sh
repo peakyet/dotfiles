@@ -11,10 +11,10 @@ mute="$(amixer -c 0 get Master | tail -1 | awk '{print $6}' | sed 's/[^a-z]*//g'
 
 if [[ $volume == 0 || "$mute" == "off" ]]; then
     # Show the sound muted notification
-    dunstify -a "Volume" -u low -i audio-volume-muted -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: " 
+    dunstify -a "Volume" -u low -i /usr/share/icons/Adwaita/16x16/status/audio-volume-muted-symbolic.symbolic.png -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: " 
 else
     # Show the volume notification
-    dunstify -a "Volume" -u low -i audio-volume-high -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
+    dunstify -a "Volume" -u low -i /usr/share/icons/Adwaita/16x16/status/audio-volume-high-symbolic.symbolic.png -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
 fi
 
 # Play the volume changed sound
