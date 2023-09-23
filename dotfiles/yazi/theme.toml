@@ -28,7 +28,7 @@ selected  = { fg = "#F3D398", bg = "#F3D398" }
 
 [preview]
 hovered       = { underline = true }
-syntect_theme = "~/.config/bat/themes/Catppuccin-macchiato.tmTheme"
+# syntect_theme = "~/.config/bat/themes/Catppuccin-macchiato.tmTheme"
 
 [filetype]
 

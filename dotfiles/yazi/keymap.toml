@@ -118,7 +118,7 @@ keymap = [
 	{ on = [ "~" ], exec = "help", desc = "Open help" },
 
 	# lazygit
-	{ on = [ "<C-g>" ], exec = "lazygit", desc = "Open lazygit" }"]},
+	{ on = [ "<C-g>" ], exec = "shell lazygit --confirm", desc = "Open lazygit" },
 ]
 
 [tasks]

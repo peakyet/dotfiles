@@ -15,8 +15,8 @@ cache_dir  = ""
 
 [opener]
 folder = [
+	{ exec = 'nvim "$@"', block=true},
 	{ exec = 'open -R "$@"', display_name = "Reveal in Finder" },
-	{ exec = '$EDITOR "$@"' },
 ]
 archive = [
 	{ exec = 'unar "$1"', display_name = "Extract here" },
