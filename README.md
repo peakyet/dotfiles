@@ -22,6 +22,7 @@ my personal dotfiles
 - [x] wireplumber
 - [x] grim
 - [x] xdg-desktop
+- [x] tofi
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
@@ -38,4 +39,3 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
     - [ ] zoxide (optional)
 - [ ] eww
 - [ ] hyprpaper
-- [ ] tofi

@@ -13,7 +13,7 @@
 	# characters not in the chosen font will fail to render.
 	#
 	# Otherwise, fonts are interpreted in Pango format.
-	font = "JetBrainsMono Nerd Font"
+	font = "/usr/share/fonts/TTF/JetBrainsMonoNerdFont-Medium.ttf"
 
 	# Point size of text.
 	font-size = 24
@@ -42,7 +42,7 @@
 	# specified via `font`. Disabling font hinting speeds up text
 	# rendering appreciably, but will likely look poor at small font pixel
 	# sizes.
-	hint-font = true
+	hint-font = false
 
 #
 ### Text theming
@@ -180,7 +180,7 @@
 	outline-color = #080800
 
 	# Width of the border in pixels.
-	border-width = 12
+	border-width = 5
 
 	# Border color
 	border-color = #F92672
@@ -256,7 +256,7 @@
 	# algorithm.
 	#
 	# Supported values: normal, prefix, fuzzy
-	matching-algorithm = normal
+	matching-algorithm = fuzzy
 
 	# If true, require a match to allow a selection to be made. If false,
 	# making a selection with no matches will print input to stdout.
@@ -310,7 +310,7 @@
 	# Assume input is plain ASCII, and disable some Unicode handling
 	# functions. This is faster, but means e.g. a search for "e" will not
 	# match "é".
-	ascii-input = false
+	ascii-input = true
 
 #
 ### Inclusion
