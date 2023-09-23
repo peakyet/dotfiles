@@ -20,6 +20,9 @@ else
     if [ $volumeBefore -lt $volume ]
     then
 	    dunstify -a "Volume" -u low -i $HOME/.config/dunst/icons/volume/volume-plus.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
+    elif [ $volume -eq $volumeBefore ]
+    then
+	    dunstify -a "Volume" -u low -i $HOME/.config/dunst/icons/volume/volume-on.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
     else
 	    dunstify -a "Volume" -u low -i $HOME/.config/dunst/icons/volume/volume-minus.svg -h string:x-dunst-stack-tag:$msgTag -h int:value:"$volume" "Status: $mute, Value: "
     fi
