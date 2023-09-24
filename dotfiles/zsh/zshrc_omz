@@ -120,3 +120,6 @@ alias open_proxy='export ALL_PROXY="socks5://$host_ip:7890"'
 # alias open_proxy='export ALL_PROXY="socks5://$host_ip:26501"'
 alias close_proxy='unset ALL_PROXY'
 
+# zoxide
+eval "$(zoxide init zsh)"
+
