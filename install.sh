@@ -6,7 +6,7 @@ excludeConfigs=(
 	# "alacritty"
 	# "bob"
 	# "dunst"
-	"eww"
+	# "eww"
 	# "hypr"
 	"joshuto"
 	# "tofi"

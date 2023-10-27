@@ -1,0 +1,6 @@
+(defpoll netStatus :interval "1s" `bash ~/.config/eww/bar/scripts/get-network-status.sh`)
+(defpoll netName :interval "1s" `nmcli connection show --active | grep wifi | cut -d ' ' -f 1`)
+
+(defwidget netStatus []
+    (box :class "module" :orientation "h" :halign "center"
+        (label :text "${netStatus}" :class "net_status" )))

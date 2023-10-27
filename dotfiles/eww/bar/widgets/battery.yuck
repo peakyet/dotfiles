@@ -1,0 +1,7 @@
+(defpoll battery :interval "60s" `bash ~/.config/eww/bar/scripts/get-battery.sh --bat`)
+(defpoll batteryStatus :interval "60s" `bash ~/.config/eww/bar/scripts/get-battery.sh --bat`)
+
+(defwidget battery []
+ (box :class "module" :orientation "h" :halign "center"
+  (label :text "  ${battery}%"))
+)
