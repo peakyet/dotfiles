@@ -22,7 +22,7 @@ decorations= "Full" # "Full" or "None" for Linux and windows
 opacity= 0.95 # 0.0 < opacity < 1.0
 startup_mode= "Windowed" # "Windowed" | "Maximized" | "Fullscreen" | "SimpleFullscreen"
 # title="Alacritty"
-dynamic_title=false
+dynamic_title=true
 # decoration_theme_variant= "Light" # "Dark" | "Light" | "None"(defalut) WARN: unused
 resize_increments=true # Prefer resizing window by discrete steps equal to cell dimensions.
 
