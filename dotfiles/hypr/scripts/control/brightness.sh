@@ -1,6 +1,6 @@
 #!/bin/bash
 
-msgTag="myBrightness"
+msgTag="systemSettings"
 
 # set brightness according to the input
 brightnessctl s $1
