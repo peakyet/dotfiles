@@ -20,7 +20,7 @@ my personal dotfiles
 - [x] zsh
 - [x] pipewire
 - [x] wireplumber
-- [x] grim
+- [x] grim, slurp, feh
 - [x] xdg-desktop
 - [x] tofi
 - [x] docker
