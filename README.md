@@ -26,6 +26,8 @@ my personal dotfiles
 - [x] docker
 - [x] openssh
 - [x] hyprpaper
+- [x] bluetooth, blueman, pulseaudio-bluetooth
+- [x] cpus-pdf, system-config-printer, hpuld for HP Laser 150 (printer)
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
@@ -43,4 +45,4 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
 - [ ] eww
     - [ ] socat
     - [ ] required by scripts of hyprland
-- [ ] bluetooth, blueman
+- [ ] pavucontrol
