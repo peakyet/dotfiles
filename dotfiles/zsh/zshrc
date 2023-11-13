@@ -2,7 +2,7 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Lines configured by zsh-newuser-install
@@ -41,6 +41,10 @@ export PATH=${PATH}:~/.local/share/bob/nvim-bin
 # neofetch
 alias n="neofetch"
 
+# editor
+export EDITOR="nvim"
+alias vi="nvim"
+
 # proxy
 function proxy_on() {
 	export https_proxy=http://127.0.0.1:7890
@@ -58,46 +62,15 @@ function WSL_proxy_on() {
 }
 
 function proxy_off(){
-	unset http_proxy https_proxy ftp_proxy rsync_proxy all_proxy no_proxy \
-		HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY
-			echo -e "Proxy environment variable removed."
-		}
+	unset http_proxy https_proxy ftp_proxy rsync_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY
+	echo -e "Proxy environment variable removed."
+}
 
-# Toggle Proxy
-# function proxy_on() {
-#     export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
-#
-#     if (( $# > 0 )); then
-#         valid=$(echo $@ | sed -n 's/\([0-9]\{1,3\}.\?\)\{4\}:\([0-9]\+\)/&/p')
-#         if [[ $valid != $@ ]]; then
-#             >&2 echo "Invalid address"
-#             return 1
-#         fi
-#         local proxy=$1
-#         export http_proxy="$proxy" \
-#                https_proxy=$proxy \
-#                ftp_proxy=$proxy \
-#                rsync_proxy=$proxy
-#         echo "Proxy environment variable set."
-#         return 0
-#     fi
-#
-#     echo -n "username: "; read username
-#     if [[ $username != "" ]]; then
-#         echo -n "password: "
-#         read -es password
-#         local pre="$username:$password@"
-#     fi
-#
-#     echo -n "server: "; read server
-#     echo -n "port: "; read port
-#     local proxy=$pre$server:$port
-#     export http_proxy="$proxy" \
-#            https_proxy=$proxy \
-#            ftp_proxy=$proxy \
-#            rsync_proxy=$proxy \
-#            HTTP_PROXY=$proxy \
-#            HTTPS_PROXY=$proxy \
-#            FTP_PROXY=$proxy \
-#            RSYNC_PROXY=$proxy
-# }
+function ya() {
+	tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+	yazi --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
