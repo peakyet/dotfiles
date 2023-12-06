@@ -221,7 +221,7 @@ label:focus {
     box-shadow: inset 0 -3px @sapphire;
 }
 
-#bluetooth.disable {
+#bluetooth.disabled {
     box-shadow: inset 0 -3px transparent;
 }
 
