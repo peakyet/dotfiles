@@ -1,7 +1,0 @@
-(defpoll volume 
- :interval "0.5s" 
- `amixer -c 0 get Master | tail -1 | awk '{print $4}' | sed 's/[^0-9]*//g'`)
-
-(defwidget volume []
- (box :class "module" :orientation "h" :halign "center"
-  (label :text "󰕾 ${volume}%")))

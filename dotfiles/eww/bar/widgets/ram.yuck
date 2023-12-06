@@ -1,5 +1,0 @@
-(defpoll ramUsage :interval "2s" `bash ~/.config/eww/bar/scripts/get-ram-usage.sh`)
-
-(defwidget ramUsage []
-    (box :class "module" :orientation "h" :halign "center"
-        (label :text "󰑭 ${ramUsage}" :class "ram")))

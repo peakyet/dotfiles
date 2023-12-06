@@ -1,7 +1,0 @@
-(defpoll brightness 
- :interval "0.5s" 
- `brightnessctl g`)
-
-(defwidget brightness []
- (box :class "module" :orientation "h" :halign "center"
-  (label :text "󰃟 ${brightness}%")))

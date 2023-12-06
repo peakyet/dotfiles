@@ -1,5 +1,0 @@
-(defpoll cpuUsage :interval "2s" `bash ~/.config/eww/bar/scripts/get-cpu-usage.sh`)
-
-(defwidget cpuUsage []
-    (box :class "module" :orientation "h" :halign "center"
-        (label :text " ${cpuUsage}" :class "cpu")))
