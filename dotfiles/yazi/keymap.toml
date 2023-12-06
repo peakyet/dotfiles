@@ -217,7 +217,10 @@ keymap = [
 	{ on = [ "<C-r>" ], exec = "redo", desc = "Redo the last operation" },
 
 	# Help
-	{ on = [ "~" ], exec = "help", desc = "Open help" }
+	{ on = [ "~" ], exec = "help", desc = "Open help" },
+	
+	# addition
+	{ on = [ "<Backspace>" ], exec = "backspace" }
 ]
 
 [help]
