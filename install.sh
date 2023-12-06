@@ -21,6 +21,7 @@ excludeConfigs=(
 	# "zshrc"
 	"zshrc_omz"
 	# "p10k.zsh"
+	# waybar
 	# mpd
 )
 
