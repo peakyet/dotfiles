@@ -3,7 +3,7 @@
 * {
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: FontAwesome, Maple Mono SC NF;
-    font-size: 15px;
+    font-size: 17px;
 }
 
 window#waybar {
@@ -281,7 +281,8 @@ label:focus {
 }
 
 #tray {
-    background-color: #2980b9;
+    background-color: transparent;
+    box-shadow: inset 0 -3px @blue;
 }
 
 #tray > .passive {
@@ -290,7 +291,7 @@ label:focus {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: #eb4d4b;
+    background-color: rgba(110, 114, 125, 0.8);
 }
 
 #idle_inhibitor {
@@ -307,20 +308,25 @@ label:focus {
 }
 
 #mpd {
-    background-color: #66cc99;
-    color: #2a5c45;
+    background-color: transparent;
+    box-shadow: inset 0 -3px @teal;
+    color: @teal;
 }
 
 #mpd.disconnected {
-    background-color: #f53c3c;
+    /* background-color: #f53c3c; */
+    /* background-color: transparent; */
+    box-shadow: inset 0 -3px transparent;
 }
 
 #mpd.stopped {
-    background-color: #90b1b1;
+    /* background-color: #90b1b1; */
+    box-shadow: inset 0 -3px transparent;
 }
 
 #mpd.paused {
-    background-color: #51a37a;
+    /* background-color: #51a37a; */
+    box-shadow: inset 0 -3px transparent;
 }
 
 #language {
