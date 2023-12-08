@@ -8,6 +8,10 @@
 
 my personal dotfiles
 
+<div align="center">
+	<img src="./arch.png" width="800" alt="display nvim" />
+</div>
+
 ## Softwares
 
 - [x] alacritty
@@ -34,6 +38,7 @@ my personal dotfiles
 - [x] electron-netease-cloud-music, mpd, vimpc
 - [x] waybar, otf-font-awesome
 - [x] baidunetdisk
+- [x] cava (optional)
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
