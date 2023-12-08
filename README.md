@@ -33,6 +33,7 @@ my personal dotfiles
 - [x] udiskie
 - [x] electron-netease-cloud-music, mpd, vimpc
 - [x] waybar, otf-font-awesome
+- [x] baidunetdisk
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
@@ -47,3 +48,4 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
     - [x] rg
     - [ ] fzf (optional)
     - [x] zoxide (optional)
+- [ ] aliyunpan
