@@ -171,22 +171,25 @@
 	height = 720
 
 	# Window background color
-	background-color = #1B1D1E
+	# background-color = #1B1D1E
+	background-color = #1B1D1EEA
 
 	# Width of the border outlines in pixels.
-	outline-width = 4
+	outline-width = 0
 
 	# Border outline color
-	outline-color = #080800
+	# outline-color = #080800
+	outline-color = #64727D7F
 
 	# Width of the border in pixels.
 	border-width = 5
 
 	# Border color
-	border-color = #F92672
+	# border-color = #F92672
+	border-color = #477BFFFF
 
 	# Radius of window corners in pixels.
-	corner-radius = 0
+	corner-radius = 20
 
 	# Padding between borders and text. Can be pixels or a percentage.
 	padding-top = 8
