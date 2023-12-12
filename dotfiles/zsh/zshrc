@@ -46,13 +46,20 @@ export EDITOR="nvim"
 alias vi="nvim"
 
 # proxy
-function proxy_on() {
+function clash_on() {
 	export https_proxy=http://127.0.0.1:7890
 	export http_proxy=http://127.0.0.1:7890
 	export all_proxy=socks5://127.0.0.1:7890
 	export ftp_proxy=$http_proxy
 	export rsync_proxy=$http_proxy
 	export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+	echo "Proxy environment variable set."
+}
+
+function v2ray_on() {
+	export https_proxy=http://127.0.0.1:20172
+	export http_proxy=http://127.0.0.1:20172
+	export all_proxy=socks5://127.0.0.1:20170
 	echo "Proxy environment variable set."
 }
 
