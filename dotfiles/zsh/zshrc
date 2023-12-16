@@ -35,7 +35,7 @@ eval "$(zoxide init zsh)" # zoxide
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/nvidia
 
 # bob
-export PATH=${PATH}:~/.local/share/bob/nvim-bin
+# export PATH=${PATH}:~/.local/share/bob/nvim-bin
 
 # neofetch
 # neofetch
