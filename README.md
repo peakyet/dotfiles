@@ -38,7 +38,10 @@ my personal dotfiles
 - [x] electron-netease-cloud-music, mpd, vimpc
 - [x] waybar, otf-font-awesome
 - [x] baidunetdisk
+- [x] v2raya or clash-for-windows
+- [x] neovim
 - [x] cava (optional)
+- [x] neovide (optional)
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
