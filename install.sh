@@ -5,6 +5,7 @@ path="$(pwd)/dotfiles"
 excludeConfigs=(
 	# "alacritty"
 	# "bob"
+	# "cava"
 	# "dunst"
 	# "hypr"
 	"joshuto"
