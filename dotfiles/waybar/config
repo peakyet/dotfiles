@@ -80,7 +80,7 @@
 	    "tooltip-format": "Disk: {used}/{total}"
     },
     "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {title} ",
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} ",
         "format-disconnected": "Disconnected ",
         "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
         "unknown-tag": "N/A",
@@ -102,17 +102,18 @@
             "paused": "",
             "playing": ""
         },
-        "tooltip-format": "Album: {album} - {date}\nTime: {elapsedTime:%M:%S}/{totalTime:%M:%S}\nQueue: {songPosition}/{queueLength}",
+        "tooltip-format": "Title: {title}\nAlbum: {album} - {date}\nTime: {elapsedTime:%M:%S}/{totalTime:%M:%S}\nQueue: {songPosition}/{queueLength}",
         "tooltip-format-disconnected": "MPD (disconnected)",
-	"on-click": "alacritty -e vimpc"
+	"on-click": "alacritty -e ncmpcpp",
+	"max-length": 20
     },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
+    // "idle_inhibitor": {
+    //     "format": "{icon}",
+    //     "format-icons": {
+    //         "activated": "",
+    //         "deactivated": ""
+    //     }
+    // },
     "tray": {
         // "icon-size": 21,
         "spacing": 10

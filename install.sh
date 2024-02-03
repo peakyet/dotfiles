@@ -9,6 +9,7 @@ excludeConfigs=(
 	# "dunst"
 	# "hypr"
 	"joshuto"
+	# "ncmpcpp"
 	# "tofi"
 	"ueberzugpp"
 	# "wluma"
