@@ -35,18 +35,16 @@ my personal dotfiles
 - [x] pavucontrol
 - [x] wps-office, ttf-wps-fonts, libtiff5
 - [x] udiskie
-- [x] electron-netease-cloud-music, mpd, vimpc
+- [x] electron-netease-cloud-music, mpd, ncmpcpp
 - [x] waybar, otf-font-awesome
 - [x] baidunetdisk
 - [x] v2raya or clash-for-windows
 - [x] neovim
 - [x] cava (optional)
 - [x] neovide (optional)
-
-Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
-
-## Todo
-
+- [x] zotero
+- [x] toDesk
+- [x] visual-studio-code
 - [x] yazi and Überzug++ (some bug with ueberzugpp in hyprland)
     - [x] ffmpegthumbnailer
     - [x] unar
@@ -54,6 +52,12 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
     - [x] poppler
     - [x] fd
     - [x] rg
-    - [ ] fzf (optional)
+    - [x] fzf (optional)
     - [x] zoxide (optional)
+
+Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
+
+## Todo
+
 - [ ] aliyunpan
+- [ ] limit the length of music bar of waybar
