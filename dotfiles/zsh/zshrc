@@ -42,8 +42,9 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/nvidia
 alias n="neofetch"
 
 # editor
-export EDITOR="nvim"
+export EDITOR="helix"
 alias vi="nvim"
+alias hx="helix"
 
 # proxy
 function clash_on() {
