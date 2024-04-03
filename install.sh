@@ -9,6 +9,7 @@ excludeConfigs=(
 	# "cava"
 	# "dunst"
 	# "gitconfig"
+	# "helix"
 	# "hypr"
 	"joshuto"
 	# "ncmpcpp"
