@@ -10,10 +10,13 @@ alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
 
 # bob
-export PATH=${PATH}:~/.local/share/bob/nvim-bin
+# export PATH=${PATH}:~/.local/share/bob/nvim-bin
 
 # neofetch
 neofetch
+
+# set true color in window terminal
+# export COLORTERM='truecolor'
 
 # proxy
 function proxy_on() {
