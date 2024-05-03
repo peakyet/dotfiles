@@ -20,7 +20,7 @@ display-messages = true
 display-inlay-hints = false
 
 [editor.statusline]
-mode.normal = "😅"
-mode.insert = "😤"
-mode.select = "😭"
+mode.normal = "😋"
+mode.insert = "🤔"
+mode.select = "🤯"
 left = ["mode", "spinner", "version-control", "file-name", "read-only-indicator", "file-modification-indicator"]
