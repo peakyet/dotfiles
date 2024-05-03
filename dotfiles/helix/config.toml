@@ -19,6 +19,9 @@ render = true
 display-messages = true
 display-inlay-hints = false
 
+[editor.soft-wrap]
+enable = true
+
 [editor.statusline]
 mode.normal = "😋"
 mode.insert = "🤔"
