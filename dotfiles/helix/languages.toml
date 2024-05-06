@@ -2,8 +2,20 @@ use-grammars = { only = ["cpp", "markdown"] }
 
 [[language]]
 name = "markdown"
-language-servers = ["mdpls"]
+# language-servers = ["mdpls"]
 
-[language-server.mdpls]
-command = "/home/chun/.cargo/bin/mdpls" 
-config = { markdown.preview.auto = false, markdown.preview.browser = "firefox" }
+# [language-server.markdown-oxide]
+# command = "/home/chun/.cargo/bin/markdown-oxide"
+
+# [language-server.mdpls]
+# command = "/home/chun/.cargo/bin/mdpls" 
+# config = { markdown.preview.auto = false, markdown.preview.browser = "firefox" }
+
+[language.auto-pairs]
+'(' = ')'
+'{' = '}'
+'[' = ']'
+'"' = '"'
+'`' = '`'
+'<' = '>'
+'$' = '$'
