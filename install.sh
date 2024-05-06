@@ -12,6 +12,7 @@ excludeConfigs=(
 	# "helix"
 	# "hypr"
 	"joshuto"
+	# "kitty"
 	# "ncmpcpp"
 	# "mpd"
 	# "p10k.zsh"
