@@ -30,6 +30,7 @@
 	"window-rewrite": {
 	    "firefox": "",
 	    "Alacritty": "",
+	    "kitty": "󰄛",
 	    "Clash for Windows": "󰀝",
 	    "electron-netease-cloud-music": "",
 	    "Bluetooth Devices": "󰂯",
