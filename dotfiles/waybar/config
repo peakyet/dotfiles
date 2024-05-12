@@ -39,7 +39,8 @@
 	    "org.photoqt.photoqt": "",
 	    "pdf": "",
 	    "baidunetdisk": "",
-	    "neovide": ""
+	    "neovide": "",
+        "Dunst": ""
 	},
     },
     "hyprland/window": {
