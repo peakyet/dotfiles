@@ -6,9 +6,8 @@
 ratio          = [ 1, 4, 3 ]
 sort_by        = "alphabetical"
 sort_sensitive = false
-sort_reverse 	 = false
+sort_reverse   = false
 sort_dir_first = true
-sort_translit  = false
 linemode       = "none"
 show_hidden    = false
 show_symlink   = true
@@ -47,8 +46,8 @@ extract = [
 	{ run = 'unar "%1"', desc = "Extract here", for = "windows" },
 ]
 play = [
-	{ run = 'mpv --force-window "$@"', orphan = true, for = "unix" },
-	{ run = 'mpv --force-window "%1"', orphan = true, for = "windows" },
+	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+	{ run = 'mpv "%1"', orphan = true, for = "windows" },
 	{ run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
 
@@ -56,19 +55,19 @@ play = [
 rules = [
 	{ name = "*/", use = [ "edit", "open", "reveal" ] },
 
-	{ mime = "text/*",          use = [ "edit", "reveal" ] },
-	{ mime = "image/*",         use = [ "open", "reveal" ] },
-	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
-	{ mime = "inode/x-empty",   use = [ "edit", "reveal" ] },
+	{ fetcher = "text/*",          use = [ "edit", "reveal" ] },
+	{ fetcher = "image/*",         use = [ "open", "reveal" ] },
+	{ fetcher = "{audio,video}/*", use = [ "play", "reveal" ] },
+	{ fetcher = "inode/x-empty",   use = [ "edit", "reveal" ] },
 
-	{ mime = "application/{,g}zip", use = [ "extract", "reveal" ] },
-	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}", use = [ "extract", "reveal" ] },
+	{ fetcher = "application/*zip", use = [ "extract", "reveal" ] },
+	{ fetcher = "application/x-{tar,bzip*,7z-compressed,xz,rar}", use = [ "extract", "reveal" ] },
 
-	{ mime = "application/json", use = [ "edit", "reveal" ] },
-	{ mime = "*/javascript",     use = [ "edit", "reveal" ] },
+	{ fetcher = "application/json", use = [ "edit", "reveal" ] },
+	{ fetcher = "*/javascript",     use = [ "edit", "reveal" ] },
 
-	{ mime = "application/pdf", use = "pdf" },
-	{ name = "*", use = [ "open", "reveal" ] },
+	{ fetcher = "application/pdf", use = "pdf" },
+	{ fetcher = "*", use = [ "open", "reveal" ] },
 ]
 
 [tasks]
@@ -81,46 +80,33 @@ suppress_preload = false
 
 [plugin]
 
-fetchers = [
-	# Mimetype
-	{ name = "*", cond = "!mime", run = "mime", prio = "high" },
-]
 preloaders = [
+	{ name = "*", cond = "!fetcher", run = "fetcher", multi = true, prio = "high" },
 	# Image
-	{ mime = "image/svg+xml", run = "magick" },
-	{ mime = "image/heic",    run = "magick" },
-	{ mime = "image/jxl",     run = "magick" },
-	{ mime = "image/*",       run = "image" },
+	{ fetcher = "image/*", run = "image" },
 	# Video
-	{ mime = "video/*", run = "video" },
+	{ fetcher = "video/*", run = "video" },
 	# PDF
-	{ mime = "application/pdf", run = "pdf" },
-	# Font
-	{ mime = "font/*", run = "font" },
-	{ mime = "application/vnd.ms-opentype", run = "font" },
+	{ fetcher = "application/pdf", run = "pdf" },
 ]
+
 previewers = [
 	{ name = "*/", run = "folder", sync = true },
 	# Code
-	{ mime = "text/*", run = "code" },
-	{ mime = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
+	{ fetcher = "text/*", run = "code" },
+	{ fetcher = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
 	# JSON
-	{ mime = "application/json", run = "json" },
+	{ fetcher = "application/json", run = "json" },
 	# Image
-	{ mime = "image/svg+xml", run = "magick" },
-	{ mime = "image/heic",    run = "magick" },
-	{ mime = "image/jxl",     run = "magick" },
-	{ mime = "image/*",       run = "image" },
+	{ fetcher = "image/vnd.djvu", run = "noop" },
+	{ fetcher = "image/*",        run = "image" },
 	# Video
-	{ mime = "video/*", run = "video" },
+	{ fetcher = "video/*", run = "video" },
 	# PDF
-	{ mime = "application/pdf", run = "pdf" },
+	{ fetcher = "application/pdf", run = "pdf" },
 	# Archive
-	{ mime = "application/{,g}zip", run = "archive" },
-	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}", run = "archive" },
-	# Font
-	{ mime = "font/*", run = "font" },
-	{ mime = "application/vnd.ms-opentype", run = "font" },
+	{ fetcher = "application/*zip", run = "archive" },
+	{ fetcher = "application/x-{tar,bzip*,7z-compressed,xz,rar}", run = "archive" },
 	# Fallback
 	{ name = "*", run = "file" },
 ]
@@ -187,10 +173,11 @@ open_origin = "hovered"
 open_offset = [ 0, 1, 50, 7 ]
 
 [which]
-sort_by      	 = "none"
+sort_by        = "none"
 sort_sensitive = false
-sort_reverse 	 = false
-sort_translit  = false
+sort_reverse   = false
 
 [log]
 enabled = false
+
+[headsup]
