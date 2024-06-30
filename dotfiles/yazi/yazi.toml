@@ -55,19 +55,19 @@ play = [
 rules = [
 	{ name = "*/", use = [ "edit", "open", "reveal" ] },
 
-	{ fetcher = "text/*",          use = [ "edit", "reveal" ] },
-	{ fetcher = "image/*",         use = [ "open", "reveal" ] },
-	{ fetcher = "{audio,video}/*", use = [ "play", "reveal" ] },
-	{ fetcher = "inode/x-empty",   use = [ "edit", "reveal" ] },
+	{ mime = "text/*",          use = [ "edit", "reveal" ] },
+	{ mime = "image/*",         use = [ "open", "reveal" ] },
+	{ mime = "{audio,video}/*", use = [ "play", "reveal" ] },
+	{ mime = "inode/x-empty",   use = [ "edit", "reveal" ] },
 
-	{ fetcher = "application/*zip", use = [ "extract", "reveal" ] },
-	{ fetcher = "application/x-{tar,bzip*,7z-compressed,xz,rar}", use = [ "extract", "reveal" ] },
+	{ mime = "application/*zip", use = [ "extract", "reveal" ] },
+	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}", use = [ "extract", "reveal" ] },
 
-	{ fetcher = "application/json", use = [ "edit", "reveal" ] },
-	{ fetcher = "*/javascript",     use = [ "edit", "reveal" ] },
+	{ mime = "application/json", use = [ "edit", "reveal" ] },
+	{ mime = "*/javascript",     use = [ "edit", "reveal" ] },
 
-	{ fetcher = "application/pdf", use = "pdf" },
-	{ fetcher = "*", use = [ "open", "reveal" ] },
+	{ mime = "application/pdf", use = "pdf" },
+	{ mime = "*", use = [ "open", "reveal" ] },
 ]
 
 [tasks]
@@ -81,32 +81,32 @@ suppress_preload = false
 [plugin]
 
 preloaders = [
-	{ name = "*", cond = "!fetcher", run = "fetcher", multi = true, prio = "high" },
+	# { name = "*", cond = "!mime", run = "mime", multi = true, prio = "high" },
 	# Image
-	{ fetcher = "image/*", run = "image" },
+	{ mime = "image/*", run = "image" },
 	# Video
-	{ fetcher = "video/*", run = "video" },
+	{ mime = "video/*", run = "video" },
 	# PDF
-	{ fetcher = "application/pdf", run = "pdf" },
+	{ mime = "application/pdf", run = "pdf" },
 ]
 
 previewers = [
 	{ name = "*/", run = "folder", sync = true },
 	# Code
-	{ fetcher = "text/*", run = "code" },
-	{ fetcher = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
+	{ mime = "text/*", run = "code" },
+	{ mime = "*/{xml,javascript,x-wine-extension-ini}", run = "code" },
 	# JSON
-	{ fetcher = "application/json", run = "json" },
+	{ mime = "application/json", run = "json" },
 	# Image
-	{ fetcher = "image/vnd.djvu", run = "noop" },
-	{ fetcher = "image/*",        run = "image" },
+	{ mime = "image/vnd.djvu", run = "noop" },
+	{ mime = "image/*",        run = "image" },
 	# Video
-	{ fetcher = "video/*", run = "video" },
+	{ mime = "video/*", run = "video" },
 	# PDF
-	{ fetcher = "application/pdf", run = "pdf" },
+	{ mime = "application/pdf", run = "pdf" },
 	# Archive
-	{ fetcher = "application/*zip", run = "archive" },
-	{ fetcher = "application/x-{tar,bzip*,7z-compressed,xz,rar}", run = "archive" },
+	{ mime = "application/*zip", run = "archive" },
+	{ mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}", run = "archive" },
 	# Fallback
 	{ name = "*", run = "file" },
 ]
