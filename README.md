@@ -14,7 +14,6 @@ my personal dotfiles
 
 ## Softwares
 
-- [x] alacritty
 - [x] dunst
 - [x] hyprland
 - [x] wluma
@@ -55,10 +54,11 @@ my personal dotfiles
     - [x] zoxide (optional)
 - [x] helix
 - [x] kitty
+- [x] obsidian
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
 ## Todo
 
 - [ ] aliyunpan
-- [ ] limit the length of music bar of waybar
+- [x] limit the length of music bar of waybar
