@@ -55,6 +55,7 @@ my personal dotfiles
 - [x] helix
 - [x] kitty
 - [x] obsidian
+- [x] fcitx5
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
