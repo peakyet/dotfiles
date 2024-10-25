@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["hyprland/workspaces", "tray", "mpd"],
     "modules-center": ["hyprland/window"],
-    "modules-right": ["keyboard-state", "bluetooth",  "network", "cpu","memory", "disk", "temperature", "backlight","pulseaudio", "battery", "clock"],
+    "modules-right": ["keyboard-state", "bluetooth",  "network", "cpu","memory", "disk", "temperature", "backlight","pulseaudio", "battery", "clock", "idle_inhibitor"],
     // Modules configuration
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -239,6 +239,14 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        },
+        "on-click": "loginctl lock-session"
     }
 }
 
