@@ -40,7 +40,6 @@ my personal dotfiles
 - [x] cava (optional)
 - [x] neovide (optional)
 - [x] zotero
-- [x] toDesk
 - [x] visual-studio-code
 - [x] zip, unzip
 - [x] yazi and Überzug++ (some bug with ueberzugpp in hyprland)
