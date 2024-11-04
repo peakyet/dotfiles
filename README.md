@@ -57,6 +57,7 @@ my personal dotfiles
 - [x] fcitx5
 - [x] hypridle
 - [x] hyprlock
+- [x] linuxqq, wechat
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
