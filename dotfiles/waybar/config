@@ -40,7 +40,9 @@
 	    "pdf": "",
 	    "baidunetdisk": "",
 	    "neovide": "",
-        "Dunst": ""
+        "Dunst": "",
+        "Zotero": "󰰸",
+        "Obsidian": "",
 	},
     },
     "hyprland/window": {
