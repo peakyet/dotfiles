@@ -22,7 +22,7 @@ my personal dotfiles
 - [x] pipewire
 - [x] wireplumber
 - [x] grim, slurp, feh
-- [x] xdg-desktop
+- [x] xdg-desktop, xdg-desktop-portal-hyprland
 - [x] tofi
 - [x] docker
 - [x] openssh
