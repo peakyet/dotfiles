@@ -26,7 +26,6 @@ my personal dotfiles
 - [x] tofi
 - [x] docker
 - [x] openssh
-- [x] swww
 - [x] bluetooth, blueman, pulseaudio-bluetooth
 - [x] cpus-pdf, system-config-printer, hpuld for HP Laser 150 (printer)
 - [x] pavucontrol
@@ -61,7 +60,34 @@ my personal dotfiles
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
+## TroubleShooting
+
+### obsidian
+
+- https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium_.2F_Electron
+
+无法使用中文，需要使用下面命令打开：
+```bash
+obsidian --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime
+```
+
 ## Todo
 
 - [ ] aliyunpan
 - [x] limit the length of music bar of waybar
+
+## Common knownledge
+
+### 连接网络
+
+- 工具：nmcli
+
+列出网络
+```bash
+nmcli dev wifi list
+```
+
+连接网络
+```bash
+nmcli dev wifi connect host password ****
+```
