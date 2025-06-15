@@ -1,5 +1,5 @@
-# theme = "catppuccin_frappe"
-theme = "catppuccin_latte"
+theme = "catppuccin_frappe"
+# theme = "catppuccin_latte"
 
 [editor]
 line-number = "relative"
@@ -7,6 +7,7 @@ mouse = false
 color-modes = true
 cursorline = true
 auto-save = true
+end-of-line-diagnostics = "hint"
 
 [editor.cursor-shape]
 insert = "bar"
@@ -28,3 +29,6 @@ mode.normal = "😋"
 mode.insert = "🤔"
 mode.select = "🤯"
 left = ["mode", "spinner", "version-control", "file-name", "read-only-indicator", "file-modification-indicator"]
+
+[editor.inline-diagnostics]
+cursor-line = "warning" # show warnings and errors on the cursorline inline

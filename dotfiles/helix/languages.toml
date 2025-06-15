@@ -1,7 +1,7 @@
-use-grammars = { only = ["cpp", "markdown"] }
+use-grammars = { only = ["cpp"] }
 
-[[language]]
-name = "markdown"
+# [[language]]
+# name = "markdown"
 # language-servers = ["mdpls"]
 
 # [language-server.markdown-oxide]
@@ -11,11 +11,11 @@ name = "markdown"
 # command = "/home/chun/.cargo/bin/mdpls" 
 # config = { markdown.preview.auto = false, markdown.preview.browser = "firefox" }
 
-[language.auto-pairs]
-'(' = ')'
-'{' = '}'
-'[' = ']'
-'"' = '"'
-'`' = '`'
-'<' = '>'
-'$' = '$'
+# [language.auto-pairs]
+# '(' = ')'
+# '{' = '}'
+# '[' = ']'
+# '"' = '"'
+# '`' = '`'
+# '<' = '>'
+# '$' = '$'
