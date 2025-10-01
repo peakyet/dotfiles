@@ -58,6 +58,7 @@ my personal dotfiles
 - [x] hyprlock
 - [x] linuxqq, wechat
 - [x] splayer: a online music player
+- [x] picgo-appimage: A simple & beautiful tool for pictures uploading built by electron-vue
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
