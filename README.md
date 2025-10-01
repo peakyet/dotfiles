@@ -57,7 +57,7 @@ my personal dotfiles
 - [x] hypridle
 - [x] hyprlock
 - [x] linuxqq, wechat
-- [x] splayer: a music player
+- [x] splayer: a online music player
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
