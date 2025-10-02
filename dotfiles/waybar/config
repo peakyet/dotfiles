@@ -43,23 +43,23 @@
         "Dunst": "",
         "Zotero": "󰰸",
         "Obsidian": "",
+        "zen": "󰺕"
 	},
     },
     "hyprland/window": {
 	    "format": "{}",
 	    "rewrite": {
-		    "(Mozilla Firefox)": " $1",
-		    "(.*) .* Mozilla Firefox": " $1",
+		    "Mozilla Firefox": "",
+		    ".* Mozilla Firefox": "",
 		    "(.*) .* Electron NCM": " $1",
-		    "(Alacritty)": " $1",
-		    "(Clash for Windows)": "󰀝 $1",
 		    "(Volume Control)": "󱀞 $1",
-		    "(Bluetooth Devices)": "󰂯 $1",
-		    "(QQ)": " $1",
+		    "Bluetooth Devices": "󰂯",
+		    "QQ": "",
 		    "(.*) .* PhotoQt Image Viewer": " $1",
 		    "(.*) .* WPS PDF": " $1",
-		    "(百度网盘)": " $1",
-		    "": "󰣇"
+		    "百度网盘": " ",
+		    "": "󰣇",
+            ".* Zen Browser": "󰺕"
 	    },
 	    "separate-outputs": true
     },
