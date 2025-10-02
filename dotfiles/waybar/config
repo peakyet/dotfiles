@@ -43,7 +43,8 @@
         "Dunst": "",
         "Zotero": "󰰸",
         "Obsidian": "",
-        "zen": "󰺕"
+        "zen": "󰺕",
+        "code": ""
 	},
     },
     "hyprland/window": {
@@ -59,7 +60,8 @@
 		    "(.*) .* WPS PDF": " $1",
 		    "百度网盘": " ",
 		    "": "󰣇",
-            ".* Zen Browser": "󰺕"
+            ".* Zen Browser": "󰺕",
+            ".* Visual Studio Code": ""
 	    },
 	    "separate-outputs": true
     },
