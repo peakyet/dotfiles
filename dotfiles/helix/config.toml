@@ -22,7 +22,7 @@ display-messages = true
 display-inlay-hints = false
 
 [editor.soft-wrap]
-enable = false
+enable = true
 
 [editor.statusline]
 mode.normal = "😋"
