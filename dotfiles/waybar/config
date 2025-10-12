@@ -61,7 +61,9 @@
 		    "百度网盘": " ",
 		    "": "󰣇",
             ".* Zen Browser": "󰺕",
-            ".* Visual Studio Code": ""
+            ".* Visual Studio Code": "",
+            "(.*) - .* - Obsidian .*": "$1",
+            "(.*) - Zotero": "$1"
 	    },
 	    "separate-outputs": true
     },
