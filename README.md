@@ -31,13 +31,14 @@ my personal dotfiles
 - [x] pavucontrol
 - [x] wps-office, ttf-wps-fonts, libtiff5
 - [x] udiskie
-- [x] electron-netease-cloud-music, mpd, ncmpcpp
+- [ ] electron-netease-cloud-music
+- [x] mpd, ncmpcpp
 - [x] waybar, otf-font-awesome, maple nerd font
 - [x] baidunetdisk
 - [x] v2raya
 - [x] neovim
 - [x] cava (optional)
-- [x] neovide (optional)
+- [ ] neovide (optional)
 - [x] zotero
 - [x] visual-studio-code
 - [x] zip, unzip
@@ -62,6 +63,10 @@ my personal dotfiles
 - [x] zen-browser-bin: zen browser, a modern browser.
 - [x] claude-code: ai coding tui
 - [x] gemini-cli: ai coding tui developed by Google
+- [ ] hyprscolling
+- [ ] nixos
+- [ ] niri
+- [ ] lazyvim
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
@@ -69,7 +74,7 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
 
 ### obsidian
 
-- https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium_.2F_Electron
+- [无法使用中文](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium_.2F_Electron)
 
 无法使用中文，需要使用下面命令打开：
 ```bash
