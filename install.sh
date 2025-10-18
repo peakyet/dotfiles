@@ -26,13 +26,17 @@ excludeConfigs=(
 	# "yazi"
 	# "zsh"
 	# "zshrc"
+	# "niri"
 	"zshrc_omz"
+	"ClaudeCode"
+	"readme.md"
+	"README.md"
 )
 
 
 linkFile(){
-        # link a single file in dotfiles folder
-        # args: file to be linked, linked file (full path), whether to remove the exist file or linksymbol.
+	# link a single file in dotfiles folder
+	# args: file to be linked, linked file (full path), whether to remove the exist file or linksymbol.
 	# check if the file or linksymbol exists
 	if [ -e $2 -o -L $2 ]
 	then
@@ -56,46 +60,50 @@ linkDotfiles(){
         echo "start linking dotfiles ..."
         for file in $1
         do
-                # check if the file is in the exclude list
-                if [[ " ${excludeConfigs[@]} " =~ " ${file} " ]]
-                then
-                        echo "exclude ${file}"
-			echo "-------------------------"
-                        continue
-                fi
+					# check if the file is in the exclude list
+					if [[ " ${excludeConfigs[@]} " =~ " ${file} " ]]
+					then
+						echo "exclude ${file}"
+					 	echo "-------------------------"
+					 	continue
+					fi
 
-                sourcefile="$2/$file"
-                if [ -d $sourcefile ]
-                then
-			if [ $file = "zsh" ]
-			then
-				filesInFolder=$(ls "$sourcefile")
-				linkDotfiles "$filesInFolder" $sourcefile $3
-			else
-				toFile="$HOME/.config/${file}"
-				linkFile $sourcefile $toFile $3
-			fi
-                else
-			if [ $file = "zshrc_omz" ]
-			then
-				toFile="$HOME/.zshrc"
-			else
-				toFile="$HOME/.${file}"
-			fi
-			linkFile $sourcefile $toFile $3
-                fi
-		echo "-------------------------"
-        done
+					sourcefile="$2/$file"
+					if [ -d $sourcefile ]
+					then
+						if [ $file = "zsh" ]
+						then
+							filesInFolder=$(ls "$sourcefile")
+							linkDotfiles "$filesInFolder" $sourcefile $3
+						else
+							toFile="$HOME/.config/${file}"
+							linkFile $sourcefile $toFile $3
+						fi
+          else
+						if [ $file = "zshrc_omz" ]
+						then
+							toFile="$HOME/.zshrc"
+						else
+							toFile="$HOME/.${file}"
+						fi
+						linkFile $sourcefile $toFile $3
+          fi
+					echo "-------------------------"
+	    	done
 }
 
 if [ $1 ]
 then
-        if [ $1 = "force" ]
-        then
-                linkDotfiles "$allDotfiles" $path true
+  if [ $1 = "force" ]
+  then
+    linkDotfiles "$allDotfiles" $path true
 	else
 		echo "Invalid argument: $1"
-        fi
+  fi
 else
-        linkDotfiles "$allDotfiles" $path
+  linkDotfiles "$allDotfiles" $path
 fi
+
+# set service of niri
+# source "${path}/niri/add_wants.sh"
+sh "${path}/niri/add_wants.sh"
