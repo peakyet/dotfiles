@@ -1,11 +1,5 @@
 # dotfiles
 
-<!--toc:start-->
-- [dotfiles](#dotfiles)
-  - [Softwares](#softwares)
-  - [Todo](#todo)
-<!--toc:end-->
-
 my personal dotfiles
 
 <div align="center">
@@ -14,34 +8,25 @@ my personal dotfiles
 
 ## Softwares
 
-- [x] dunst
-- [x] hyprland
-- [x] wluma
-- [x] tmux and tqm
 - [x] zsh
 - [x] pipewire
 - [x] wireplumber
-- [x] grim, slurp, feh
-- [x] xdg-desktop, xdg-desktop-portal-hyprland
-- [x] tofi
+- [x] xdg-desktop, 
 - [x] docker
 - [x] openssh
 - [x] bluetooth, blueman, pulseaudio-bluetooth
-- [x] cpus-pdf, system-config-printer, hpuld for HP Laser 150 (printer)
 - [x] pavucontrol
-- [x] wps-office, ttf-wps-fonts, libtiff5
 - [x] udiskie
-- [ ] electron-netease-cloud-music
-- [x] mpd, ncmpcpp
+- [x] kitty
 - [x] waybar, otf-font-awesome, maple nerd font
 - [x] baidunetdisk
 - [x] v2raya
-- [x] neovim
-- [x] cava (optional)
-- [ ] neovide (optional)
-- [x] zotero
-- [x] visual-studio-code
 - [x] zip, unzip
+- [x] fcitx5
+- [x] zen-browser-bin: zen browser, a modern browser.
+- notification
+  - [x] dunst
+  - [x] mako: notification daemon (replace dunst)
 - [x] yazi and Überzug++ (some bug with ueberzugpp in hyprland)
     - [x] ffmpegthumbnailer
     - [x] unar
@@ -51,22 +36,56 @@ my personal dotfiles
     - [x] rg
     - [x] fzf (optional)
     - [x] zoxide (optional)
-- [x] helix
-- [x] kitty
-- [x] obsidian
-- [x] fcitx5
-- [x] hypridle
-- [x] hyprlock
-- [x] linuxqq, wechat
-- [x] splayer: a online music player
-- [x] picgo-appimage: A simple & beautiful tool for pictures uploading built by electron-vue
-- [x] zen-browser-bin: zen browser, a modern browser.
-- [x] claude-code: ai coding tui
-- [x] gemini-cli: ai coding tui developed by Google
-- [ ] hyprscolling
-- [ ] nixos
-- [ ] niri
-- [ ] lazyvim
+- Pictures and video
+  - [x] photoqt
+  - [x] grim, slurp, feh
+  - [x] gpu-screen-recorder(-gtk): Screen recording functionality
+- music player
+  - [x] mpd, ncmpcpp
+  - [x] splayer: a online music player
+  - [ ] electron-netease-cloud-music
+- work
+  - [x] wps-office, ttf-wps-fonts, libtiff5
+  - [x] zotero
+  - editor
+  	- [x] helix
+  	- [x] neovim
+  	- [x] visual-studio-code
+  	- [x] Zed
+  	- [ ] neovide (optional)
+  	- [ ] lazyvim
+  - markdown editor
+  	- [x] obsidian
+  	- [x] typora
+  	- [x] picgo-appimage: A simple & beautiful tool for pictures uploading built by electron-vue
+- social apps
+  - [x] linuxqq
+  - [x] wechat
+- AI
+  - [x] claude-code: ai coding tui
+  - [x] gemini-cli: ai coding tui developed by Google
+- [x] hyprland
+  - [x] hypridle
+  - [x] hyprlock
+  - [x] xdg-desktop-portal-hyprland
+- [x] niri
+  - [x] xdg-desktop-portal-gtk, xdg-desktop-portal-gnome, gnome-keyring
+  - [x] polkit-kde-agent: authentication agent (installed before niri)
+  - [x] xwayland-satellite: run X11 apps like Steam or Discord
+  - [x] swaylock, swayidle, swaybg
+  - [x] gdm
+  - [x] cliphist: clipboard history support
+- app launcher
+  - [x] fuzzel
+  - [x] tofi
+- printer
+    - [ ] cpus-pdf
+    - [ ] system-config-printer
+    - [ ] hpuld for HP Laser 150 (printer)
+- [x] cava (optional)
+- [ ] wluma
+- [ ] tmux and tqm
+
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
