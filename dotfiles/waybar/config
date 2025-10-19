@@ -5,9 +5,11 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["hyprland/workspaces", "tray", "mpd"],
-    "modules-center": ["hyprland/window"],
-    "modules-right": ["keyboard-state", "bluetooth",  "network", "cpu","memory", "disk", "temperature", "backlight","pulseaudio", "battery", "clock", "idle_inhibitor"],
+    // "modules-left": ["hyprland/workspaces", "tray", "mpd"],
+    // "modules-center": ["hyprland/window"],
+    "modules-left": ["niri/workspaces", "tray", "mpd"],
+    "modules-center": ["niri/window"],
+    "modules-right": ["keyboard-state", "bluetooth",  "network", "cpu","memory", "disk", "temperature", "wireplumber", "backlight", "battery", "clock", "idle_inhibitor"],
     // Modules configuration
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -15,37 +17,39 @@
         "warp-on-scroll": false,
         // "format": "{name}: {icon}",
         "format": "{name}: {windows}",
-	"format-window-separator": " ",
-        // "format-icons": {
-        //     "1": "",
-        //     "2": "",
-        //     "3": "",
-        //     "4": "",
-        //     "5": "",
-        //     "urgent": "",
-        //     "focused": "",
-        //     "default": ""
-        // },
-	"window-rewrite-default": "",
-	"window-rewrite": {
-	    "firefox": "",
-	    "Alacritty": "",
-	    "kitty": "󰄛",
-	    "Clash for Windows": "󰀝",
-	    "SPlayer": "",
-	    "Bluetooth Devices": "󰂯",
-	    "pavucontrol": "󱀞",
-	    "QQ": "",
-	    "org.photoqt.photoqt": "",
-	    "pdf": "",
-	    "baidunetdisk": "",
-	    "neovide": "",
-        "Dunst": "",
-        "Zotero": "󰰸",
-        "Obsidian": "",
-        "zen": "󰺕",
-        "code": ""
-	},
+    	"format-window-separator": " ",
+            // "format-icons": {
+            //     "1": "",
+            //     "2": "",
+            //     "3": "",
+            //     "4": "",
+            //     "5": "",
+            //     "urgent": "",
+            //     "focused": "",
+            //     "default": ""
+            // },
+    	"window-rewrite-default": "",
+    	"window-rewrite": {
+    	    "firefox": "",
+    	    "Alacritty": "",
+    	    "kitty": "󰄛",
+    	    "Clash for Windows": "󰀝",
+    	    "SPlayer": "",
+    	    "Bluetooth Devices": "󰂯",
+    	    "pavucontrol": "󱀞",
+    	    "QQ": "",
+    	    "org.photoqt.photoqt": "",
+    	    "pdf": "",
+    	    "baidunetdisk": "",
+    	    "neovide": "",
+            "Dunst": "",
+            "Zotero": "󰰸",
+            "Obsidian": "",
+            "zen": "󰺕",
+            "code": "",
+            "dev.zed.Zed-Preview": "",
+            "com.dec05eba.gpu_screen_recorder": "󰑋"
+    	},
     },
     "hyprland/window": {
 	    "format": "{}",
@@ -67,6 +71,42 @@
 	    },
 	    "separate-outputs": true
     },
+    "niri/workspace": {
+       "on-update": "sudo pacman -Syu",
+        "format": "{icon}",
+    	"format-icons": {
+    		// Named workspaces
+    		// (you need to configure them in niri)
+    		"browser": "",
+    		"discord": "",
+    		"chat": "<b></b>",
+
+    		// Icons by state
+    		"active": "",
+    		"default": ""
+    	}
+    },
+    "niri/window": {
+	    "format": "{}",
+	    "rewrite": {
+		    "Mozilla Firefox": "",
+		    ".* Mozilla Firefox": "",
+		    "(.*) .* Electron NCM": " $1",
+		    "(Volume Control)": "󱀞 $1",
+		    "Bluetooth Devices": "󰂯",
+		    "QQ": "",
+		    "(.*) .* PhotoQt Image Viewer": " $1",
+		    "(.*) .* WPS PDF": " $1",
+		    "百度网盘": " ",
+		    "": "󰣇",
+            ".* Zen Browser": "󰺕",
+            ".* Visual Studio Code": "",
+            "(.*) - .* - Obsidian .*": "$1",
+            "(.*) - Zotero": "$1"
+	    },
+	    "separate-outputs": true
+    },
+
     "keyboard-state": {
         "numlock": false,
         "capslock": true,
@@ -112,8 +152,8 @@
         },
         "tooltip-format": "Title: {title}\nAlbum: {album} - {date}\nTime: {elapsedTime:%M:%S}/{totalTime:%M:%S}\nQueue: {songPosition}/{queueLength}",
         "tooltip-format-disconnected": "MPD (disconnected)",
-	"on-click": "alacritty -e ncmpcpp",
-	"max-length": 20
+    	"on-click": "kitty -e ncmpcpp",
+    	"max-length": 20
     },
     // "idle_inhibitor": {
     //     "format": "{icon}",
@@ -128,17 +168,17 @@
     },
     "clock": {
         // "timezone": "America/New_York",
-	"format": "{:%H:%M} ",
+    	"format": "{:%H:%M} ",
         "timezone": "Asia/Shanghai",
-	"tooltip-format": "{:%Y-%m-%d}",
+    	"tooltip-format": "{:%Y-%m-%d}",
         // "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         // "format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
         "format": "{usage}% ",
-	// "format": "{icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7}",
+    	// "format": "{icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7}",
         "tooltip": true,
-	"interval": 1,
+    	"interval": 1,
         "format-icons": [
              "<span color='#69ff94'>▁</span>", // green
              "<span color='#2aa9ff'>▂</span>", // blue
@@ -225,14 +265,30 @@
         },
         "on-click": "pavucontrol"
     },
+    "wireplumber": {
+        "format": "{volume}% {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pwvucontrol"
+    },
     "bluetooth": {
     	"format": "",
-	"format-disabled": "󰂲",
+    	"format-disabled": "󰂲",
     	"tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
     	"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
     	"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
     	"tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
-	"on-click": "blueman-manager"
+    	"on-click": "bluetooth on"
     },
     "custom/media": {
         "format": "{icon} {}",
@@ -252,7 +308,7 @@
             "activated": "",
             "deactivated": ""
         },
-        "on-click": "loginctl lock-session"
+        "on-click": "swaylock -f -i $HOME/dotfiles/wallpapers/eclipseTeal.png"
     }
 }
 

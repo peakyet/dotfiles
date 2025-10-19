@@ -260,12 +260,17 @@ label:focus {
 }
 
 #wireplumber {
-    background-color: #fff0f5;
-    color: #000000;
+    /* background-color: #fff0f5; */
+    color: @mauve;
+    background-color: transparent;
+    box-shadow: inset 0 -3px @mauve;
+    /* color: #000000; */
 }
 
 #wireplumber.muted {
-    background-color: #f53c3c;
+    /* background-color: #f53c3c; */
+    color: @mauve;
+    box-shadow: inset 0 -3px transparent;
 }
 
 #custom-media {
