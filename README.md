@@ -9,13 +9,9 @@ my personal dotfiles
 ## Softwares
 
 - [x] zsh
-- [x] pipewire
-- [x] wireplumber
 - [x] xdg-desktop, 
 - [x] docker
 - [x] openssh
-- [x] bluetooth, blueman, pulseaudio-bluetooth
-- [x] pavucontrol
 - [x] udiskie
 - [x] kitty
 - [x] waybar, otf-font-awesome, maple nerd font
@@ -24,8 +20,29 @@ my personal dotfiles
 - [x] zip, unzip
 - [x] fcitx5
 - [x] zen-browser-bin: zen browser, a modern browser.
+- [ ] cava (optional)
+- [ ] wluma
+- [ ] tmux and tqm
+- Audio (choose `pipewire` or `pulseaudio`)
+  - [x] pipewire
+    - [x] pipewire-audio: 关键组件
+    - [x] pipewire-jack: 兼容层，支持需要 JACK 音频服务器
+    - [x] wireplumber: 会话管理
+    - [x] pwvucontrol: 音量控制工具
+    - [x] pipewire-pulse: 代替 pulseaudio 和 pulseaudio-bluetooth
+    - [x] pipewire-alsa
+  - [ ] pulseaudio
+    - [ ] alsa-utils
+    - [ ] pavucontrol: PulseAudio Volume Control
+    - [ ] pulseaudio-bluetooth
+    - [ ] pulseaudio-alsa
+    - [ ] pulseaudio
+  - Bluetooth
+    - [ ] blueman
+    - [x] bluez
+    - [x] bluez-utils
 - notification
-  - [x] dunst
+  - [ ] dunst
   - [x] mako: notification daemon (replace dunst)
 - [x] yazi and Überzug++ (some bug with ueberzugpp in hyprland)
     - [x] ffmpegthumbnailer
@@ -38,7 +55,7 @@ my personal dotfiles
     - [x] zoxide (optional)
 - Pictures and video
   - [x] photoqt
-  - [x] grim, slurp, feh
+  - [ ] grim, slurp, feh
   - [x] gpu-screen-recorder(-gtk): Screen recording functionality
 - music player
   - [x] mpd, ncmpcpp
@@ -64,10 +81,10 @@ my personal dotfiles
 - AI
   - [x] claude-code: ai coding tui
   - [x] gemini-cli: ai coding tui developed by Google
-- [x] hyprland
-  - [x] hypridle
-  - [x] hyprlock
-  - [x] xdg-desktop-portal-hyprland
+- [ ] hyprland
+  - [ ] hypridle
+  - [ ] hyprlock
+  - [ ] xdg-desktop-portal-hyprland
 - [x] niri
   - [x] xdg-desktop-portal-gtk, xdg-desktop-portal-gnome, gnome-keyring
   - [x] polkit-kde-agent: authentication agent (installed before niri)
@@ -76,15 +93,12 @@ my personal dotfiles
   - [x] gdm
   - [x] cliphist: clipboard history support
 - app launcher
-  - [x] fuzzel
+  - [ ] fuzzel
   - [x] tofi
 - printer
-    - [ ] cpus-pdf
-    - [ ] system-config-printer
-    - [ ] hpuld for HP Laser 150 (printer)
-- [x] cava (optional)
-- [ ] wluma
-- [ ] tmux and tqm
+  - [ ] cpus-pdf
+  - [ ] system-config-printer
+  - [ ] hpuld for HP Laser 150 (printer)
 
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
@@ -120,3 +134,41 @@ nmcli dev wifi list
 ```bash
 nmcli dev wifi connect host password ****
 ```
+
+### 更换国内源
+
+打开[archlinux mirror](https://archlinux.org/mirrors/)，找到国内的源，按照下面的格式添加源到 `/etc/pacman.d/mirrorlist` 中：
+
+```
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+```
+
+### 蓝牙连接
+
+安装 `bluez, bluez-utils`.
+
+开启蓝牙：
+```bash
+bluetooth on
+```
+
+进入控制界面：
+```bash
+bluetoothctl
+```
+
+用 `help` 命令查看，基本上就是
+1. `scan on`
+2. `connect [device]`
+
+## TroubleShooting
+
+### wireplumber
+
+打开时报错
+```bash
+wp-event-dispatcher: wp_event_dispatcher_unregister_hook: assertion 'already_registered_dispatcher == self' failed
+```
+
+貌似是正常现象。
+
