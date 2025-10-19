@@ -71,19 +71,19 @@
 	    },
 	    "separate-outputs": true
     },
-    "niri/workspace": {
-       "on-update": "sudo pacman -Syu",
+    "niri/workspaces": {
+        "on-update": "sudo pacman -Syu",
         "format": "{icon}",
     	"format-icons": {
     		// Named workspaces
     		// (you need to configure them in niri)
-    		"browser": "",
-    		"discord": "",
+    		"daily": "",
+    		"work": "",
     		"chat": "<b></b>",
 
     		// Icons by state
-    		"active": "",
-    		"default": ""
+    		"active": "󱠇",
+    		"default": "󱤅"
     	}
     },
     "niri/window": {
