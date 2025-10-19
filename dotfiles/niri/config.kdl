@@ -443,6 +443,9 @@ environment {
     // GDK_BACKEND "wayland,x11"
     // CLUTTER_BACKEND "wayland"
     // SDL_VIDEODRIVER "wayland"
+
+    // modelscope api
+    MODELSCOPE_API_KEY "ms-8e6d6791-1ad4-4273-8601-4078585637b9"
 }
 
 // Cursor Setting
@@ -473,9 +476,9 @@ animations {
     // slowdown 3.0
 }
 
-// --------------------------------------------------------------------------------
-// ---------------------------- window rule -------------------------------------
-// 
+// -----------------------------------------------------------------------------------------
+// ---------------------------- window rule ------------------------------------------------
+// -----------------------------------------------------------------------------------------
 
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
@@ -543,6 +546,27 @@ window-rule {
     }
 }
 
+// open software in particular workspace
+ 
+// window-rule {
+//     match at-startup=true app-id="zen"
+//     open-on-workspace "daily"
+// }
+
+window-rule {
+    match at-startup=true app-id="obsidian"
+    match at-startup=true app-id="Zotero"
+    open-on-workspace "work"
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// --------------------------------- Named Workspaces ---------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+workspace "work"
+workspace "daily"
+
 // ------------------------------------------------------------------------------------------------------
 // --------------------------------- Keybindings --------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------
@@ -591,7 +615,7 @@ binds {
     // or do a four-finger swipe up on a touchpad.
     Mod+O repeat=false { toggle-overview; }
 
-    Mod+Q repeat=false { close-window; }
+    Mod+C hotkey-overlay-title="Close the Window" repeat=false { close-window; }
 
     Mod+Left  { focus-column-left; }
     Mod+Down  { focus-window-down; }
@@ -651,12 +675,12 @@ binds {
 
     Mod+Page_Down      { focus-workspace-down; }
     Mod+Page_Up        { focus-workspace-up; }
-    Mod+I              { focus-workspace-down; }
-    Mod+U              { focus-workspace-up; }
+    Mod+N              { focus-workspace-down; }
+    Mod+P              { focus-workspace-up; }
     Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
     Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
-    Mod+Ctrl+I         { move-column-to-workspace-down; }
-    Mod+Ctrl+U         { move-column-to-workspace-up; }
+    Mod+Ctrl+N         { move-column-to-workspace-down; }
+    Mod+Ctrl+P         { move-column-to-workspace-up; }
 
     // Alternatively, there are commands to move just a single window:
     // Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
@@ -664,8 +688,8 @@ binds {
 
     Mod+Shift+Page_Down { move-workspace-down; }
     Mod+Shift+Page_Up   { move-workspace-up; }
-    Mod+Shift+I         { move-workspace-down; }
-    Mod+Shift+U         { move-workspace-up; }
+    Mod+Shift+N         { move-workspace-down; }
+    Mod+Shift+P         { move-workspace-up; }
 
     // You can bind mouse wheel scroll ticks using the following syntax.
     // These binds will change direction based on the natural-scroll setting.
@@ -755,7 +779,7 @@ binds {
     // Makes the column "fill the rest of the space".
     Mod+Ctrl+F { expand-column-to-available-width; }
 
-    Mod+C { center-column; }
+    // Mod+C { center-column; }
 
     // Center all fully visible columns on screen.
     Mod+Ctrl+C { center-visible-columns; }
@@ -812,7 +836,7 @@ binds {
 
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
-    Mod+Shift+P { power-off-monitors; }
+    Mod+Alt+P { power-off-monitors; }
 
     // custom keybindings
     // Super+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; } // own
