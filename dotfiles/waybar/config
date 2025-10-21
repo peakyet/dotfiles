@@ -72,7 +72,7 @@
 	    "separate-outputs": true
     },
     "niri/workspaces": {
-        "on-update": "sudo pacman -Syu",
+        // "on-update": "sudo pacman -Syu",
         "format": "{icon}",
     	"format-icons": {
     		// Named workspaces
