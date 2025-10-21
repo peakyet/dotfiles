@@ -54,20 +54,20 @@
     "hyprland/window": {
 	    "format": "{}",
 	    "rewrite": {
-		    "Mozilla Firefox": "",
-		    ".* Mozilla Firefox": "",
+		    "Mozilla Firefox": " ",
+		    ".* Mozilla Firefox": " ",
 		    "(.*) .* Electron NCM": " $1",
 		    "(Volume Control)": "󱀞 $1",
 		    "Bluetooth Devices": "󰂯",
-		    "QQ": "",
+		    "QQ": " ",
 		    "(.*) .* PhotoQt Image Viewer": " $1",
 		    "(.*) .* WPS PDF": " $1",
 		    "百度网盘": " ",
-		    "": "󰣇",
-            ".* Zen Browser": "󰺕",
-            ".* Visual Studio Code": "",
-            "(.*) - .* - Obsidian .*": "$1",
-            "(.*) - Zotero": "$1"
+		    "": "󰣇 ",
+            ".* Zen Browser": "󰺕 ",
+            ".* Visual Studio Code": " ",
+            "(.*) - .* - Obsidian .*": " ",
+            "(.*) - Zotero": "󱛉 "
 	    },
 	    "separate-outputs": true
     },
@@ -77,32 +77,32 @@
     	"format-icons": {
     		// Named workspaces
     		// (you need to configure them in niri)
-    		"daily": "",
-    		"work": "",
-    		"chat": "<b></b>",
+    		"daily": " ",
+    		"work": " ",
+    		"chat": "<b> </b>",
 
     		// Icons by state
-    		"active": "  ",
-    		"default": ""
+    		"active": " ",
+    		"default": " "
     	}
     },
     "niri/window": {
 	    "format": "{}",
 	    "rewrite": {
-		    "Mozilla Firefox": "",
-		    ".* Mozilla Firefox": "",
+		    "Mozilla Firefox": " ",
+		    ".* Mozilla Firefox": " ",
 		    "(.*) .* Electron NCM": " $1",
 		    "(Volume Control)": "󱀞 $1",
 		    "Bluetooth Devices": "󰂯",
-		    "QQ": "",
+		    "QQ": " ",
 		    "(.*) .* PhotoQt Image Viewer": " $1",
 		    "(.*) .* WPS PDF": " $1",
 		    "百度网盘": " ",
-		    "": "󰣇",
-            ".* Zen Browser": "󰺕",
-            ".* Visual Studio Code": "",
-            "(.*) - .* - Obsidian .*": "$1",
-            "(.*) - Zotero": "$1"
+		    "": "󰣇 ",
+            ".* Zen Browser": "󰺕 ",
+            ".* Visual Studio Code": " ",
+            "(.*) - .* - Obsidian .*": " ",
+            "(.*) - Zotero": "󱛉 "
 	    },
 	    "separate-outputs": true
     },
