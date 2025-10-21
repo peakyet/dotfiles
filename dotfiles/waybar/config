@@ -77,13 +77,13 @@
     	"format-icons": {
     		// Named workspaces
     		// (you need to configure them in niri)
-    		"daily": "",
+    		"daily": "",
     		"work": "",
     		"chat": "<b></b>",
 
     		// Icons by state
-    		"active": "󱠇",
-    		"default": "󱤅"
+    		"active": "  ",
+    		"default": ""
     	}
     },
     "niri/window": {
