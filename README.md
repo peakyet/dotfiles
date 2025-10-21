@@ -20,6 +20,7 @@ my personal dotfiles
 - [x] zip, unzip
 - [x] fcitx5
 - [x] zen-browser-bin: zen browser, a modern browser.
+- [x] neofetch
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
