@@ -90,7 +90,7 @@ my personal dotfiles
   - [x] polkit-kde-agent: authentication agent (installed before niri)
   - [x] xwayland-satellite: run X11 apps like Steam or Discord
   - [x] swaylock, swayidle, swaybg
-  - [x] gdm
+  - [x] gdm: 登陆管理器
   - [x] cliphist: clipboard history support
 - app launcher
   - [ ] fuzzel
@@ -103,21 +103,26 @@ my personal dotfiles
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
 
-## TroubleShooting
-
-### obsidian
-
-- [无法使用中文](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium_.2F_Electron)
-
-无法使用中文，需要使用下面命令打开：
-```bash
-obsidian --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime
-```
-
 ## Todo
 
 - [ ] aliyunpan
 - [x] limit the length of music bar of waybar
+
+## Setup
+
+### Install dotfiles
+
+edit `install.sh` to include the dotfile you need and then run
+```
+./install.sh
+```
+
+### gdm
+
+设置
+```
+systemctl enable gdm
+```
 
 ## Common knownledge
 
@@ -172,3 +177,15 @@ wp-event-dispatcher: wp_event_dispatcher_unregister_hook: assertion 'already_reg
 
 貌似是正常现象。
 
+### obsidian
+
+> [!note]
+> 使用 `niri` 按照配置好环境变量 `ELECTRON_OZONE_PLATFORM_HINT "auto"`，就可以了
+> 不用下面的操作了
+
+- [无法使用中文](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium_.2F_Electron)
+
+无法使用中文，需要使用下面命令打开：
+```bash
+obsidian --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime
+```
