@@ -91,7 +91,7 @@ my personal dotfiles
   - [x] polkit-kde-agent: authentication agent (installed before niri)
   - [x] xwayland-satellite: run X11 apps like Steam or Discord
   - [x] swaylock, swayidle, swaybg
-  - [x] gdm: 登陆管理器
+  - [ ] gdm: 登陆管理器
   - [x] cliphist: clipboard history support
 - app launcher
   - [ ] fuzzel
@@ -106,7 +106,7 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
 
 ## Todo
 
-- [ ] aliyunpan
+- [ ] 配置waybar,激活状态为光带形式。
 - [x] limit the length of music bar of waybar
 
 ## Setup
