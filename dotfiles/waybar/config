@@ -9,7 +9,7 @@
     // "modules-center": ["hyprland/window"],
     "modules-left": ["niri/workspaces", "tray", "mpd"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "bluetooth",  "network", "cpu","memory", "disk", "temperature", "wireplumber", "backlight", "battery", "clock", "idle_inhibitor"],
+    "modules-right": ["keyboard-state", "bluetooth",  "network", "cpu","memory", "disk", "wireplumber", "backlight", "battery", "clock", "idle_inhibitor"],
     // Modules configuration
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -82,7 +82,7 @@
     		"chat": "<b> </b>",
 
     		// Icons by state
-    		"active": " ",
+    		// "active": " ",
     		"default": " "
     	}
     },
