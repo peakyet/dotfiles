@@ -246,15 +246,37 @@ label:focus {
 
 #network {
     color: @sky;
-
-    background: #99D1DB;
-    background: linear-gradient(0deg, rgba(153, 209, 219, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
-    /* background-color: transparent; */
+    background-color: transparent;
     box-shadow: inset 0 -3px @sky;
 }
 
 #network.disconnected {
+    background-color: transparent;
     box-shadow: inset 0 -3px transparent;
+}
+
+
+#network.disabled{
+    background-color: transparent;
+    box-shadow: inset 0 -3px transparent;
+}
+
+#network.wifi {
+    background: #99D1DB;
+    background: linear-gradient(0deg, rgba(153, 209, 219, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
+    box-shadow: inset 0 -3px @sky;
+}
+
+#network.ethernet {
+    background: #99D1DB;
+    background: linear-gradient(0deg, rgba(153, 209, 219, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
+    box-shadow: inset 0 -3px @sky;
+}
+
+#network.linked {
+    background: #99D1DB;
+    background: linear-gradient(0deg, rgba(153, 209, 219, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
+    box-shadow: inset 0 -3px @sky;
 }
 
 #bluetooth {
