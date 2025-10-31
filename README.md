@@ -21,6 +21,7 @@ my personal dotfiles
 - [x] fcitx5
 - [x] zen-browser-bin: zen browser, a modern browser.
 - [x] neofetch
+- [x] foxglove
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
