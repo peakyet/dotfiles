@@ -22,6 +22,9 @@ my personal dotfiles
 - [x] zen-browser-bin: zen browser, a modern browser.
 - [x] neofetch
 - [x] foxglove
+- [x] ghostscript: pdf 转换器
+- [x] piliplus-bin: bilibili client
+- [x] 4kvideodownloaderplus
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
@@ -167,6 +170,10 @@ bluetoothctl
 用 `help` 命令查看，基本上就是
 1. `scan on`
 2. `connect [device]`
+
+### Ghostscript
+
+见[blog](https://www.cnblogs.com/springcoming/p/18796226).
 
 ## TroubleShooting
 
