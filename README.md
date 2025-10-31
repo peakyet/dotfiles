@@ -107,7 +107,7 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
 
 ## Todo
 
-- [ ] 配置waybar,激活状态为光带形式。
+- [x] 配置waybar,激活状态为光带形式。
 - [x] limit the length of music bar of waybar
 
 ## Setup
