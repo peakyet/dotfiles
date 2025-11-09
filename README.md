@@ -25,9 +25,17 @@ my personal dotfiles
 - [x] ghostscript: pdf 转换器
 - [x] piliplus-bin: bilibili client
 - [x] 4kvideodownloaderplus
+- [x] tlp: power management
+  - [x] tlp-rdw:
+  - [x] tlpui
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
+- Nvidia (建议按照wiki上走，也可以看[blog](https://geek-blogs.com/blog/arch-linux-nvidia/#1-%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87%E6%A3%80%E6%9F%A5%E7%A1%AC%E4%BB%B6%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83))
+  - [x] nvidia-dkms
+  - [x] nvidia-settings
+  - [x] nvidia-utils
+  - [x] nvidia-container-toolkit
 - Audio (choose `pipewire` or `pulseaudio`)
   - [x] pipewire
     - [x] pipewire-audio: 关键组件
@@ -152,6 +160,13 @@ nmcli dev wifi connect host password ****
 ```
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
 ```
+
+### 添加仓库
+
+在 `/etc/pacman.conf`中进行修改。
+
+可以添加
+- extra
 
 ### 蓝牙连接
 
