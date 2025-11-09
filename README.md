@@ -28,6 +28,7 @@ my personal dotfiles
 - [x] tlp: power management
   - [x] tlp-rdw:
   - [x] tlpui
+- [x] steam
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
@@ -189,6 +190,16 @@ bluetoothctl
 ### Ghostscript
 
 见[blog](https://www.cnblogs.com/springcoming/p/18796226).
+
+### Steam
+
+安装完成后，第一次打开得挂梯子，他需要下载东西，国内网络一般搞不下来。
+
+使用proton来做兼容。
+
+开启N卡的帧生成 DLSS（40系以上）可以改善帧数。
+
+看参考视频[bilibili](https://www.bilibili.com/video/BV1zyttzPEmp)
 
 ## TroubleShooting
 
