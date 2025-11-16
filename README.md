@@ -29,6 +29,7 @@ my personal dotfiles
   - [x] tlp-rdw:
   - [x] tlpui
 - [x] steam
+- [x] mathematica-light
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
@@ -200,6 +201,14 @@ bluetoothctl
 开启N卡的帧生成 DLSS（40系以上）可以改善帧数。
 
 看参考视频[bilibili](https://www.bilibili.com/video/BV1zyttzPEmp)
+
+### mathematica-light
+
+正常下载激活即可。
+
+若有能力请支持正版。
+
+在线激活见[Mathematica安装激活极简教程 - 科研小飞的文章 - 知乎](https://zhuanlan.zhihu.com/p/632361071)，不过更高版本的激活见[这里](https://wu-yijun.github.io/Mathematica-Keygen-Mechanism/)
 
 ## TroubleShooting
 
