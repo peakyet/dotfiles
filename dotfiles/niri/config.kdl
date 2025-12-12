@@ -615,6 +615,7 @@ binds {
     // or do a four-finger swipe up on a touchpad.
     Mod+O repeat=false { toggle-overview; }
 
+    // Mod+Q hotkey-overlay-title="Close the Window" repeat=false { close-window; }
     Mod+C hotkey-overlay-title="Close the Window" repeat=false { close-window; }
 
     Mod+Left  { focus-column-left; }
@@ -840,5 +841,5 @@ binds {
 
     // custom keybindings
     // Super+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; } // own
-    Mod+M hotkey-overlay-title="Open ncmpcpp" { spawn-sh "kitty -e ncmpcpp"; }
+    // Mod+M hotkey-overlay-title="Open ncmpcpp" { spawn-sh "kitty -e ncmpcpp"; }
 }
