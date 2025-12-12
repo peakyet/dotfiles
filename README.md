@@ -30,6 +30,8 @@ my personal dotfiles
   - [x] tlpui
 - [x] steam
 - [x] mathematica-light
+- [x] usbip: 貌似没什么用
+- [x] solaar: Logit devices manager
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
