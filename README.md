@@ -20,6 +20,7 @@ my personal dotfiles
 - [x] zip, unzip
 - [x] fcitx5
 - [x] zen-browser-bin: zen browser, a modern browser.
+- [x] google-chrome: google browser
 - [x] neofetch
 - [x] foxglove
 - [x] ghostscript: pdf 转换器
@@ -32,6 +33,9 @@ my personal dotfiles
 - [x] mathematica-light
 - [x] usbip: 貌似没什么用
 - [x] solaar: Logit devices manager
+- [x] shotcut: video editor
+- [x] octave
+  - [x] gcc-fortran
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
@@ -211,6 +215,18 @@ bluetoothctl
 若有能力请支持正版。
 
 在线激活见[Mathematica安装激活极简教程 - 科研小飞的文章 - 知乎](https://zhuanlan.zhihu.com/p/632361071)，不过更高版本的激活见[这里](https://wu-yijun.github.io/Mathematica-Keygen-Mechanism/)
+
+### obsidian
+
+安装插件:
+- image auto upload: 自动上传图床
+- Zotero Integration: 导入文献引用
+
+### Zotero
+
+安装插件：
+- Better Bibtex for Zotero: 导出文献（与 obsidian 配合）
+
 
 ## TroubleShooting
 
