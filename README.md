@@ -100,8 +100,9 @@ my personal dotfiles
   - [x] linuxqq
   - [x] wechat
 - AI
-  - [x] claude-code: ai coding tui
-  - [x] gemini-cli: ai coding tui developed by Google
+  - [ ] claude-code: ai coding tui
+    - [ ] claude-code-router: help claude-code access other llms.
+  - [ ] gemini-cli: ai coding tui developed by Google
 - [ ] hyprland
   - [ ] hypridle
   - [ ] hyprlock
