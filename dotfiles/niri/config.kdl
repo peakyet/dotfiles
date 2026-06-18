@@ -444,8 +444,8 @@ environment {
     // CLUTTER_BACKEND "wayland"
     // SDL_VIDEODRIVER "wayland"
 
-    // modelscope api
-    MODELSCOPE_API_KEY "ms-8e6d6791-1ad4-4273-8601-4078585637b9"
+    
+    
 }
 
 // Cursor Setting
