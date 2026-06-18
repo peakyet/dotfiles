@@ -103,6 +103,8 @@ my personal dotfiles
   - [ ] claude-code: ai coding tui
     - [ ] claude-code-router: help claude-code access other llms.
   - [ ] gemini-cli: ai coding tui developed by Google
+  - [x] opencode: an open source ai cli\
+  - [x] reasonix: agent for Deepseek
 - [ ] hyprland
   - [ ] hypridle
   - [ ] hyprlock
