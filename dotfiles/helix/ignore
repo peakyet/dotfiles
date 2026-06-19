@@ -1,0 +1,2 @@
+# unignore in file picker and global search
+!.devcontainer/
