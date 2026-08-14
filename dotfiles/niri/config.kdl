@@ -78,30 +78,6 @@ input {
         // middle-emulation
     }
 
-    trackball {
-        // off
-        // natural-scroll
-        // accel-speed 0.2
-        // accel-profile "flat"
-        // scroll-method "on-button-down"
-        // scroll-button 273
-        // scroll-button-lock
-        // left-handed
-        // middle-emulation
-    }
-
-    tablet {
-        // off
-        map-to-output "eDP-1"
-        // left-handed
-        // calibration-matrix 1.0 0.0 0.0 0.0 1.0 0.0
-    }
-
-    touch {
-        // off
-        map-to-output "eDP-1"
-        // calibration-matrix 1.0 0.0 0.0 0.0 1.0 0.0
-    }
 
     // Uncomment this to make the mouse warp to the center of newly focused windows.
     // warp-mouse-to-focus
@@ -132,7 +108,7 @@ output "eDP-1" {
     // for the resolution.
     // If the mode is omitted altogether or is invalid, niri will pick one automatically.
     // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "2560x1600"
+    mode "2560x1600@165.004"
 
     // You can use integer or fractional scale, for example use 1.5 for 150% scale.
     // scale 2
@@ -154,7 +130,7 @@ output "eDP-1" {
 
     // This flag enables variable refresh rate (VRR, also known as adaptive sync, FreeSync, or G-Sync), if the output supports it.
     // You can check whether an output supports VRR in niri msg outputs.
-    variable-refresh-rate on-demand=true
+    // variable-refresh-rate on-demand=true
 
     focus-at-startup
     backdrop-color "#001100"
@@ -181,7 +157,7 @@ layout {
     // - "always", the focused column will always be centered.
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
-    center-focused-column "on-overflow"
+    center-focused-column "never"
 
     // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
     preset-column-widths {
@@ -590,7 +566,7 @@ binds {
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+D hotkey-overlay-title="Run an Application: tofi" { spawn "tofi-drun" "--drun-launch=true"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn-sh "swaylock -f -i $HOME/dotfiles/wallpapers/eclipseTeal.png"; } // own
-
+  
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
