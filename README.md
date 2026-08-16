@@ -36,6 +36,7 @@ my personal dotfiles
 - [x] shotcut: video editor
 - [x] octave
   - [x] gcc-fortran
+- [x] luarocks
 - [ ] cava (optional)
 - [ ] wluma
 - [ ] tmux and tqm
@@ -123,6 +124,10 @@ my personal dotfiles
   - [ ] cpus-pdf
   - [ ] system-config-printer
   - [ ] hpuld for HP Laser 150 (printer)
+- Code
+  - [x] clang
+  - [x] lua-languages-servers
+  - [x] pyright
 
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
