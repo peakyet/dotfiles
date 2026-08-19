@@ -125,6 +125,8 @@ my personal dotfiles
   - [x] clang
   - [x] lua-languages-servers
   - [x] pyright
+  - [x] tree-sitter-cli
+  - [x] uv: an extremely fast python package installer and resolver written in Rust.
 
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
