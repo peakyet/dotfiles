@@ -101,11 +101,8 @@ my personal dotfiles
   - [x] linuxqq
   - [x] wechat
 - AI
-  - [ ] claude-code: ai coding tui
-    - [ ] claude-code-router: help claude-code access other llms.
-  - [ ] gemini-cli: ai coding tui developed by Google
-  - [x] opencode: an open source ai cli\
-  - [x] reasonix: agent for Deepseek
+  - [x] opencode: an open source ai cli
+  - [x] deepseek-harness: agent developped by Deepseek AI
 - [ ] hyprland
   - [ ] hypridle
   - [ ] hyprlock
