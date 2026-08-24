@@ -1,5 +1,19 @@
 # Mako notification daemon configuration (managed by dotfiles)
 #
+# Appearance: Catppuccin Latte (light style) with rounded corners.
+# Palette: https://github.com/catppuccin/catppuccin (latte)
+
+# ── appearance ──────────────────────────────────────────────────────
+
+# Light card background, dark text, blue border, rounded corners.
+background-color=#eff1f5
+text-color=#4c4f69
+border-color=#89b4fa
+border-size=2
+border-radius=12
+
+# ── behavior ────────────────────────────────────────────────────────
+#
 # mako's built-in default-timeout is 0, i.e. notifications are never
 # auto-dismissed and stay on screen until clicked/dismissed. This includes
 # niri's screenshot notification, which is sent with expire_timeout = -1
