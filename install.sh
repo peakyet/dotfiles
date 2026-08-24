@@ -105,6 +105,23 @@ else
   linkDotfiles "$allDotfiles" $path
 fi
 
+# link the dsh desktop-notify plugin into the dsh web profile so it can be
+# loaded via ~/.dsh/profiles/web/cordis.patch.yml (name: './dsh-desktop-notify.js')
+dshProfileDir="$HOME/.dsh/profiles/web"
+echo "start linking dsh desktop-notify plugin to $dshProfileDir"
+if [ ! -d "$dshProfileDir" ]
+then
+	echo "create $dshProfileDir"
+	mkdir -p "$dshProfileDir"
+fi
+if [ "$1" = "force" ]
+then
+	linkFile "$path/DSH-Plugins/notify.js" "$dshProfileDir/dsh-desktop-notify.js" true
+else
+	linkFile "$path/DSH-Plugins/notify.js" "$dshProfileDir/dsh-desktop-notify.js"
+fi
+echo "-------------------------"
+
 # set service of niri
 # source "${path}/niri/add_wants.sh"
 sh "${path}/niri/add_wants.sh"

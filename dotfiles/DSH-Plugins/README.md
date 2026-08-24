@@ -16,7 +16,10 @@ mako / any notification daemon. With the mako config in this repo
 
 ## Install
 
-1. Make the plugin visible to the web profile (pick one):
+1. `./install.sh` (or `./install.sh force` to replace an existing link) already
+   creates the soft link
+   `notify.js → ~/.dsh/profiles/web/dsh-desktop-notify.js` at the end of the
+   run. If you don't want to run install.sh, set up the link yourself:
 
    ```sh
    # A — recommended: symlink into the profile dir so the patch uses the
