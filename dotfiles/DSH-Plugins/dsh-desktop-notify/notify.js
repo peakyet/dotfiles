@@ -12,24 +12,32 @@
 //         config: {}
 //
 // after putting this file there (e.g. keep the copy here in dotfiles and
-// symlink it: ln -s ~/dotfiles/dsh-notify/notify.js ~/.dsh/profiles/web/dsh-desktop-notify.js)
+// symlink it):
+//
+//   ln -s ~/dotfiles/dotfiles/DSH-Plugins/dsh-desktop-notify/notify.js \
+//         ~/.dsh/profiles/web/dsh-desktop-notify.js
 //
 // Then restart `dsh web`. No rebuild is needed; plugins load at boot.
 
 import { spawn } from "node:child_process";
 
 export const name = "desktop-notify";
-export const inject = ["sessions"];
 
 const APP_NAME = "dsh";
 
 /** Fire a notify-send and forget. Never throws into the agent loop. */
 function notify(summary, body) {
   try {
-    const child = spawn("notify-send", ["-a", APP_NAME, summary, body], {
-      detached: true,
-      stdio: "ignore",
-    });
+    const child = spawn(
+      "notify-send",
+      // `--` terminates option parsing so a body that starts with "-" is not
+      // misread as a flag (the question text is user-supplied).
+      ["-a", APP_NAME, "--", summary, body],
+      { detached: true, stdio: "ignore" },
+    );
+    // A missing/broken notify-send surfaces as an async "error" event on the
+    // child, not a throw. Swallow it: a failed spawn must never crash DSH.
+    child.on("error", () => {});
     child.unref();
   } catch {
     // notification failure must never break DSH
@@ -38,8 +46,9 @@ function notify(summary, body) {
 
 export function apply(ctx) {
   // Only ping "finished" for sessions the human actually drives, so
-  // subagent / background turns don't spam. Armed on user/message, consumed
-  // on the next completed turn/end.
+  // subagent / background turns don't spam. Armed on a real human user/message
+  // (source.kind === "user"), consumed on the next turn/end regardless of how
+  // that turn ended, so a later background completion can't fire a stale ping.
   const userDriven = new Set();
   // Per-session cooldown so rapid consecutive turns collapse into one ping.
   const lastFinished = new Map();
@@ -54,12 +63,18 @@ export function apply(ctx) {
   // invariant plugin uses the same subscription pattern).
   ctx.on(
     "session/event",
-    (sessionId, event) => {
-      if (!event || typeof event.type !== "string") return;
+    // The first argument is the live Session object, not its id — key all state
+    // by session.id for stable identity and easy cleanup on disposal.
+    (session, event) => {
+      if (!session || !event || typeof event.type !== "string") return;
+      const sessionId = session.id;
 
       switch (event.type) {
         case "user/message":
-          userDriven.add(sessionId);
+          // Only a direct human prompt counts. Synthetic agent.inject context,
+          // schedule/tool-job notices, and goal-continuation rounds all carry a
+          // non-"user" source and must not arm the "finished" ping.
+          if (event.data?.source?.kind === "user") userDriven.add(sessionId);
           break;
 
         case "tool/call": {
@@ -81,11 +96,14 @@ export function apply(ctx) {
         }
 
         case "turn/end": {
+          // Consume the arm for this session however the turn ended, so an
+          // aborted/blocked turn or a cooldown-suppressed ping can never leave a
+          // stale arm behind for a later background turn to release.
+          const armed = userDriven.delete(sessionId);
+          if (!armed) break;
           const kind = event.data?.reason?.kind;
           if (kind !== "completed") break;
-          if (!userDriven.has(sessionId)) break; // subagent/autonomous turn
           if (!cooldownOk(sessionId)) break;
-          userDriven.delete(sessionId);
           lastFinished.set(sessionId, Date.now());
           notify("dsh finished", "Your reply is ready.");
           break;
@@ -94,6 +112,18 @@ export function apply(ctx) {
         default:
           break;
       }
+    },
+    { global: true },
+  );
+
+  // Drop live session state when the session leaves the store, so userDriven /
+  // lastFinished never grow unboundedly over the process lifetime.
+  ctx.on(
+    "session/disposed",
+    (session) => {
+      if (!session) return;
+      userDriven.delete(session.id);
+      lastFinished.delete(session.id);
     },
     { global: true },
   );

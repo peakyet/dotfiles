@@ -10,9 +10,18 @@ web GUI that sends a desktop notification when:
    session you sent a message to (subagent/autonomous turns are ignored, and a
    per-session cooldown collapses rapid turns into one ping).
 
+The "armed" flag is set only by a *direct human prompt* (`user/message` with
+`source.kind = "user"`), so synthetic context — `agent.inject` notices,
+schedule/tool-job pings, goal-continuation rounds, relays — never arms a ping.
+The flag is consumed on the *next* `turn/end` however that turn ends, so an
+aborted/blocked turn or a cooldown-suppressed ping can't leave a stale arm for a
+later background turn to release.
+
 Notifications go through `notify-send` (`libnotify`), so they appear in
 mako / any notification daemon. With the mako config in this repo
-(`dotfiles/mako/config`), they auto-dismiss after 5 s.
+(`dotfiles/mako/config`), they auto-dismiss after 5 s. `notify-send` is spawned
+fire-and-forget (`detached`, `stdio: ignore`) and its async `error` event is
+swallowed, so a missing/broken `notify-send` can never crash DSH.
 
 ## Install
 
@@ -68,10 +77,17 @@ mako / any notification daemon. With the mako config in this repo
 
 DSH's session events are published app-wide to `session/event` with
 `{ global: true }` listeners (the session-invariant plugin subscribes the same
-way). Event payloads (verified in `dsh-session`, `dsh-agent-loop`):
+way). The `session/event` listener receives `(session, event)` — the **live `Session`
+object**, not its id. State is keyed by `session.id` so it survives the object
+and can be cleaned up when the session is disposed. The listener also subscribes
+to `session/disposed` and deletes that session's entries, so the two per-session
+maps never grow unboundedly over the process lifetime.
+
+Event payloads (verified in `dsh-session`, `dsh-agent-loop`):
 
 - `tool/call` → `data = { turn, step, callId, name, arguments }`
 - `turn/end` → `data = { turn, reason: { kind } }`
-- `user/message` → fired when the client appends your message
+- `user/message` → `data = { …, source: { kind } }`; `kind === "user"` is a
+  direct human prompt, other kinds are synthetic context
 
 The plugin needs no DSH source changes and loads from plain JS at boot.
