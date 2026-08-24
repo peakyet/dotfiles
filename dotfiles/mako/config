@@ -12,6 +12,10 @@ border-color=#89b4fa
 border-size=2
 border-radius=12
 
+# Same font family as the terminal (kitty: "Maple Mono NF CN" @ 12),
+# bumped up in size for glanceable notifications.
+font=Maple Mono NF CN 14
+
 # ── behavior ────────────────────────────────────────────────────────
 #
 # mako's built-in default-timeout is 0, i.e. notifications are never
