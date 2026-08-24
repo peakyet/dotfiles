@@ -11,6 +11,7 @@ excludeConfigs=(
 	# "gitconfig"
 	# "helix"
 	# "hypr"
+	"DSH-Plugins"
 	"joshuto"
 	# "kitty"
 	# "ncmpcpp"
