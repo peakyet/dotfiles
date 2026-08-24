@@ -1,0 +1,9 @@
+# Mako notification daemon configuration (managed by dotfiles)
+#
+# mako's built-in default-timeout is 0, i.e. notifications are never
+# auto-dismissed and stay on screen until clicked/dismissed. This includes
+# niri's screenshot notification, which is sent with expire_timeout = -1
+# ("daemon decides"), so mako falls back to default-timeout below.
+#
+# Auto-dismiss such notifications after 5 seconds (value in milliseconds).
+default-timeout=5000
