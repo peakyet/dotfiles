@@ -116,9 +116,9 @@ then
 fi
 if [ "$1" = "force" ]
 then
-	linkFile "$path/DSH-Plugins/notify.js" "$dshProfileDir/dsh-desktop-notify.js" true
+	linkFile "$path/DSH-Plugins/dsh-desktop-notify/notify.js" "$dshProfileDir/dsh-desktop-notify.js" true
 else
-	linkFile "$path/DSH-Plugins/notify.js" "$dshProfileDir/dsh-desktop-notify.js"
+	linkFile "$path/DSH-Plugins/dsh-desktop-notify/notify.js" "$dshProfileDir/dsh-desktop-notify.js"
 fi
 echo "-------------------------"
 

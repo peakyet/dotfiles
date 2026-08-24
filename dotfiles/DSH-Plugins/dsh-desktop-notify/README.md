@@ -24,11 +24,11 @@ mako / any notification daemon. With the mako config in this repo
    ```sh
    # A — recommended: symlink into the profile dir so the patch uses the
    #                    designed relative-specifier form
-   ln -s ~/dotfiles/dotfiles/DSH-Plugins/notify.js ~/.dsh/profiles/web/dsh-desktop-notify.js
+   ln -s ~/dotfiles/dotfiles/DSH-Plugins/dsh-desktop-notify/notify.js ~/.dsh/profiles/web/dsh-desktop-notify.js
 
    # B — alternative: no symlink, reference across the home dir instead
    #     (works as long as `~/dotfiles` is at this path)
-   #     name: '../../../dotfiles/dotfiles/DSH-Plugins/notify.js'
+   #     name: '../../../dotfiles/dotfiles/DSH-Plugins/dsh-desktop-notify/notify.js'
    ```
 
 2. Append to `~/.dsh/profiles/web/cordis.patch.yml` (the profile's own patch
@@ -41,7 +41,7 @@ mako / any notification daemon. With the mako config in this repo
          config: {}
    ```
 
-   With option B, use `name: '../../../dotfiles/dotfiles/DSH-Plugins/notify.js'` instead.
+   With option B, use `name: '../../../dotfiles/dotfiles/DSH-Plugins/dsh-desktop-notify/notify.js'` instead.
 
 3. Restart `dsh web` (however you normally start it — Ctrl+C and relaunch, or
    `systemctl --user restart <service>`). Sessions persist; the page just
