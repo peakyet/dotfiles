@@ -33,8 +33,8 @@ default-timeout=5000
 [app-name=dsh summary="dsh needs your input"]
 default-timeout=0
 border-color=#d20f39
-on-notify=paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
 
 # ── DSH finished notifications play a completion chime ───────────────
 [app-name=dsh summary="dsh finished"]
-on-notify=paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
