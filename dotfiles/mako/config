@@ -26,10 +26,15 @@ font=Maple Mono NF CN 14
 # Auto-dismiss such notifications after 5 seconds (value in milliseconds).
 default-timeout=5000
 
-# ── DSH question notifications are sticky + red-bordered ─────────────
-# Urgent questions from the plugin get a red frame to grab attention.
+# ── DSH question notifications are sticky + red-bordered + sound ────
+# Urgent questions from the plugin get a red frame and a chime.
 # Exact strings, matching the plugin's notify-send call:
 #   notify-send -a dsh "dsh needs your input" ...
 [app-name=dsh summary="dsh needs your input"]
 default-timeout=0
 border-color=#d20f39
+on-notify=paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+
+# ── DSH finished notifications play a completion chime ───────────────
+[app-name=dsh summary="dsh finished"]
+on-notify=paplay /usr/share/sounds/freedesktop/stereo/complete.oga
