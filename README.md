@@ -116,6 +116,8 @@ my personal dotfiles
   - [ ] system-config-printer
   - [ ] hpuld for HP Laser 150 (printer)
 - Code
+  - [x] typst
+    - [x] tinymist
   - [x] clang
   - [x] lua-languages-servers
   - [x] pyright
