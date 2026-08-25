@@ -26,10 +26,10 @@ font=Maple Mono NF CN 14
 # Auto-dismiss such notifications after 5 seconds (value in milliseconds).
 default-timeout=5000
 
-# ── DSH question notifications are sticky ─────────────────────────────
-# When the dsh-desktop-notify plugin asks the user a question, keep the
-# popup on screen until it is clicked/dismissed (default-timeout=0 disables
-# the auto-dismiss timer). Exact strings, matching the plugin's
-# notify-send call: notify-send -a dsh "dsh needs your input" ...
+# ── DSH question notifications are sticky + red-bordered ─────────────
+# Urgent questions from the plugin get a red frame to grab attention.
+# Exact strings, matching the plugin's notify-send call:
+#   notify-send -a dsh "dsh needs your input" ...
 [app-name=dsh summary="dsh needs your input"]
 default-timeout=0
+border-color=#d20f39
