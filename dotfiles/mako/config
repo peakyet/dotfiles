@@ -16,8 +16,11 @@ border-radius=12
 # bumped up in size for glanceable notifications.
 font=Maple Mono NF CN 14
 
-# Wider notification box (default is 300 logical px).
-width=480
+# Notification box width in logical px. Mako keeps one fixed width per rule
+# (it cannot auto-size to the text), so widths are tuned per message type:
+# long question text gets the widest box (the absolute cap), short "finished"
+# pings get a narrow one, everything else sits in between.
+width=400
 
 # ── behavior ────────────────────────────────────────────────────────
 #
@@ -34,10 +37,12 @@ default-timeout=5000
 # Exact strings, matching the plugin's notify-send call:
 #   notify-send -a dsh "dsh needs your input" ...
 [app-name=dsh summary="dsh needs your input"]
+width=520
 default-timeout=0
 border-color=#d20f39
 on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
 
 # ── DSH finished notifications play a completion chime ───────────────
 [app-name=dsh summary="dsh finished"]
+width=320
 on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
