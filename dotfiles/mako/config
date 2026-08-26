@@ -16,6 +16,9 @@ border-radius=12
 # bumped up in size for glanceable notifications.
 font=Maple Mono NF CN 14
 
+# Wider notification box (default is 300 logical px).
+width=480
+
 # ── behavior ────────────────────────────────────────────────────────
 #
 # mako's built-in default-timeout is 0, i.e. notifications are never
