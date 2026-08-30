@@ -95,8 +95,9 @@ my personal dotfiles
   - [x] linuxqq
   - [x] wechat
 - AI
-  - [x] opencode: an open source ai cli
+  - [ ] opencode: an open source ai cli
   - [x] deepseek-harness: agent developped by Deepseek AI
+  - [x] zcode
 - [ ] hyprland
   - [ ] hypridle
   - [ ] hyprlock
