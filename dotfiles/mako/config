@@ -46,3 +46,10 @@ on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
 [app-name=dsh summary="dsh finished"]
 width=320
 on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+
+# ── kitty notifications play a completion chime ──────────────────────
+# codex-cli's "agent-turn-complete" notify is forwarded by kitty as a
+# desktop notification whose app-name falls back to "kitty", so match
+# any notification originating from the terminal and play the chime.
+[app-name=kitty]
+on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
