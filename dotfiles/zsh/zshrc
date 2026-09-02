@@ -34,6 +34,9 @@ eval "$(zoxide init zsh)" # zoxide
 # nvidia
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib/nvidia
 
+# python tool 
+export PATH="/home/chun/.local/bin:$PATH"
+
 # bob
 # export PATH=${PATH}:~/.local/share/bob/nvim-bin
 
