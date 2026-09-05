@@ -11,9 +11,9 @@ Target reader: comfortable with algebra and basic calculus; wants the "why" and 
 
 Ground the explanation in accurate, gathered information about the topic. Research it before writing.
 
-Restrictions:
-- Do not write code to verify the theorem. Verification code is forbidden.
-- The only exception is code used purely for presentation or a demo (e.g. an interactive widget or simulation that illustrates the concept). Such code must not check, prove, or assert the result.
+Calculations:
+- When you need a mathematical or scientific calculation — to check a value, evaluate a symbol, solve, integrate, differentiate, or plot — use the `wolfram-mcp` skill (the Wolfram Language MCP server) instead of writing your own verification code. Load and follow that skill's instructions before computing, and prefer exact results over approximations, with labelled plots.
+- Use the Wolfram tools to create plots and visualizations that illustrate the topic, and embed them in the artifact with clear labels and legends.
 
 Guide the explanation with these principles:
 - Save every generated file — the HTML explanation and the markdown document — into a folder named after the topic inside `reference/` (e.g. `reference/gradient-descent/` for "gradient descent"), keeping that topic's files together.
@@ -21,6 +21,7 @@ Guide the explanation with these principles:
 - Prefer figures over prose — use a figure to explain and teach each key idea.
 - When building figures, follow the layout and inspection rules in [references/figures.md](references/figures.md).
 - Lead with a short motivation: the problem it solves and why it matters.
+- Before every claim or derivation step, state its motivation first: explain why it is worth doing or including, and never assert a fact without its "why".
 - Use a concrete worked example and, where useful, a small demo to show how the theorem applies.
 - Derive concisely; justify every step in a clause and leave no unexplained jumps.
 - End each section with a one-sentence takeaway, and connect steps so no gaps hide.

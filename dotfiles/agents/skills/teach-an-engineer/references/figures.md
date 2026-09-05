@@ -7,6 +7,10 @@ Build and verify the figures with these rules:
 - Build each figure as HTML <div>s laid out with CSS grid/flex, so MathJax renders equations natively inside them; overlay a small inline <svg> only for geometric primitives like axes, circles, and arrows — never put text or math inside an SVG.
 - Before finishing, inspect every figure: verify elements sit in the right place, do not overlap or clip, and any visible equations or labels are correct — fix problems rather than leaving them.
 
+## Wolfram figures
+
+Generate plots, curves, and other visualizations with the Wolfram tools (`wolfram-mcp`) and embed them in the artifact as image assets — they carry their own labels and legends. Keep the authored overlay SVG geometry-only (axes, circles, arrows) and put all equations in HTML via MathJax, so a Wolfram plot is used for data and curves rather than for text or math placement.
+
 ## Recommended patterns (optional)
 
 These improve layout and legibility; treat them as suggestions, not additional requirements.
