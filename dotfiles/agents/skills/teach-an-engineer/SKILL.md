@@ -16,8 +16,14 @@ Calculations:
 - Use the Wolfram tools to create plots and visualizations that illustrate the topic, and embed them in the artifact with clear labels and legends.
 
 Guide the explanation with these principles:
+- Pick a template first. Open `templates/README.md` for a one-page comparison of
+  the available styles and choose ONE of them — never hand-build a new template
+  unless the user explicitly asks for a custom look. If the user gives no
+  preference, offer the styles and ask which they want; if they don't care,
+  default to the best fit (e.g. `warm-serif.html` for a math-heavy,
+  long-form note, `navy-hero.html` for a broad, card-based overview).
 - Save every generated file — the HTML explanation and the markdown document — into a folder named after the topic inside `reference/` (e.g. `reference/gradient-descent/` for "gradient descent"), keeping that topic's files together.
-- Use light mode: a light background with dark text throughout the artifact, no dark theme.
+- Use light mode: a light background with dark text throughout the artifact, no dark theme. The templates in `templates/` already follow this — pick one of them.
 - Prefer figures over prose — use a figure to explain and teach each key idea.
 - When building figures, follow the layout and inspection rules in [references/figures.md](references/figures.md).
 - Lead with a short motivation: the problem it solves and why it matters.
@@ -26,7 +32,7 @@ Guide the explanation with these principles:
 - Derive concisely; justify every step in a clause and leave no unexplained jumps.
 - End each section with a one-sentence takeaway, and connect steps so no gaps hide.
 - Define every symbol on first use and keep notation consistent.
-- Typeset equations to LaTeX quality: italic variables, proper spacing, and correct structures for fractions, exponents, and operators. Render them with MathJax embedded in the page so they read like LaTeX and stay self-contained — no CDN and no pre-rendered SVG math.
+- Typeset equations to LaTeX quality: italic variables, proper spacing, and correct structures for fractions, exponents, and operators. Render them with the math engine the chosen template uses (KaTeX auto-render) so they read like LaTeX and stay self-contained — inline the KaTeX bundle, no CDN and no pre-rendered SVG math.
 - Move from the core idea to its variations and improvements.
 - Tie the idea to related theory and show where it fits a larger framework.
 

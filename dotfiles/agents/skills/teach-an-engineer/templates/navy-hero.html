@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template — Navy Hero (navy gradient / cards)</title>
+<style>
+  :root{
+    --bg:#f3f5f9; --card:#ffffff; --ink:#1f2a44; --muted:#5a6a84; --soft:#e7ebf3;
+    --accent:#2b5ad8; --accent-soft:#e8edfc; --teal:#0e8f83; --teal-soft:#e3f4f2;
+    --amber:#b45309; --amber-soft:#fdf0e0; --line:#dbe2ee; --code:#28344f;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+       font:16.5px/1.66 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 20px 80px}
+
+  /* ---------- sticky top navigation ---------- */
+  nav{position:sticky; bottom:0; z-index:50; background:rgba(243,245,249,.94);
+      backdrop-filter:blur(6px); border-top:1px solid var(--line)}
+  nav .inner{margin:0 auto; padding:10px 20px;
+             display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+             justify-content:center}
+  nav a{color:var(--muted); text-decoration:none; font-size:13.5px; padding:4px 12px;
+        border-radius:99px; white-space:nowrap; border:1px solid transparent}
+  nav a:hover{background:var(--soft); color:var(--accent)}
+  nav a.active{background:var(--accent); color:#fff}
+  nav a.active:hover{background:var(--accent); color:#fff}
+
+  /* ---------- gradient hero card ---------- */
+  header.hero{margin:34px auto 10px; max-width:1080px; padding:38px 36px 30px;
+    background:linear-gradient(135deg,#1c2f63 0%,#27418f 55%,#2b5ad8 100%);
+    color:#fff; border-radius:20px; box-shadow:0 14px 40px rgba(28,47,99,.22)}
+  header.hero .kicker{color:#bcd0ff; letter-spacing:.14em; font-size:12.5px;
+                      text-transform:uppercase; font-weight:600}
+  header.hero h1{margin:10px 0 12px; font-size:40px; line-height:1.18; letter-spacing:-.01em}
+  header.hero p.lead{font-size:18.5px; color:#d9e4ff; max-width:900px; margin:6px 0 0}
+  header.hero .chips{margin-top:20px; display:flex; gap:8px; flex-wrap:wrap}
+  header.hero .chip{background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+                    color:#eef3ff; font-size:13px; padding:4px 12px; border-radius:99px}
+
+  main{margin-top:26px}
+  section{margin:44px 0 8px}
+  h2{font-size:27px; margin:0 0 6px; letter-spacing:-.01em; display:flex;
+     align-items:baseline; gap:12px}
+  h2 .no{font-size:14px; font-weight:700; color:#fff; background:var(--accent);
+         border-radius:8px; padding:3px 9px; white-space:nowrap; align-self:center}
+  h3{font-size:20px; margin:30px 0 8px; color:#18305e}
+  h4{font-size:16.5px; margin:22px 0 6px; color:#2a3f70}
+  p{margin:10px 0}
+  .prose{max-width:880px}
+  .muted{color:var(--muted)}
+
+  /* ---------- cards & callouts ---------- */
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px;
+        padding:24px 26px; margin:18px 0; box-shadow:0 2px 10px rgba(31,42,68,.05)}
+  .note{background:var(--amber-soft); border-left:4px solid var(--amber); border-radius:8px;
+        padding:12px 16px; margin:16px 0; font-size:15px}
+  .takeaway{background:var(--accent-soft); border:1px solid #cdd9f7; border-radius:12px;
+            padding:13px 18px; margin:20px 0 6px}
+  .takeaway b{color:var(--accent)}
+
+  /* ---------- math & figures ---------- */
+  .eqline{text-align:center; padding:6px 0}
+  .formula{background:#f8faff; border:1px solid #d6e0f5; border-radius:12px;
+           padding:14px 18px; margin:18px 0}
+  .formula .tag{font-size:12.5px; color:var(--accent); font-weight:600;
+                text-transform:uppercase; letter-spacing:.06em}
+  figure{margin:26px 0 10px}
+  .fig{background:var(--card); border:1px solid var(--line); border-radius:16px;
+       padding:18px 16px 14px; box-shadow:0 2px 10px rgba(31,42,68,.05)}
+  .fig svg, .fig img{width:100%; height:auto; display:block}
+  figure .cap{font-size:14.5px; color:var(--muted); margin:10px 4px 0; line-height:1.55}
+  figure .cap b{color:var(--ink)}
+
+  /* ---------- notation table ---------- */
+  table.nt{width:100%; border-collapse:collapse; margin:8px 0; font-size:14.8px}
+  table.nt th, table.nt td{border-bottom:1px solid var(--line); text-align:left;
+                           padding:7px 10px; vertical-align:top}
+  table.nt th{background:#f0f3fa; font-weight:600; color:#2a3f70}
+  table.nt td:first-child{white-space:nowrap; font-family:Cambria,"Times New Roman",serif;
+                          font-size:15.5px}
+
+  /* ---------- card grid ---------- */
+  .zoo{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+       gap:14px; margin:16px 0}
+  .zoo .zc{background:#f7f9fd; border:1px solid var(--line); border-radius:14px;
+           padding:16px 16px 12px}
+  .zoo .zc h4{margin:0 0 6px; font-size:16px}
+  .zoo .zc p{font-size:14.3px; margin:6px 0; color:#33415e}
+
+  footer{margin-top:56px; border-top:1px solid var(--line); padding-top:14px;
+         font-size:13px; color:var(--muted)}
+</style>
+<!-- Reference docs inline KaTeX + fonts for offline use; CDN shown here for brevity. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});"></script>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="kicker">Kicker line for engineers</div>
+    <h1>Document Title</h1>
+    <p class="lead">One-paragraph lead: the idea and how the page is organized.</p>
+    <div class="chips">
+      <span class="chip">keyword one</span><span class="chip">keyword two</span>
+      <span class="chip">interactive demos inside</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section id="notation">
+      <div class="card">
+        <h3>Notation used throughout</h3>
+        <table class="nt">
+          <tr><th>symbol</th><th>meaning</th></tr>
+          <tr><td>\(x\)</td><td>state</td></tr>
+          <tr><td>\(u\)</td><td>input</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="s1">
+      <h2><span class="no">1</span>Section heading</h2>
+      <div class="prose">
+        <p>Body paragraph with inline math \(P_\theta\) and a <b>key term</b>.</p>
+        <div class="eqline">\[ \bar{\nabla}_\theta = G^{-1}\nabla_\theta \]</div>
+        <div class="formula"><span class="tag">Named formula</span><br>
+          \[ f(x) \;\le\; L\,\|x-x_k\| \]</div>
+        <div class="note"><b>Note label:</b> caveat or remark paragraph.</div>
+        <div class="takeaway"><b>Takeaway.</b> One-sentence section summary.</div>
+      </div>
+    </section>
+
+    <section id="s2">
+      <h2><span class="no">2</span>Section with cards and figure</h2>
+      <div class="prose"><p>Lead-in text.</p></div>
+      <div class="zoo">
+        <div class="zc"><h4>Card one</h4><p>Short description of the item.</p></div>
+        <div class="zc"><h4>Card two</h4><p>Short description of the item.</p></div>
+        <div class="zc"><h4>Card three</h4><p>Short description of the item.</p></div>
+      </div>
+      <figure>
+        <div class="fig"><img src="figure.png" alt=""></div>
+        <div class="cap"><b>Figure 1.</b> Caption sentence describing the figure.</div>
+      </figure>
+    </section>
+
+    <footer>
+      Provenance line: sources, verification notes, or further reading.
+    </footer>
+
+  </main>
+
+  <nav><div class="inner">
+    <a href="#notation">Notation</a><a href="#s1">Section heading</a><a href="#s2">Cards &amp; figure</a>
+  </div></nav>
+
+  <script>
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]'));
+    var items = links.map(function(a){
+      var el = document.querySelector(a.getAttribute('href'));
+      return el ? {a:a, el:el} : null;
+    }).filter(Boolean);
+    function update(){
+      var ref = window.innerHeight * 0.35, cur = null, top = -Infinity;
+      items.forEach(function(it){
+        var r = it.el.getBoundingClientRect();
+        if (r.top <= ref && r.top > top){ top = r.top; cur = it; }
+      });
+      items.forEach(function(it){ it.a.classList.toggle('active', it === cur); });
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', update);
+    update();
+  })();
+  </script>
+</body>
+</html>

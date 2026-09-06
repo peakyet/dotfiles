@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template — Warm Serif (serif / warm)</title>
+<style>
+  /* ---------- reset & base ---------- */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:17px;scroll-behavior:smooth}
+  body{
+    font-family:"Source Serif Pro",Georgia,"Times New Roman",serif;
+    color:#1a1a1a; background:#fdfcf8;
+    line-height:1.7; max-width:900px; margin:0 auto; padding:2rem 1.5rem 4rem;
+  }
+  img{max-width:100%;display:block}
+
+  /* ---------- typography ---------- */
+  h1{font-family:"Source Serif Pro",Georgia,serif; font-weight:700; font-size:2.1rem;
+     letter-spacing:-0.01em; line-height:1.2; margin:2.5rem 0 0.4rem; color:#111;
+     border-bottom:2px solid #d4a72c; padding-bottom:0.3rem}
+  h2{font-family:"Source Serif Pro",Georgia,serif; font-weight:600; font-size:1.45rem;
+     color:#222; margin:2.2rem 0 0.6rem}
+  h3{font-size:1.12rem; color:#333; margin:1.4rem 0 0.4rem}
+  p{margin:0.75rem 0}
+  a{color:#9a5b00; text-decoration:none; border-bottom:1px solid #d4a72c}
+  a:hover{color:#7a4a00}
+  strong{color:#111}
+  em{color:#444}
+  ul,ol{margin:0.6rem 0 0.6rem 1.4rem}
+  li{margin:0.3rem 0}
+
+  /* ---------- equation blocks ---------- */
+  .eq{display:block; text-align:center; margin:1.1rem 0; padding:0.75rem 0.5rem;
+      background:#f7f4ec; border-left:3px solid #d4a72c; border-radius:4px;
+      overflow-x:auto; line-height:1.9}
+
+  /* ---------- callouts ---------- */
+  .callout{background:#f7f4ec; border-left:4px solid #d4a72c; border-radius:0 6px 6px 0;
+           padding:0.75rem 1rem; margin:1rem 0; font-size:0.97rem}
+  .callout.takeaway{border-left-color:#3a7d44; background:#edf5ec}
+  .callout.takeaway strong{color:#1d5e2a}
+  .callout.intuition{border-left-color:#4a7bb5; background:#eef4fb}
+  .callout.intuition strong{color:#1f4f7a}
+
+  /* ---------- figures ---------- */
+  .figure{margin:1.4rem 0; padding:1rem; background:#fff; border:1px solid #e8e4d8;
+          border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+  .figure svg{width:100%;height:auto;display:block}
+  .figure-caption{font-size:0.88rem; color:#555; text-align:center; margin-top:0.6rem;
+                  line-height:1.5}
+  .figure-caption b{color:#333}
+  .figure-side-by-side{display:grid; grid-template-columns:1fr 1fr; gap:1.2rem}
+
+  /* ---------- table ---------- */
+  table{border-collapse:collapse; margin:0.8rem 0; font-size:0.92rem}
+  th,td{border:1px solid #ddd; padding:0.45rem 0.7rem; text-align:left}
+  th{background:#f0ebe0; color:#333}
+  tr:nth-child(even) td{background:#fafaf5}
+
+  /* ---------- section divider ---------- */
+  hr{border:none; border-top:1px solid #e0dcd0; margin:2.5rem 0}
+
+  /* ---------- page chrome ---------- */
+  .toc{position:sticky; bottom:0; z-index:50; display:flex; gap:0.6rem;
+       flex-wrap:wrap; align-items:center; justify-content:center;
+       background:rgba(253,252,248,.96); backdrop-filter:blur(6px);
+       border:1px solid #e8e4d8; border-radius:10px 10px 0 0;
+       padding:0.6rem 0.9rem; margin:1.4rem calc(50% - 50vw) 0}
+  .toc a{color:#6b5a29; text-decoration:none; font-size:0.85rem;
+         padding:0.22rem 0.7rem; border-radius:999px; border:1px solid transparent;
+         white-space:nowrap}
+  .toc a:hover{background:#f7f4ec; border-color:#d4a72c; color:#9a5b00}
+  .toc a.active{background:#d4a72c; color:#fff; border-color:#d4a72c}
+  .toc a.active:hover{background:#d4a72c; color:#fff}
+  .hero{font-size:1.1rem; color:#333; margin-bottom:1.5rem;
+        padding:0.8rem 1rem; background:#f7f4ec; border-radius:6px}
+  .hero strong{color:#111}
+
+  @media (max-width:700px){
+    body{font-size:16px; padding:1.2rem 0.9rem 3rem}
+    h1{font-size:1.7rem}
+    h2{font-size:1.25rem}
+    .figure-side-by-side{grid-template-columns:1fr}
+  }
+</style>
+<!-- Reference docs inline KaTeX + fonts for offline use; CDN shown here for brevity. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[
+    {left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});"></script>
+</head>
+<body>
+
+  <h1>Document Title</h1>
+  <p class="hero"><strong>One-paragraph summary</strong> of the whole page: the problem, the
+  trick, and what the reader will be able to do afterwards.</p>
+
+  <h2 id="s1">1. First section heading</h2>
+  <p>Body paragraph with inline math \(\boldsymbol{w}\) and a <em>key idea</em>.</p>
+
+  <div class="eq">\[ \boldsymbol{x}[k+1] \;=\; A\boldsymbol{x}[k] + B\boldsymbol{u}[k] + \boldsymbol{w}[k] \]</div>
+
+  <div class="callout"><b>Point label:</b> short callout paragraph.</div>
+  <div class="callout intuition"><strong>Intuition:</strong> one-paragraph intuition callout.</div>
+  <div class="callout takeaway"><strong>Takeaway:</strong> one-sentence summary.</div>
+
+  <hr>
+
+  <h2 id="s2">2. Section with figure and table</h2>
+  <p>Lead-in text for the figure and table.</p>
+
+  <div class="figure">
+    <img src="figure.png" alt="">
+    <div class="figure-caption"><b>Figure 1.</b> Caption sentence describing the figure.</div>
+  </div>
+
+  <table>
+    <tr><th>symbol</th><th>meaning</th></tr>
+    <tr><td>\(x[k]\)</td><td>state at step \(k\)</td></tr>
+    <tr><td>\(u[k]\)</td><td>input at step \(k\)</td></tr>
+  </table>
+
+  <nav class="toc">
+    <a href="#s1">First section heading</a><a href="#s2">Figure &amp; table</a>
+  </nav>
+
+  <script>
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]'));
+    var items = links.map(function(a){
+      var el = document.querySelector(a.getAttribute('href'));
+      return el ? {a:a, el:el} : null;
+    }).filter(Boolean);
+    function update(){
+      var ref = window.innerHeight * 0.35, cur = null, top = -Infinity;
+      items.forEach(function(it){
+        var r = it.el.getBoundingClientRect();
+        if (r.top <= ref && r.top > top){ top = r.top; cur = it; }
+      });
+      items.forEach(function(it){ it.a.classList.toggle('active', it === cur); });
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', update);
+    update();
+  })();
+  </script>
+</body>
+</html>
