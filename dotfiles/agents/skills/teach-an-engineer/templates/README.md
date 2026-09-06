@@ -1,8 +1,8 @@
 # HTML templates
 
 Pick **one** of these templates and reuse it. Do **not** hand-build a new template
-unless the user explicitly asks for a custom look. Each file is a complete,
-self-contained skeleton (layout + CSS + KaTeX) — copy it, recolor it, and fill in
+unless the user explicitly asks for a custom look. Each file is a complete
+skeleton (layout + CSS + KaTeX from a CDN) — copy it, recolor it, and fill in
 the placeholder sections.
 
 ## Quick pick
@@ -37,13 +37,13 @@ the placeholder sections.
   `.formula` (tagged), `.fig` + caption, `.zoo` card grid, notation table
   `table.nt`, footer.
 
-## Math & self-contained
+## Math rendering
 
 Both templates render math with **KaTeX auto-render**, loaded from a CDN along
 with `katex.min.css`; inline math uses `\(...\)`, display math uses `\[...\]`.
-There is no MathJax CHTML template in this set. To ship a truly offline file,
-inline the KaTeX CSS/JS (and web fonts) into the page and drop the CDN
-`<link>`/`<script>` tags.
+There is no MathJax CHTML template in this set. The CDN links are the default —
+inline the KaTeX CSS/JS (and web fonts) only if an offline copy is specifically
+requested.
 
 ## Reusing a template
 
@@ -53,5 +53,4 @@ inline the KaTeX CSS/JS (and web fonts) into the page and drop the CDN
    and the body font family if you change the look.
 4. Replace the placeholder sections with the topic content, keeping the
    intuition / takeaway callouts from `SKILL.md`.
-5. Swap the CDN math for the inlined KaTeX bundle before shipping a
-   self-contained file.
+5. Keep the CDN KaTeX links; inline them only if an offline copy is requested.

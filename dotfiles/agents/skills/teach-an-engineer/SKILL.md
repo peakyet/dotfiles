@@ -5,7 +5,7 @@ description: Explain a topic like I'm a well-educated engineer. Use when the use
 
 # teach-an-engineer
 
-Produce a single, self-contained HTML explanation (one file, all assets embedded, no network dependencies) that teaches the topic to a well-educated engineer who is new to it but comfortable with basic math. Build intuition first, then support it with rigor: use equations where they clarify, but never let algebra replace a mental picture.
+Produce a single HTML explanation that teaches the topic to a well-educated engineer who is new to it but comfortable with basic math. Build intuition first, then support it with rigor: use equations where they clarify, but never let algebra replace a mental picture.
 
 Target reader: comfortable with algebra and basic calculus; wants the "why" and the underlying mechanism, not a formula to memorize.
 
@@ -24,6 +24,12 @@ Guide the explanation with these principles:
   long-form note, `navy-hero.html` for a broad, card-based overview).
 - Save every generated file — the HTML explanation and the markdown document — into a folder named after the topic inside `reference/` (e.g. `reference/gradient-descent/` for "gradient descent"), keeping that topic's files together.
 - Use light mode: a light background with dark text throughout the artifact, no dark theme. The templates in `templates/` already follow this — pick one of them.
+- Spend the depth on the **why** and the **how**: the mechanism, the reasoning, the
+  intuition, and each step of the derivation. Keep the **what** (definitions,
+  terminology, taxonomy, naming) to a brief introduction and then move on — a
+  definition the reader can look up elsewhere does not deserve its own section. The
+  value of this artifact is the why and the how, not a re-description of what the
+  thing is.
 - Prefer figures over prose — use a figure to explain and teach each key idea.
 - When building figures, follow the layout and inspection rules in [references/figures.md](references/figures.md).
 - Lead with a short motivation: the problem it solves and why it matters.
@@ -32,7 +38,7 @@ Guide the explanation with these principles:
 - Derive concisely; justify every step in a clause and leave no unexplained jumps.
 - End each section with a one-sentence takeaway, and connect steps so no gaps hide.
 - Define every symbol on first use and keep notation consistent.
-- Typeset equations to LaTeX quality: italic variables, proper spacing, and correct structures for fractions, exponents, and operators. Render them with the math engine the chosen template uses (KaTeX auto-render) so they read like LaTeX and stay self-contained — inline the KaTeX bundle, no CDN and no pre-rendered SVG math.
+- Typeset equations to LaTeX quality: italic variables, proper spacing, and correct structures for fractions, exponents, and operators. Render them with the math engine the chosen template uses (KaTeX auto-render) so they read like LaTeX. Loading KaTeX from a CDN is fine — there is no need to inline the bundle or avoid pre-rendered SVG math unless the user asks.
 - Move from the core idea to its variations and improvements.
 - Tie the idea to related theory and show where it fits a larger framework.
 
