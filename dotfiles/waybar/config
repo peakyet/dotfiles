@@ -1,15 +1,18 @@
 {
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 30, // Waybar height (to be removed for auto height)
+    "height": 38, // Waybar height (to be removed for auto height)
+    "margin-top": 6,
+    "margin-left": 10,
+    "margin-right": 10,
     // "width": 1280, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
+    "spacing": 5, // Gaps between glass modules
     // Choose the order of the modules
     // "modules-left": ["hyprland/workspaces", "tray", "mpd"],
     // "modules-center": ["hyprland/window"],
-    "modules-left": ["niri/workspaces", "tray", "mpd"],
+    "modules-left": ["niri/workspaces", "mpd"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "bluetooth",  "network", "cpu","memory", "disk", "wireplumber", "backlight", "battery", "clock", "idle_inhibitor"],
+    "modules-right": ["keyboard-state", "bluetooth", "network", "cpu", "memory", "disk", "wireplumber", "backlight", "battery", "clock", "idle_inhibitor", "tray"],
     // Modules configuration
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -77,9 +80,9 @@
     	"format-icons": {
     		// Named workspaces
     		// (you need to configure them in niri)
-    		"daily": " ",
-    		"work": " ",
-    		"chat": "<b> </b>",
+            "daily": "",
+            "work": "",
+            "chat": "",
 
     		// Icons by state
     		// "active": " ",
@@ -88,6 +91,7 @@
     },
     "niri/window": {
 	    "format": "{}",
+	    "max-length": 60,
 	    "rewrite": {
 		    "Mozilla Firefox": " ",
 		    ".* Mozilla Firefox": " ",
@@ -99,8 +103,8 @@
 		    "(.*) .* WPS PDF": " $1",
 		    "百度网盘": " ",
 		    "": "󰣇 ",
-            ".* Zen Browser": "󰺕 ",
-            ".* Visual Studio Code": " ",
+            ".*Zen Browser": "󰺕 ",
+            ".*Visual Studio Code": " ",
             "(.*) - .* - Obsidian .*": " ",
             "(.*) - Zotero": "󱛉 "
 	    },
@@ -110,7 +114,7 @@
     "keyboard-state": {
         "numlock": false,
         "capslock": true,
-        "format": "{name} {icon}",
+        "format": "{icon}",
         "format-icons": {
             "locked": "",
             "unlocked": ""
@@ -124,8 +128,12 @@
         "device": "nvidia_0"
     },
     "disk": {
-	    "format": "{percentage_used}% 󰨣",
-	    "tooltip-format": "Disk: {used}/{total}"
+        "format": "󰨣",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        },
+	    "tooltip-format": "Disk: {used}/{total} ({percentage_used}% used)"
     },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} ",
@@ -175,24 +183,18 @@
         // "format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
-        "format": "{usage}% ",
-    	// "format": "{icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7}",
-        "tooltip": true,
-    	"interval": 1,
+        "format": " {icon}",
+	    "tooltip-format": "CPU usage: {usage}%\nLoad: {load}",
+	    "interval": 1,
         "format-icons": [
-             "<span color='#69ff94'>▁</span>", // green
-             "<span color='#2aa9ff'>▂</span>", // blue
-             "<span color='#f8f8f2'>▃</span>", // white
-             "<span color='#f8f8f2'>▄</span>", // white
-             "<span color='#ffffa5'>▅</span>", // yellow
-             "<span color='#ffffa5'>▆</span>", // yellow
-             "<span color='#ff9977'>▇</span>", // orange
-             "<span color='#dd532e'>█</span>"  // red
+             "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"
         ]
     },
     "memory": {
-        "format": "{percentage}%:{swapPercentage}% ",
-	"tooltip-format": "ram: {used:0.1f}G/{total:0.1f}G\nswap: {swapUsed:0.1f}G/{swapTotal:0.1f}G"
+	    "format": " {icon}",
+	    "interval": 2,
+	    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+	    "tooltip-format": "RAM: {used:0.1f}G/{total:0.1f}G ({percentage}%)\nSwap: {swapUsed:0.1f}G/{swapTotal:0.1f}G ({swapPercentage}%)"
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -209,8 +211,9 @@
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format": "{icon}",
+        "format-icons": ["󰃞", "󰃝", "󰃟", "󰃠"],
+        "tooltip-format": "Brightness: {percent}%"
     },
     "battery": {
     	"bat": "BAT0",
@@ -220,9 +223,9 @@
                 "warning": 30,
                 "critical": 15
             },
-            "format": "{capacity}% {icon}",
-            "format-charging": "{capacity}% ",
-            "format-plugged": "{capacity}% ",
+            "format": "{icon}",
+            "format-charging": "{icon} ",
+            "format-plugged": "{icon} ",
             "format-alt": "{time} {icon}",
             // "format-good": "", // An empty format will hide the module
             // "format-full": "",
@@ -248,12 +251,13 @@
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
+        "format": "{icon}",
+        "format-bluetooth": "{icon}",
+        "format-bluetooth-muted": "",
+        "format-muted": "",
+        "format-source": "",
         "format-source-muted": "",
+        "tooltip-format": "{volume}% {desc}",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -266,10 +270,11 @@
         "on-click": "pavucontrol"
     },
     "wireplumber": {
-        "format": "{volume}% {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
+        "format": "{icon}",
+        "format-muted": "",
+        "format-source": "",
         "format-source-muted": "",
+        "tooltip-format": "{volume}% {node_name}",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -308,7 +313,6 @@
             "activated": "",
             "deactivated": ""
         },
-        "on-click": "swaylock -f -i $HOME/dotfiles/wallpapers/eclipseTeal.png"
+        "on-click": "swaylock -f -i $HOME/dotfiles/wallpapers/red_circuit.png"
     }
 }
-

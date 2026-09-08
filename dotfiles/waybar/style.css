@@ -1,97 +1,83 @@
 @import "frappe.css";
 
+/* Floating liquid-glass bar: translucent surfaces, soft highlights, clear accents. */
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
     font-family: FontAwesome, Maple Mono NF CN;
-    font-size: 17px;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 window#waybar {
-    /* background-color: rgba(43, 48, 59, 0.5); */
     background-color: transparent;
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    /* background-color: @base; */
-    /* border: 3px solid @crust; */
-    /* color: #ffffff; */
     color: @text;
     transition-property: background-color;
-    transition-duration: .5s;
+    transition-duration: 180ms;
 }
 
 window#waybar.hidden {
-    opacity: 0.7;
+    opacity: 0.78;
 }
 
-/*
-window#waybar.empty {
-    background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
-window#waybar.termite {
-    background-color: #3F3F3F;
-}
-
-window#waybar.chromium {
-    background-color: #000000;
-    border: none;
-}
-
+window#waybar.termite,
+window#waybar.chromium,
 window#waybar.firefox {
-    background-color: #000000;
+    background-color: transparent;
     border: none;
 }
 
 button {
-    /* Use box-shadow instead of border so the text isn't offset */
-    box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
     border: none;
-    border-radius: 0;
+    border-radius: 9px;
+    box-shadow: none;
+    color: @subtext1;
+    transition-property: background-color, color;
+    transition-duration: 160ms;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
-    background: inherit;
-    box-shadow: inset 0 -3px #8ceebb;
-}
-
-#workspaces button {
-    padding: 0 5px;
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.18);
+    box-shadow: none;
     color: @text;
 }
 
-#workspaces button:hover {
-    /* background: rgba(0, 0, 0, 0.2); */
-    background: #8ceebb;
-    background: linear-gradient(0deg, rgba(140, 238, 187, 0.6) 15%, rgba(215, 243, 247, 0.05) 80%);
+/* Keep workspaces compact: only the selected workspace gets a glass surface. */
+#workspaces {
+    margin: 0 1px;
+    padding: 0;
+}
+
+#workspaces button {
+    min-width: 25px;
+    min-height: 29px;
+    margin: 0 1px;
+    padding: 0 5px;
+    background-color: transparent;
+    color: @overlay1;
 }
 
 #workspaces button.active {
-    /* background-color: #64727D; */
-    /* background-color: rgba(110, 114, 125, 0.8); */
+    background-color: rgba(231, 130, 132, 0.30);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.04) 45%, rgba(231, 130, 132, 0.18));
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    border-radius: 12px;
+    color: @text;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.30),
+                inset 0 -1px rgba(231, 130, 132, 0.20),
+                0 2px 8px rgba(231, 130, 132, 0.18);
+}
 
-    background: #EEAECA;
-    background: linear-gradient(0deg, rgba(238, 174, 202, 0.53) 15%, rgba(148, 187, 233, 0.15) 80%);
-
-    color: #EEAECA;
-    box-shadow: inset 0 -3px #EEAECA;
+#workspaces button:hover {
+    background-color: rgba(140, 170, 238, 0.24);
 }
 
 #workspaces button.urgent {
-    /* background-color: #eb4d4b; */
-    box-shadow: inset 0 -3px @red;
+    background-color: rgba(231, 130, 132, 0.38);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    color: @flamingo;
 }
 
-#mode {
-    background-color: #64727D;
-    border-bottom: 3px solid #ffffff;
-}
-
+/* Shared glass surface for status modules. */
 #clock,
 #battery,
 #cpu,
@@ -108,266 +94,64 @@ button:hover {
 #mode,
 #idle_inhibitor,
 #scratchpad,
-#mpd {
-    padding: 0 10px;
-    color: #ffffff;
+#mpd,
+#keyboard-state {
+    min-height: 29px;
+    margin: 0 1px;
+    padding: 0 11px;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 16px;
+    background-color: rgba(255, 255, 255, 0.11);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.03) 42%, rgba(255, 255, 255, 0.12));
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.30),
+                inset 0 -1px rgba(17, 17, 27, 0.13),
+                0 4px 14px rgba(17, 17, 27, 0.16);
 }
 
 #window {
-    border-radius: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-
-    color: #CFE3FF;
-    /* background-color: rgba(110, 114, 125, 0.8); */
-
-    background: #EEAECA;
-    background: linear-gradient(0deg, rgba(148, 187, 233, 0.8) 30% ,rgba(238, 174, 202, 0.5) 80%);
-
-    /* https://github.com/zhang-yunqi/dotfiles.git */
-    /* background: radial-gradient(circle, rgba(137,180,250,120) 0%, rgba(142,179,250,120) 6%, rgba(148,226,213,1) 14%, rgba(147,178,250,1) 14%, rgba(155,176,249,1) 18%, rgba(245,194,231,1) 28%, rgba(158,175,249,1) 28%, rgba(181,170,248,1) 58%, rgba(205,214,244,1) 69%, rgba(186,169,248,1) 69%, rgba(195,167,247,1) 72%, rgba(137,220,235,1) 73%, rgba(198,167,247,1) 78%, rgba(203,166,247,1) 100%); */ 
-    /* background-size: 400% 400%; */
-    /* animation use lots of cpu */
-    /* animation: gradient_f 20s cubic-bezier(.72,.39,.21,1) infinite; */
-}
-
-@keyframes gradient_f {
-	0% {
-		background-position: 0% 200%;
-	}
-	50% {
-		background-position: 200% 0%;
-	}
-	100% {
-		background-position: 400% 200%;
-	}
-}
-
-#workspaces {
+    min-height: 29px;
     margin: 0 4px;
+    padding: 0 13px;
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    border-radius: 13px;
+    background-color: rgba(229, 200, 144, 0.15);
+    background-image: linear-gradient(115deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04) 45%, rgba(229, 200, 144, 0.14));
+    color: @text;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36),
+                inset 0 -1px rgba(17, 17, 27, 0.12),
+                0 4px 16px rgba(17, 17, 27, 0.18);
 }
 
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
+#mode {
+    border-color: rgba(238, 187, 190, 0.35);
+    background-color: rgba(234, 153, 156, 0.22);
+    color: @flamingo;
 }
 
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-    margin-right: 0;
-}
-
-#clock {
-    /* background-color: #64727D; */
-    /* background-color: transparent; */
-
-    background: #F2D5CF;
-    background: linear-gradient(0deg, rgba(242, 213, 207, 0.6) 15%, rgba(215, 243, 247, 0.05) 80%);
-    box-shadow: inset 0 -3px @rosewater;
-    color: @rosewater;
-}
-
-#battery {
-    /* background-color: #ffffff; */
-    /* color: #000000; */
-
-    background-color: transparent;
-    box-shadow: inset 0 -3px transparent;
-    color: #e782d1;
-}
-
-#battery.charging, #battery.plugged, #battery.full{
-    /* color: #ffffff; */
-    /* background-color: #26A65B; */
-
-    background: #e782d1;
-    background: linear-gradient(0deg, rgba(231, 130, 209, 0.6) 15%, rgba(215, 243, 247, 0.05) 80%);
-    background-color: transparent;
-    box-shadow: inset 0 -3px @pink;
-    color: @pink;
-}
-
-@keyframes blink {
-    to {
-        color: #000000;
-    	box-shadow: inset 0 -3px transparent;
-    }
-}
-
-#battery.critical:not(.charging) {
-    color: @pink;
-    box-shadow: inset 0 -3px @pink;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-
-label:focus {
-    background-color: #000000;
-}
-
-#cpu {
-    /* background-color: #2ecc71; */
-
-    background: #81C8BE;
-    background: linear-gradient(0deg, rgba(129, 200, 190, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
-
-    /* background-color: transparent; */
-    box-shadow: inset 0 -3px @teal;
-    color: @teal;
-}
-
-#memory {
-    /* background-color: #9b59b6; */
-    /* background-color: transparent; */
-    background: #EF9F76;
-    background: linear-gradient(0deg, rgba(239, 159, 118, 0.6) 15%, rgba(229, 200, 144, 0.05) 80%);
-    box-shadow: inset 0 -3px @yellow;
-    color: @yellow;
-}
-
-#disk {
-    /* background-color: #964B00; */
-    /* background-color: transparent; */
-    background: #EF9F76;
-    background: linear-gradient(0deg, rgba(239, 159, 118, 0.6) 15%, rgba(214, 255, 255, 0.05) 80%);
-    box-shadow: inset 0 -3px @peach;
+#mpd {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(239, 159, 118, 0.20);
     color: @peach;
 }
 
-#backlight {
-    /* background-color: #fff0f5; */
-    color: @mauve;
-    background: #CA9EE6;
-    background: linear-gradient(0deg, rgba(202, 158, 230, 0.6) 15%, rgba(215, 243, 247, 0.05) 80%);
-    /* background-color: transparent; */
-    box-shadow: inset 0 -3px @mauve;
-    /* color: #000000; */
+#mpd.playing {
+    background-color: rgba(239, 159, 118, 0.34);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.16),
+                0 3px 14px rgba(239, 159, 118, 0.20);
 }
 
-#network {
-    color: @sky;
-    background-color: transparent;
-    box-shadow: inset 0 -3px @sky;
-}
-
-#network.disconnected {
-    background-color: transparent;
-    box-shadow: inset 0 -3px transparent;
-}
-
-
-#network.disabled{
-    background-color: transparent;
-    box-shadow: inset 0 -3px transparent;
-}
-
-#network.wifi {
-    background: #99D1DB;
-    background: linear-gradient(0deg, rgba(153, 209, 219, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
-    box-shadow: inset 0 -3px @sky;
-}
-
-#network.ethernet {
-    background: #99D1DB;
-    background: linear-gradient(0deg, rgba(153, 209, 219, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
-    box-shadow: inset 0 -3px @sky;
-}
-
-#network.linked {
-    background: #99D1DB;
-    background: linear-gradient(0deg, rgba(153, 209, 219, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
-    box-shadow: inset 0 -3px @sky;
-}
-
-#bluetooth {
-    color: @sapphire;
-    /* background: #85C1DC; */
-    background-color: transparent;
-    box-shadow: inset 0 -3px @sapphire;
-}
-
-#bluetooth.disabled {
-    box-shadow: inset 0 -3px transparent;
-}
-
-#bluetooth.off {
-    box-shadow: inset 0 -3px transparent;
-}
-
-#bluetooth.on {
-    box-shadow: inset 0 -3px @sapphire;
-}
-
-#bluetooth.connected {
-    background: linear-gradient(0deg, rgba(133, 193, 220, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
-    box-shadow: inset 0 -3px @sapphire;
-}
-
-#pulseaudio {
-    color: @mauve;
-    background-color: transparent;
-    box-shadow: inset 0 -3px @mauve;
-    /* color: #000000; */
-}
-
-#pulseaudio.muted {
-    color: @mauve;
-    box-shadow: inset 0 -3px transparent;
-    /* color: #2a5c45; */
-}
-
-#wireplumber {
-    color: @red;
-    box-shadow: inset 0 -3px @red;
-    background: #E78284;
-    background: linear-gradient(0deg, rgba(231, 130, 132, 0.6) 15%, rgba(215, 243, 247, 0.05) 80%);
-    /* background-color: #90b1b1; */
-    /* background-color: transparent; */
-}
-
-#wireplumber.muted {
-    /* background-color: #f53c3c; */
-    color: @red;
-    box-shadow: inset 0 -3px transparent;
-}
-
-#custom-media {
-    background-color: #66cc99;
-    color: #2a5c45;
-    min-width: 100px;
-}
-
-#custom-media.custom-spotify {
-    background-color: #66cc99;
-}
-
-#custom-media.custom-vlc {
-    background-color: #ffa000;
-}
-
-#temperature {
-    /* background-color: #f0932b; */
-    background-color: transparent;
-    box-shadow: inset 0 -3px @maroon;
-    color: @maroon;
-}
-
-#temperature.critical {
-    /* background-color: #eb4d4b; */
-    background-color: transparent;
-    box-shadow: inset 0 -3px red;
-    color: red;
+#mpd.disconnected,
+#mpd.stopped,
+#mpd.paused {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: @overlay1;
 }
 
 #tray {
-    /* background-color: transparent; */
-    background: #4897db;
-    background: linear-gradient(0deg, rgba(72, 151, 219, 0.61) 15%, rgba(0, 187, 255, 0.15) 80%);
-
-    box-shadow: inset 0 -3px #4897db;
+    padding: 0 9px;
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(166, 209, 137, 0.20);
+    color: @green;
 }
 
 #tray > .passive {
@@ -376,97 +160,225 @@ label:focus {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: rgba(110, 114, 125, 0.8);
-}
-
-#idle_inhibitor {
-    /* background-color: #2d3436; */
-    background-color: transparent;
-    box-shadow: inset 0 -3px transparent;
-    color: @blue;
-}
-
-#idle_inhibitor.activated {
-    /* background-color: transparent; */
-    background: #8CAAEE;
-    background: linear-gradient(0deg, rgba(140, 170, 238, 0.6) 15%, rgba(215, 243, 247, 0.05) 80%);
-    box-shadow: inset 0 -3px @blue;
-    /* background-color: #ecf0f1; */
-}
-
-#mpd {
-    background-color: transparent;
-    box-shadow: inset 0 -3px @teal;
-    color: #8ceee1;
-}
-
-#mpd.playing {
-    background: #8ceee1;
-    background: linear-gradient(0deg, rgba(140, 238, 225, 0.6) 15%, rgba(215, 243, 247, 0.05) 80%);
-}
-
-#mpd.disconnected {
-    /* background-color: #f53c3c; */
-    /* background-color: transparent; */
-    box-shadow: inset 0 -3px transparent;
-}
-
-#mpd.stopped {
-    /* background-color: #90b1b1; */
-    box-shadow: inset 0 -3px transparent;
-}
-
-#mpd.paused {
-    /* background-color: #51a37a; */
-    box-shadow: inset 0 -3px transparent;
-}
-
-#language {
-    background: #00b093;
-    color: #740864;
-    padding: 0 5px;
-    margin: 0 5px;
-    min-width: 16px;
+    background-color: rgba(231, 130, 132, 0.35);
 }
 
 #keyboard-state {
-    /* background: #97e1ad; */
-    /* color: #000000; */ 
-    padding: 0 0px;
-    margin: 0 1px;
-    min-width: 16px;
-    background-color: transparent;
-    box-shadow: inset 0 -3px transparent;
-    color: @lavender;
+    padding: 0;
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(166, 209, 137, 0.18);
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(166, 209, 137, 0.04) 45%, rgba(255, 255, 255, 0.12));
+    color: @green;
 }
 
 #keyboard-state > label {
-    padding: 0 5px;
+    min-width: 29px;
+    min-height: 29px;
+    padding: 0 6px;
 }
 
 #keyboard-state > label.locked {
-    /* background: rgba(0, 0, 0, 0.2); */
-    background: #BABBF1;
-    background: linear-gradient(0deg, rgba(186, 187, 241, 0.6) 15%, rgba(0, 255, 255, 0.01) 80%);
-    box-shadow: inset 0 -3px @lavender;
+    margin: -1px;
+    border-radius: 15px;
+    background-color: rgba(166, 209, 137, 0.38);
+    color: @text;
+}
+
+#bluetooth {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(129, 200, 190, 0.19);
+    color: @teal;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: @overlay1;
+}
+
+#bluetooth.connected {
+    background-color: rgba(129, 200, 190, 0.34);
+}
+
+#network {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(137, 220, 235, 0.20);
+    color: @sky;
+}
+
+#network.wifi,
+#network.ethernet,
+#network.linked {
+    background-color: rgba(137, 220, 235, 0.34);
+}
+
+#network.disconnected,
+#network.disabled {
+    background-color: rgba(231, 130, 132, 0.22);
+    border-color: rgba(231, 130, 132, 0.32);
+    color: @red;
+}
+
+#cpu {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(140, 170, 238, 0.20);
+    color: @blue;
+}
+
+#memory {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(186, 187, 241, 0.20);
+    color: @lavender;
+}
+
+#disk {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(202, 158, 230, 0.20);
+    color: @mauve;
+}
+
+#disk.warning {
+    background-color: rgba(202, 158, 230, 0.34);
+    border-color: rgba(239, 159, 118, 0.52);
+}
+
+#disk.critical {
+    background-color: rgba(231, 130, 132, 0.38);
+    border-color: rgba(231, 130, 132, 0.58);
+    color: @red;
+}
+
+#temperature {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(244, 184, 228, 0.18);
+    color: @pink;
+}
+
+#temperature.critical {
+    background-color: rgba(231, 130, 132, 0.38);
+    border-color: rgba(231, 130, 132, 0.55);
+    color: @red;
+}
+
+#wireplumber,
+#pulseaudio {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(244, 184, 228, 0.20);
+    color: @pink;
+}
+
+#wireplumber.muted,
+#pulseaudio.muted {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: @overlay1;
+}
+
+#backlight {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(242, 213, 207, 0.20);
+    color: @rosewater;
+}
+
+#battery {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(231, 130, 132, 0.20);
+    color: @red;
+}
+
+#battery.charging,
+#battery.plugged,
+#battery.full {
+    background-color: rgba(129, 200, 190, 0.32);
+    border-color: rgba(129, 200, 190, 0.45);
+    color: @teal;
+}
+
+#battery.warning {
+    background-color: rgba(239, 159, 118, 0.34);
+    border-color: rgba(239, 159, 118, 0.48);
+    color: @peach;
+}
+
+#battery.critical:not(.charging) {
+    background-color: rgba(231, 130, 132, 0.38);
+    border-color: rgba(231, 130, 132, 0.55);
+    color: @red;
+    animation-name: blink;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes blink {
+    to {
+        background-color: rgba(231, 130, 132, 0.16);
+        color: @flamingo;
+    }
+}
+
+#clock {
+    border-color: rgba(255, 255, 255, 0.44);
+    background-color: rgba(239, 159, 118, 0.22);
+    color: @peach;
+}
+
+#idle_inhibitor {
+    border-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(229, 200, 144, 0.18);
+    color: @yellow;
+}
+
+#idle_inhibitor.activated {
+    background-color: rgba(229, 200, 144, 0.38);
+    color: @text;
+}
+
+#custom-media {
+    min-width: 100px;
+    background-color: rgba(129, 200, 190, 0.24);
+    color: @teal;
+}
+
+#custom-media.custom-spotify {
+    background-color: rgba(166, 209, 137, 0.25);
+    color: @green;
+}
+
+#custom-media.custom-vlc {
+    background-color: rgba(239, 159, 118, 0.25);
+    color: @peach;
+}
+
+#language {
+    min-width: 16px;
+    margin: 0 2px;
+    padding: 0 7px;
+    border: 1px solid rgba(129, 200, 190, 0.30);
+    border-radius: 14px;
+    background-color: rgba(129, 200, 190, 0.20);
+    color: @teal;
 }
 
 #scratchpad {
-    background: rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.10);
 }
 
 #scratchpad.empty {
-	background-color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
 }
 
-#backlight-slider trough {
-    /* min-height: 10px; */
-    min-width: 80px;
-    border-radius: 30px;
-    background-color: black;
+label:focus {
+    background-color: rgba(202, 158, 230, 0.30);
 }
-#backlight-slider highlight {
-    /* min-width: 80px; */
-    border-radius: 30px;
-    background-color: blue;
+
+/* Keep the left and right glass clusters aligned with the bar edge. */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+.modules-right > widget:last-child > #tray {
+    margin-right: 0;
 }
