@@ -10,8 +10,8 @@ Create a single HTML explanation for an engineer who is new to the topic but com
 ## Requirements
 
 - First read `templates/README.md`, choose exactly one existing template, and use a light background with dark text throughout. Ask the user to choose when they express no preference; otherwise choose the best fit. Do not create a custom template unless requested.
-- Save the HTML and, after completion, the final markdown summary under `reference/<topic>/`.
-- Emphasize mechanism, intuition, reasoning, and concise derivations. Keep definitions and terminology brief. Begin with motivation, explain why each claim or step matters, and end every section with a one-sentence takeaway.
+- Save the HTML and, after completion, the final markdown summary under `reference/<topic>/`. Keep any code, scripts, notebooks, or demos written for the explanation there as well; do not delete them after the task, since the user may learn from them.
+- Emphasize mechanism, intuition, reasoning, and concise derivations. Before introducing the idea, state the problem it is meant to solve and why solving that problem matters. Keep definitions and terminology brief; explain why each claim or step matters, and end every section with a one-sentence takeaway.
 - Prefer a figure for each key idea. Follow [references/figures.md](references/figures.md), and include a concrete worked example plus a small demo when useful.
 - Define symbols on first use and keep notation consistent. Render equations with the chosen template's math engine at LaTeX quality, including proper variables, spacing, fractions, exponents, and operators.
 - Progress from the core idea to variations and improvements, then connect it to related theory and its broader framework.
@@ -23,5 +23,6 @@ After the artifact:
 - Revise the HTML in place to incorporate surfaced details, corrections, or clarifications while preserving its visual and LaTeX style, then show the revised artifact again. Put each change in the conceptually correct section or subsection, not at the end; add a new section only for a genuinely new concept.
 - When questions are finished, test understanding section by section with deeper, insight-focused questions. Correct misconceptions and update the HTML until each section is understood.
 - After the comprehension check, write a standalone markdown summary in the topic folder containing only the final understanding, not the Q&A.
+- End with a concise list of reputable recommended resources for deeper research, such as books, papers, documentation, or courses, with a brief note explaining what each adds.
 
 Topic: $ARGUMENTS
