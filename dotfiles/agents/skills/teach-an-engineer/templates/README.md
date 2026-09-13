@@ -1,23 +1,15 @@
 # HTML templates
 
-Pick **one** of these templates and reuse it. Do **not** hand-build a new template
-unless the user explicitly asks for a custom look. Each file is a complete
-skeleton (layout + CSS + KaTeX from a CDN) — copy it, recolor it, and fill in
-the placeholder sections.
+One template ships with this set: **`warm-serif.html`**. Do **not** hand-build a
+new template unless the user explicitly asks for a custom look. The file is a
+complete skeleton (layout + CSS + KaTeX from a CDN) — copy it and fill in the
+placeholder sections.
 
-## Quick pick
-
-| Template file | Style | Look & feel | Best when | Math |
-|---|---|---|---|---|
-| `warm-serif.html` | Warm serif | Warm paper `#fdfcf8`, serif (Source Serif / Georgia), gold `#d4a72c` title underline + topbar, soft callout blocks | Math-heavy, long-form explanation with a lecture-note rhythm | KaTeX |
-| `navy-hero.html` | Navy hero | Light-gray page `#f3f5f9`, sans (system-ui), sticky pill bottom-nav, navy-gradient hero card with chips, white cards + card grid | Broad overview, card-based sections, many side-by-side ideas | KaTeX |
-
-> Both are **light mode** (light background, dark text). The "navy hero" file's
-> hero is a dark navy gradient **card**, but the page and body stay light.
-
-## Template details
-
-### `warm-serif.html` — warm serif
+## `warm-serif.html` — warm serif
+- **Look & feel:** warm paper `#fdfcf8`, serif (Source Serif / Georgia), gold
+  `#d4a72c` title underline + topbar, soft callout blocks. **Light mode**
+  (light background, dark text).
+- **Best when:** math-heavy, long-form explanations with a lecture-note rhythm.
 - **Font:** Source Serif Pro / Georgia / Times, serif; base 17px.
 - **Palette:** bg `#fdfcf8`, ink `#1a1a1a`, heading underline gold `#d4a72c`,
   link `#9a5b00`; equation block bg `#f7f4ec`; intuition blue `#4a7bb5` on
@@ -26,31 +18,19 @@ the placeholder sections.
   title + one-paragraph hero, numbered `<h2>` sections, centred `.eq` blocks,
   `.callout` (`intuition` / `takeaway`), `.figure`, `table`, `<hr>` dividers.
 
-### `navy-hero.html` — navy hero
-- **Font:** system-ui / Helvetica / Arial, sans; base 16.5px.
-- **Palette (CSS vars):** `--bg:#f3f5f9`, `--card:#ffffff`, `--ink:#1f2a44`,
-  `--muted:#5a6a84`, `--soft:#e7ebf3`, `--accent:#2b5ad8`,
-  `--accent-soft:#e8edfc`, `--teal:#0e8f83`, `--amber:#b45309`,
-  `--line:#dbe2ee`.
-- **Structure:** sticky pill `nav`, gradient hero header (kicker + title + lead +
-  chips), sections with numbered badges, `.card`, `.note`, `.takeaway`,
-  `.formula` (tagged), `.fig` + caption, `.zoo` card grid, notation table
-  `table.nt`, footer.
-
 ## Math rendering
 
-Both templates render math with **KaTeX auto-render**, loaded from a CDN along
+The template renders math with **KaTeX auto-render**, loaded from a CDN along
 with `katex.min.css`; inline math uses `\(...\)`, display math uses `\[...\]`.
-There is no MathJax CHTML template in this set. The CDN links are the default —
-inline the KaTeX CSS/JS (and web fonts) only if an offline copy is specifically
-requested.
+The CDN links are the default — inline the KaTeX CSS/JS (and web fonts) only
+if an offline copy is specifically requested.
 
-## Reusing a template
+## Reusing the template
 
-1. Copy the chosen template.
-2. Update `<title>`, topbar / nav brand, and hero text.
-3. Set the accent variables (gold `#d4a72c` values, or `--accent`/`--teal`/…)
-   and the body font family if you change the look.
+1. Copy `warm-serif.html`.
+2. Update `<title>`, topbar brand, and hero text.
+3. Recolor the gold accents (`#d4a72c`, `#9a5b00`) or the body font family only
+   if the user asks for a different look.
 4. Replace the placeholder sections with the topic content, keeping the
    intuition / takeaway callouts from `SKILL.md`.
 5. Keep the CDN KaTeX links; inline them only if an offline copy is requested.

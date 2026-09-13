@@ -1,6 +1,6 @@
 # Figures
 
-Prefer figures over prose — use them to explain and teach each key idea.
+Figures are the primary medium — every key idea should be explained and taught with one, not a paragraph of prose. Text around a figure only motivates it (before) and states its takeaway (after); let the figure carry the mechanism.
 
 Build and verify the figures with these rules:
 - Some big, self-explanatory figures per idea; each figure should carry a single concept.
@@ -9,7 +9,7 @@ Build and verify the figures with these rules:
 
 ## Wolfram figures
 
-Generate plots, curves, and other visualizations with the Wolfram tools (`wolfram-mcp`) and embed them in the artifact as image assets — they carry their own labels and legends. Prefer to keep the authored overlay SVG geometry-only (axes, circles, arrows) and put equations in HTML via the math renderer (KaTeX auto-render in the templates), so a Wolfram plot is used for data and curves rather than for text or math placement.
+Generate plots, curves, and other visualizations with the Wolfram tools (`wolfram-mcp`) and embed them in the artifact as image assets — they carry their own labels and legends. Prefer to keep the authored overlay SVG geometry-only (axes, circles, arrows) and put equations in HTML via the math renderer (KaTeX auto-render in the templates), so a Wolfram plot is used for data and curves rather than for text or math placement. The one exception: a PNG emitted by a simple C++/Python/Octave demo belongs to the demo (see [demos.md](demos.md)) — embed it with its code, no Wolfram redraw needed.
 
 ## Recommended patterns (optional)
 
