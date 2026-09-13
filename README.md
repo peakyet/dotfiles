@@ -8,6 +8,7 @@ my personal dotfiles
 
 ## Softwares
 
+- [x] telegram
 - [x] zsh
 - [x] xdg-desktop, 
 - [x] docker
@@ -21,7 +22,7 @@ my personal dotfiles
 - [x] fcitx5
 - [x] zen-browser-bin: zen browser, a modern browser.
 - [x] google-chrome: google browser
-- [x] neofetch
+- [x] fastfetch
 - [x] foxglove
 - [x] ghostscript: pdf 转换器
 - [x] piliplus-bin: bilibili client
@@ -98,10 +99,7 @@ my personal dotfiles
   - [x] deepseek-harness: agent developped by Deepseek AI
   - [x] zcode
   - [x] openai-codex
-- [ ] hyprland
-  - [ ] hypridle
-  - [ ] hyprlock
-  - [ ] xdg-desktop-portal-hyprland
+  - [x] cc-switch-bin
 - [x] niri
   - [x] xdg-desktop-portal-gtk, xdg-desktop-portal-gnome, gnome-keyring
   - [x] polkit-kde-agent: authentication agent (installed before niri)
@@ -125,7 +123,6 @@ my personal dotfiles
   - [x] tree-sitter-cli
   - [x] uv: an extremely fast python package installer and resolver written in Rust.
   - [x] katex
-  - [ ] edgeone cli (installed in `~/.local/lib/node_modules/`, also a soft link in `~/.local/bin/`) [bullshit, use git page to deploy]
 
 
 Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
