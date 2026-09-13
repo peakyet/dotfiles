@@ -1,6 +1,6 @@
 ---
 name: wolfram-mcp
-description: Use when writing or editing Wolfram Language (.wl/.m, .wls) code with the Wolfram Language MCP server. Not for unrelated or non-Wolfram coding.
+description: Trigger this skill BEFORE the first time you call any tool provided by the Wolfram Language MCP server, and load it once before using such tools in a session. It forbids one MCP tool that always fails here and fixes the required workflow, so calling Wolfram MCP tools without reading it is wrong. Also use when writing or editing Wolfram Language (.wl, .m, .wls) code. Not for unrelated or non-Wolfram coding.
 ---
 
 # Wolfram MCP
@@ -11,7 +11,7 @@ Use this for any Wolfram Language development when the Wolfram Language MCP serv
 
 ## Workflow
 
-1. **Before writing code**, look up documentation and find the relevant functions **using web search** (e.g. `web_search` / `web_fetch` for `reference.wolfram.com` or the Wolfram Function Repository) instead of guessing names, signatures, or options. **Do not call `WolframLanguageContext`.**
+1. **Before writing code**, if you are not 90% sure the usage of the relevant functions, look up documentation and find the relevant functions **using web search** (e.g. `web_search` / `web_fetch` for `reference.wolfram.com` or the Wolfram Function Repository) instead of guessing names, signatures, or options. **Do not call `WolframLanguageContext`.**
 2. **To inspect a symbol**, use `SymbolDefinition` rather than `Definition` / `DownValues`; it runs in the same kernel as the evaluator, so it sees the same definitions.
 3. **After changing source**, add or update tests and run them with `TestReport`.
 4. **Before finishing**, check every changed file (tests included) with `CodeInspector`.

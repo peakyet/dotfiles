@@ -1,21 +1,11 @@
 # Figures
 
-Figures are the primary medium — every key idea should be explained and taught with one, not a paragraph of prose. Text around a figure only motivates it (before) and states its takeaway (after); let the figure carry the mechanism.
+Figures are a primary teaching medium. Give each central idea one primary figure when a visual representation genuinely carries the mechanism; do not add several decorative variants just to satisfy a quota. Text around a figure should motivate it before and state its takeaway after, while the figure carries the mechanism.
 
-Build and verify the figures with these rules:
-- Some big, self-explanatory figures per idea; each figure should carry a single concept.
-- Build each figure as HTML <div>s laid out with CSS grid/flex, so the math renderer (KaTeX auto-render in the templates) typesets equations natively inside them; overlay a small inline <svg> for geometric primitives like axes, circles, and arrows. Math may also be pre-rendered into an SVG if that is what the content calls for — the artifacts are not required to be dependency-free or fully offline.
-- Before finishing, inspect every figure: verify elements sit in the right place, do not overlap or clip, and any visible equations or labels are correct — fix problems rather than leaving them.
+Build and verify figures with these rules:
 
-## Wolfram figures
-
-Generate plots, curves, and other visualizations with the Wolfram tools (`wolfram-mcp`) and embed them in the artifact as image assets — they carry their own labels and legends. Prefer to keep the authored overlay SVG geometry-only (axes, circles, arrows) and put equations in HTML via the math renderer (KaTeX auto-render in the templates), so a Wolfram plot is used for data and curves rather than for text or math placement. The one exception: a PNG emitted by a simple C++/Python/Octave demo belongs to the demo (see [demos.md](demos.md)) — embed it with its code, no Wolfram redraw needed.
-
-## Recommended patterns (optional)
-
-These improve layout and legibility; treat them as suggestions, not additional requirements.
-
-- **Single coordinate system.** Pick a figure size (W×H), draw the SVG with `viewBox="0 0 W H"`, and position the text and math divs from the same coordinates (`left = x/W*100%`, `top = y/H*100%`). Give the container `aspect-ratio` and `max-width` so the whole figure scales as one unit and labels can't drift off the axes.
-- **Keep math in the HTML layer.** Let KaTeX auto-render typeset math as HTML/CSS spans so no math sits inside the SVG. Inline the KaTeX CSS/JS and web fonts (e.g. WOFF2 as data URIs) only if an offline copy is wanted; otherwise the CDN link is fine.
-- **Safe equation blocks.** Put each display equation in its own centered block with vertical padding and `overflow: visible`, so tall fractions, integrals, and sub/superscripts don't clip. Keep `line-height` uniform so inline math aligns to the surrounding text baseline.
-- **Minimal styling.** One base font size and spacing unit, one accent color on the light background, subtle fills/borders with rounded corners to group parts, and arrows drawn in the SVG layer (e.g. `marker-end`) rather than over the text.
+- Choose the representation that exposes the idea: HTML/CSS for layouts, states, and comparisons; inline SVG for geometry and annotated diagrams; a generated plot for measured data, dense curves, or computed results. Do not force a plot into hand-authored SVG when the plot itself is the evidence.
+- Keep explanatory math in the HTML layer so KaTeX can typeset it. Use SVG text only for short labels that are part of the geometry; use a generated image or SVG for a plot only when its labels and legend can remain legible.
+- Give every figure one clear visual claim, a semantic `<figure>`/`<figcaption>`, and a useful alt text or adjacent text equivalent. Put the main takeaway in the caption or immediately after it, not inside an unreadable graphic.
+- Make responsive figures from a stable coordinate system. Use an explicit `viewBox` and `aspect-ratio` for SVG/overlay layouts, keep labels inside the bounds, and avoid absolute-positioned text whose position drifts away from the geometry.
+- Before finishing, inspect every figure at desktop and narrow widths when possible: verify that elements sit where they belong, nothing overlaps or clips, and every visible equation, axis, label, and legend is correct. Fix problems rather than leaving them.
