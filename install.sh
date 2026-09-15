@@ -90,6 +90,14 @@ linkDotfiles(){
 			if [[ $file = "zsh" ]]; then
 				filesInFolder=$(ls "$filePath")
 				linkDotfiles "$filesInFolder" $filePath $3
+			elif [[ $file = "claude" ]]; then
+				# ~/.claude holds runtime state, so link individual files instead of the folder
+				toDir="$HOME/.claude"
+				mkdir -p "$toDir"
+				for subFile in $(ls "$filePath"); do
+					linkFile "$filePath/$subFile" "$toDir/$subFile" $3
+					echo "-------------------------"
+				done
 			elif [[ $file = "DSH-Plugins" ]]; then
 				filesInFolder=$(ls "$filePath")
 				linkDSHPlugins "$filesInFolder" $filePath $3
