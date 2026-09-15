@@ -1,125 +1,162 @@
 ---
 name: tavily-dynamic-search
 description: |
-  Web research with context isolation. Use this skill when a research task requires searching the web, triaging results, and extracting specific information across multiple sources — without flooding the caller's context window with raw pages and boilerplate. Triggers on "research", "search and filter", "find the important parts", "compare X vs Y", "what does the literature say", or any multi-source investigation needing a curated, noise-free answer. For a single quick fact or one known URL, call the Tavily MCP tools directly instead.
-context: fork
+  Programmatic Tavily search with context isolation. Use when web search or extraction will return large results that need filtering, deduplication, or multi-step triage before they enter the model context. Use tavily-search for ordinary lookups and tavily-research for end-to-end cited synthesis.
+allowed-tools: Bash(tvly *), Bash(python3 *), Bash(uv run *), Bash(jq *)
 ---
 
 # Tavily Dynamic Search
 
-Search the web, filter results, and extract content so that **raw pages never reach the caller's context window**. Only your final curated digest comes back.
+Keep large raw web payloads on disk and return only the evidence needed for the
+task. This is useful when using `--include-raw-content`, combining several
+queries, or extracting multiple long pages. Do not use this workflow for a
+simple lookup that a normal `tvly search --json` can answer directly.
 
-## Why this matters
+## Before running
 
-`tavily_search` with `include_raw_content` can return 15 results × 30-50K chars each — **~500K characters** of navigation bars, cookie banners, and boilerplate. If that lands in a conversation context, it burns tokens and degrades reasoning quality under the noise.
+Search and extract support capped keyless access. Run them directly when `tvly`
+is available. If `tvly` is missing, follow the
+[tavily-cli setup](../tavily-cli/SKILL.md#setup). Do not look for an API key or
+authenticate before the first request. If the keyless cap is reached in an
+interactive session, run `tvly login` to open browser OAuth, then retry the
+blocked request once. In an unattended environment, report the cap and
+authentication options instead of starting an interactive flow.
 
-This skill runs in a **forked subagent**. The fork boundary is the sandbox: every `tavily_*` tool result stays in *your* context, and only your final report crosses back to the caller. A caller that would have absorbed 500K characters receives ~2-4K of pure signal.
+## Workflow
 
-## How isolation is achieved
+1. Search broadly without raw content and inspect titles, URLs, scores, and
+   snippets.
+2. Fetch full content only for the best sources.
+3. When raw output could be large, save it with `-o` and filter the file before
+   printing anything to the model context.
+4. Preserve source URLs beside every extracted fact.
 
-MCP tools are model-invoked, not script-invoked — you cannot call them from inside a `python3` heredoc the way you would a CLI. The isolation therefore comes from the fork, not from a subprocess:
+When the user restricts evidence to official or named domains, validate the
+hostname of every selected URL during local filtering. `--include-domains`
+narrows the search but is not proof that every returned result belongs to an
+allowed host. If full-page extraction is unavailable, label conclusions as
+search-snippet evidence instead of implying that the page body was verified.
 
-- **Inside the fork** — call `tavily_search` / `tavily_extract` freely. Intermediate results are yours alone. Triage, discard, re-query as much as the task needs.
-- **Leaving the fork** — you return one final message. That is the *only* thing the caller sees.
+Keep the process in one turn when the relevant sources and filters are already
+known. Use another turn only when the first search changes what should be
+extracted.
 
-So the discipline is: be verbose in your tool use, ruthless in your report. Never paste raw page text into your final answer.
+Create a unique temporary task directory before saving evidence so concurrent
+agents do not overwrite one another. Python's `tempfile.mkdtemp()` is available
+when `mktemp` is not permitted. Reuse that directory for all raw and filtered
+artifacts from the task.
 
-## Core rule
+## Small result: filter a direct JSON response
 
-**Never let raw page content into your final report.** Filter first, quote selectively, cite URLs.
+For a small search response, a pipe is enough:
 
-Before including any quote, ask: does the caller need this exact text, or do they need the fact it establishes? Usually the latter — with the URL as the receipt.
+```bash
+tvly search "query" --max-results 5 --json | python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+for result in data.get("results", []):
+    score = result.get("score") or 0
+    title = result.get("title") or ""
+    print(f"[{score:.2f}] {title}")
+    print(result.get("url", ""))
+    print(result.get("content", "")[:300])
+'
+```
 
-## Tool Selection
+Do not discard stderr. Authentication failures, keyless-cap messages, and API
+errors are actionable and must remain visible.
 
-Two tools cover almost everything:
+## Large result: save first, then filter
 
-| Tool | Use for |
-|------|---------|
-| `tavily_search` | Discovery — titles, URLs, snippets, scores. `.results[].content` is a ~500-1500 char snippet. |
-| `tavily_extract` | Depth — full markdown for URLs you have already chosen. |
+Use the CLI's file output so raw page content does not pass through the tool
+response:
 
-Three more for structure and synthesis:
+```bash
+tvly search "query" \
+  --include-raw-content markdown \
+  --max-results 8 \
+  --json \
+  -o /tmp/tavily-search-results.json
+```
 
-| Tool | Use for |
-|------|---------|
-| `tavily_map` | List URLs on a domain without extracting. Use when you know the site but not the page. |
-| `tavily_crawl` | Bulk-extract many pages under a path (`select_paths`). Use for "all of the docs section". |
-| `tavily_research` | Hand off an entire multi-source research question. Returns a synthesized report. Takes 30-120s. |
+Then print only bounded evidence:
 
-### Mind the configured defaults
+```bash
+python3 -c '
+import json
+from pathlib import Path
 
-This MCP server is configured with `DEFAULT_PARAMETERS` = `{"include_images": true, "max_results": 15, "search_depth": "advanced"}`. So searches already run at **advanced depth with 15 results and images on**. For lean research, override `include_images: false` (image URLs are pure noise for text questions) and set `max_results` explicitly — 15 results of raw content is a lot to triage.
+data = json.loads(Path("/tmp/tavily-search-results.json").read_text())
+for result in data.get("results", []):
+    title = result.get("title") or ""
+    url = result.get("url") or ""
+    print(f"## {title}")
+    print(f"URL: {url}")
+    print((result.get("raw_content") or result.get("content") or "")[:1200])
+    print()
+'
+```
 
-## Key parameters
+Adjust the filtering logic to the question. Prefer relevant paragraphs or
+fields over fixed character slices when the target information is known. Aim
+for roughly 150-600 tokens per source unless a table or code block genuinely
+requires more.
 
-### `tavily_search`
+## Targeted extraction
 
-| Parameter | Notes |
-|-----------|-------|
-| `query` | Required. |
-| `max_results` | Default 5 (server default here: 15). |
-| `search_depth` | `basic` (default), `advanced`, `fast`, `ultra-fast`. Server default: `advanced`. |
-| `include_raw_content` | Full page text inline. **Use sparingly** — this is what floods context. Prefer `tavily_extract` on chosen URLs. |
-| `include_domains` / `exclude_domains` | Arrays. Whitelisting is often the single highest-leverage filter. |
-| `time_range` | `day` / `week` / `month` / `year` — for "what's the latest". |
-| `country` | Boost results from a country (full name, e.g. `"Germany"`). Only when `topic` is general. |
-| `start_date` / `end_date` | `YYYY-MM-DD` bounds. |
-| `exact_match` | Restrict to results containing your quoted phrase. |
+When search identifies the right URLs, extract only those pages:
 
-### `tavily_extract`
+```bash
+tvly extract "https://example.com/article" \
+  --json \
+  -o /tmp/tavily-extract-results.json
+```
 
-| Parameter | Notes |
-|-----------|-------|
-| `urls` | Required, array. |
-| `extract_depth` | `basic` (default) or `advanced` — use `advanced` for LinkedIn, protected sites, tables. |
-| `format` | `markdown` (default) or `text`. |
-| `query` | Reranks returned chunks toward a query — **very useful**: it does relevance filtering server-side, so you receive less to filter yourself. |
+For topic-focused pages, let Tavily reduce the response before local filtering:
 
-Results come back split into `results` (succeeded) and `failed_results`. **Check `failed_results` and drop them silently** — do not report a source you could not read.
+```bash
+tvly extract "https://example.com/docs" \
+  --query "authentication API" \
+  --chunks-per-source 3 \
+  --json \
+  -o /tmp/tavily-extract-results.json
+```
 
-## The workflow: triage, then extract
+## Multiple queries
 
-Do not search and extract in one breath. Triage first — you cannot filter well before you know what you have.
+For multi-angle research, run a small set of focused searches, deduplicate by
+URL, and rank before extracting. Use `subprocess.run(..., capture_output=True,
+text=True)` when orchestrating commands in Python. Check `returncode`; if a
+command fails, surface its stderr and stop or retry deliberately. Never use a
+blanket `except Exception: continue` that hides missing evidence.
 
-**Step 1 — discover.** Run one or more `tavily_search` calls aimed at different angles. Keep `include_raw_content` off. You get titles, URLs, scores, snippets.
+## Response shapes
 
-**Step 2 — triage.** Read the snippets and rank. Which 2-4 sources actually bear on the question? Which are SEO filler, forums, or stale? Notice agreement and conflict across sources — that is signal about the answer, not just about the sources.
+`tvly search --json` returns `query`, optional `answer`, `results`, and
+`response_time`. Each result commonly contains `url`, `title`, `content`,
+`score`, and optional `raw_content`.
 
-**Step 3 — extract.** Call `tavily_extract` on your chosen URLs only, with a `query` tuned to what you need. Use `extract_depth: advanced` when the content is table-heavy or protected.
+`tvly extract --json` returns `results`, `failed_results`, and
+`response_time`. Each successful result commonly contains `url`,
+`raw_content`, and optional images.
 
-**Step 4 — filter and synthesize.** Pull the specific facts, figures, dates, and quotes you need. Then write the digest.
+Treat fields as optional and use `.get()` while filtering. Inspect
+`failed_results` instead of assuming every requested URL succeeded.
 
-For a question you cannot answer from step 2 snippets, iterate: new query → new triage → new extract. Follow leads (a document named in one source, an author, a dataset) rather than re-running variations of your first query.
+## Useful options
 
-## Writing the digest
+| Option | Purpose |
+|--------|---------|
+| `--max-results` | Bound the search result count; default 5, maximum 20 |
+| `--depth` | Choose `ultra-fast`, `fast`, `basic`, or `advanced` |
+| `--time-range` | Restrict results to `day`, `week`, `month`, or `year` |
+| `--include-domains` | Restrict results to a comma-separated list of trusted domains |
+| `--exclude-domains` | Exclude a comma-separated list of domains |
+| `--include-raw-content` | Include full content as `markdown` or `text` |
+| `-o, --output` | Save the complete response to a file |
 
-Structure your final report as:
+Use `jq` only for short filters when Python is unavailable:
 
-1. **Answer** — the finding, up front. If the sources disagree, say so and give the range.
-2. **Evidence** — the specific supporting facts and figures, each with its URL and a one-line relevance note.
-3. **Confidence and gaps** — what was thin, contradicted, or unfindable. Never paper over this.
-
-Target **150-600 tokens per source**, and prefer fewer, better sources. If you are about to return 5,000+ chars from one page, filter harder — but a critical data table is worth keeping intact.
-
-**Attribute everything.** A claim without a URL is not a finding. Where two sources conflict, present both rather than silently picking one.
-
-**Report failure honestly.** If searches returned nothing useful, say that. A confident-sounding synthesis over thin sources is the worst possible output.
-
-## Anti-patterns
-
-- **Dumping raw extracts** into the final report "so the caller can judge". That defeats the entire skill — filter it yourself.
-- **Extracting every result.** Triage exists for a reason; `tavily_extract` on 15 URLs at advanced depth is expensive and mostly wasted.
-- **One query, one pass.** Real questions usually need a discovery round before you know the right keywords.
-- **Reporting a source you couldn't read.** Drop `failed_results`; do not cite what you did not see.
-- **Ignoring dates.** On anything time-sensitive, check publication dates and prefer `time_range` — stale results are a common failure mode.
-
-## Fallback
-
-If `context: fork` is unavailable in this harness, spawn a Task/Agent subagent and give it this skill's instructions — the isolation property is preserved as long as the raw tool results stay in the subagent and only a digest returns.
-
-## References
-
-- Tavily search API: https://docs.tavily.com/documentation/api-reference/search
-- Tavily extract API: https://docs.tavily.com/documentation/api-reference/extract
-- For SDK integration work (writing Tavily into your own code), see the `tavily-best-practices` skill.
+```bash
+tvly search "query" --json | jq '[.results[] | {title, url, score, content}]'
+```

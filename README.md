@@ -100,6 +100,7 @@ my personal dotfiles
   - [x] zcode
   - [x] openai-codex
   - [x] cc-switch-bin
+  - [x] claude-code
 - [x] niri
   - [x] xdg-desktop-portal-gtk, xdg-desktop-portal-gnome, gnome-keyring
   - [x] polkit-kde-agent: authentication agent (installed before niri)
