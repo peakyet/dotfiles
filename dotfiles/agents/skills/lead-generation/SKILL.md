@@ -11,9 +11,9 @@ For very large or continuously maintained lead lists with per-item verification,
 
 ## Prerequisites
 
-This skill requires the Exa MCP server with the Agent tool enabled. Use the `agent_tools` URL selection alias to enable `agent_run`.
+This skill requires `agent_run`. The configured Exa MCP server (`https://mcp.exa.ai/mcp`) exposes it directly — no URL alias needed.
 
-If the Agent tools are not available, tell the user:
+If `agent_run` is not available, tell the user:
 
 > You need the Exa MCP server installed with the Agent tools and your API key.
 > Instructions: https://docs.exa.ai/reference/exa-mcp

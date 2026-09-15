@@ -11,9 +11,9 @@ context: fork
 Two Exa surfaces, two jobs:
 
 - **Exa Agent** (`agent_run`) — the default for company research. Use it for deep dives, competitor analysis, multi-angle research (product + funding + news + people), and building company lists. One Agent run handles query decomposition, multi-step searching, and synthesis internally — do not orchestrate many manual searches for work an Agent run covers.
-- **`web_search_advanced_exa`** — quick, low-latency lookups: a fast `category: "company"` discovery pass, a single news check, or finding a homepage.
+- **`web_search_exa`** — quick, low-latency lookups: a fast company discovery pass, a single news check, or finding a homepage.
 
-Do NOT use other Exa tools.
+Do NOT use `web_fetch_exa` — Agent runs already gather page content, and fetching raw pages yourself just floods context.
 
 ## Deep Dives and Lists: Exa Agent
 
@@ -73,61 +73,64 @@ agent_run {
 }
 ```
 
-## Quick Lookups: Advanced Search
+## Quick Lookups: Exa Search
 
-Use `web_search_advanced_exa` when a single fast search answers the question. Tune `numResults` to intent (a few → 10-20; comprehensive → 50-100; specified → match it).
+Use `web_search_exa` when a single fast search answers the question. It takes exactly three parameters:
 
-### Categories
+| Parameter | Notes |
+|-----------|-------|
+| `query` | Required. Describe the *ideal page*, not keywords — `"blog post comparing React and Vue performance"`, not `"React vs Vue"`. |
+| `numResults` | Default 10. Raise for a discovery sweep, lower for a targeted check. |
+| `objective` | Goal for this search turn: which documents should rank first, which to exclude, what facts or figures to pull. This is the strongest lever — use it. |
 
-- `company` → homepages, rich metadata (headcount, location, funding, revenue)
-- `news` → press coverage, announcements
-- `people` → public professional profiles
-- No category (`type: "auto"`) → general web results, broader context
+### Focusing by category
 
-Default to `type: "auto"`. Prefer `highlights` for content extraction; do not stack text + highlights + summary in one call.
+There is no separate category field — embed it in the query string:
 
-### Category-Specific Filter Restrictions
+- `category:company` → homepages with rich metadata (headcount, location, funding, revenue)
+- `category:people` → public professional profiles
+- no category → general web results, broader context
 
-Unsupported category/filter combinations return 400 errors:
+### Express filters in natural language
 
-- `category: "company"` does not support published-date or crawl-date filters, `excludeDomains`, or exact-text filters; express constraints like "founded after 2020" in the query instead
-- `category: "people"` does not support published-date, crawl-date, domain, or exact-text filters; put all filtering in the natural-language query
-- Without a category (or with `news`), domain and date filters work fine
+This surface has **no** domain, date, or exact-text filter parameters. Constraints go into `query` or `objective`:
+
+- instead of a date filter → `"2026 coverage of ..."` in the query
+- instead of `excludeDomains` → "exclude vendor marketing pages" in `objective`
+- instead of exact-text → quote the phrase in the query
 
 ### Examples
 
 Discovery pass:
 ```
-web_search_advanced_exa {
-  "query": "AI infrastructure startups San Francisco",
-  "category": "company",
+web_search_exa {
+  "query": "category:company AI infrastructure startups San Francisco",
   "numResults": 20,
-  "type": "auto"
+  "objective": "Rank company homepages first; prefer those listing headcount and funding stage."
 }
 ```
 
 News check:
 ```
-web_search_advanced_exa {
-  "query": "Anthropic AI safety",
-  "category": "news",
+web_search_exa {
+  "query": "Anthropic AI safety announcements",
   "numResults": 15,
-  "startPublishedDate": "2025-01-01"
+  "objective": "Rank 2026 press coverage first; exclude opinion pieces and aggregators."
 }
 ```
 
 Key people:
 ```
-web_search_advanced_exa {
-  "query": "VP Engineering AI infrastructure",
-  "category": "people",
-  "numResults": 20
+web_search_exa {
+  "query": "category:people VP Engineering AI infrastructure",
+  "numResults": 20,
+  "objective": "Rank current VP-level engineering leaders at infrastructure companies first."
 }
 ```
 
 ## Token Isolation
 
-Never dump raw search results into main context. Spawn Task agents for Advanced Search calls; for Agent runs, go straight from `output.structured` to the final answer.
+Never dump raw search results into main context. Spawn Task agents for `web_search_exa` calls; for Agent runs, go straight from `output.structured` to the final answer.
 
 ## Browser Fallback
 
