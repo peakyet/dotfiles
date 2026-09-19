@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Source the unit files next to this script instead of a hardcoded repo path.
+scriptPath="${BASH_SOURCE[0]:-$0}"
+scriptDir="$(cd -- "$(dirname -- "$scriptPath")" && pwd)"
+
 linkFile(){
 	# $1: source file
 	# $2: symbolic file
@@ -29,12 +33,12 @@ customService=(
   "swayidle.service"
 )
 
-echo "start linking custom service to ~/.config/systemd/user"
+echo "start linking custom service to $HOME/.config/systemd/user"
 
 for srv in "${customService[@]}"
 do
   echo "link srv: ${srv}"
-  linkFile "$HOME/dotfiles/dotfiles/niri/${srv}" "$HOME/.config/systemd/user/${srv}"
+  linkFile "$scriptDir/${srv}" "$HOME/.config/systemd/user/${srv}"
   echo "----------------"
 done
 # update

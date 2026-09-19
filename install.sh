@@ -1,7 +1,25 @@
 #!/bin/bash
 
-allDotfiles=$(ls $HOME/dotfiles/dotfiles)
-path="$(pwd)/dotfiles"
+# Resolve the repo from this script's own location, so install.sh works no matter
+# where the repo is cloned or from which directory it is called.
+scriptPath="${BASH_SOURCE[0]:-$0}"
+scriptDir="$(cd -- "$(dirname -- "$scriptPath")" && pwd)"
+path="$scriptDir/dotfiles"
+allDotfiles=$(ls "$path")
+
+# swaybg/swayidle units, waybar and the niri config reach the wallpapers through
+# ~/dotfiles. If the repo was cloned elsewhere, expose it under that name so
+# those home-relative references keep working.
+if [ "$scriptDir" != "$HOME/dotfiles" ]; then
+	if [ -e "$HOME/dotfiles" ] || [ -L "$HOME/dotfiles" ]; then
+		echo "WARNING: $HOME/dotfiles already exists and is not $scriptDir;"
+		echo "         wallpaper paths in niri/waybar/systemd units may be broken."
+	else
+		echo "linking $HOME/dotfiles -> $scriptDir"
+		ln -s "$scriptDir" "$HOME/dotfiles"
+	fi
+fi
+
 excludeConfigs=(
 	# "alacritty"
 	# "bashrc"

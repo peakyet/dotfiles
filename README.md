@@ -101,6 +101,7 @@ my personal dotfiles
   - [x] openai-codex
   - [x] cc-switch-bin
   - [x] claude-code
+  - [x] arxiv-mcp-server (uvx)
 - [x] niri
   - [x] xdg-desktop-portal-gtk, xdg-desktop-portal-gnome, gnome-keyring
   - [x] polkit-kde-agent: authentication agent (installed before niri)
@@ -141,6 +142,10 @@ edit `install.sh` to include the dotfile you need and then run
 ```
 ./install.sh
 ```
+
+`install.sh` 按脚本自身位置定位仓库，所以可以从任意目录、把仓库克隆到任意路径后运行。
+配置里的壁纸统一走 `~/dotfiles/wallpapers/...`（systemd unit 中写作 `%h/dotfiles/...`）；
+如果仓库不在 `~/dotfiles`，脚本会自动建立 `~/dotfiles -> <仓库目录>` 软链接（若该名字已被占用则只告警）。
 
 ### gdm
 
