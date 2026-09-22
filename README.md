@@ -101,7 +101,7 @@ my personal dotfiles
   - [x] openai-codex
   - [x] cc-switch-bin
   - [x] claude-code
-  - [x] arxiv-mcp-server (uvx)
+  - [x] arxiv-mcp-server, paper-search-mcp (uvx)
 - [x] niri
   - [x] xdg-desktop-portal-gtk, xdg-desktop-portal-gnome, gnome-keyring
   - [x] polkit-kde-agent: authentication agent (installed before niri)
