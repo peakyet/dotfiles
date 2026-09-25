@@ -236,6 +236,12 @@ bluetoothctl
 安装插件：
 - Better Bibtex for Zotero: 导出文献（与 obsidian 配合）
 
+安装 MCP
+
+```bash
+uv tool install zotero-mcp-server
+```
+
 
 ## TroubleShooting
 
