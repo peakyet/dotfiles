@@ -38,21 +38,32 @@ button:hover {
     color: @mac_text;
 }
 
+/* macOS-style hover card: hairline rim, soft lift shadow, compact text.
+   Both nodes get the fill — tooltip.background is the one that actually paints. */
 tooltip {
-    border: 1px solid @mac_border;
-    border-radius: 10px;
-    background-color: @mac_surface;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 9px;
+    background-color: rgba(252, 252, 254, 0.98);
     color: @mac_text;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16), 0 1px 4px rgba(0, 0, 0, 0.10);
+    text-shadow: none;
 }
 
 tooltip.background {
-    border: 1px solid @mac_border;
-    border-radius: 10px;
-    background-color: rgba(245, 245, 247, 0.96);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 9px;
+    background-color: rgba(252, 252, 254, 0.98);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 tooltip label {
     color: @mac_text;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    padding: 6px 10px;
+    margin: 0;
+    text-shadow: none;
 }
 
 #custom-apple {

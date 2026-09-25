@@ -368,7 +368,7 @@
 	"format-wifi": "{icon}",
         "format-ethernet": "󰱓",
 	"format-linked": "󰛵",
-        "tooltip-format": "{ifname}({essid}) via {gwaddr} \nIP address: {ipaddr}/{cidr} \nUp: {bandwidthUpBytes}, Down: {bandwidthDownBytes}\nStrength: {signalStrength}%",
+        "tooltip-format": "{essid}  {signalStrength}%\n{ipaddr}/{cidr} · via {gwaddr}\n↓ {bandwidthDownBytes}   ↑ {bandwidthUpBytes}",
         // "format-wifi": "{essid} ({signalStrength}%) ",
         // "format-ethernet": "{ipaddr}/{cidr} ",
         // "format-linked": "{ifname} (No IP) ",
