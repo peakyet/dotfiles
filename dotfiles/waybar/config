@@ -456,6 +456,7 @@
         "tooltip": false,
         "on-click": "tofi-drun --drun-launch=true"
     },
+
     "wlr/taskbar": {
         "all-outputs": true,
         "format": "{icon}",

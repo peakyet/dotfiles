@@ -16,7 +16,7 @@
 	font = "Cantarell"
 
 	# Point size of text.
-	font-size = 18
+	font-size = 15
 
 	# Comma separated list of OpenType font feature settings to apply,
 	# if supported by the chosen font. The format is similar to the CSS
@@ -88,7 +88,7 @@
 	# Default result text theme
 	default-result-color = #1D1D1F
 	default-result-background = #00000000
-	default-result-background-padding = 4
+	default-result-background-padding = 4, 8
 	default-result-background-corner-radius = 10
 
 	# Alternate (even-numbered) result text theme
@@ -98,13 +98,13 @@
 	#
 	alternate-result-color = #1D1D1F
 	# alternate-result-background = #00000000
-	alternate-result-background-padding = 4
+	alternate-result-background-padding = 4, 8
 	alternate-result-background-corner-radius = 10
 
 	# Selection text
 	selection-color = #FFFFFF
 	selection-background = #0A84FF
-	selection-background-padding = 6
+	selection-background-padding = 4, 8
 	selection-background-corner-radius = 10
 
 	# Matching portion of selection text
@@ -155,7 +155,7 @@
 	num-results = 6
 
 	# Spacing between results in pixels. Can be negative.
-	result-spacing = 4
+	result-spacing = 6
 
 	# List results horizontally.
 	horizontal = false
@@ -167,12 +167,12 @@
 ### Window theming
 #
 	# Width and height of the window. Can be pixels or a percentage.
-	width = 40%
-	height = 420
+	width = 32%
+	height = 360
 
 	# Window background color
 	# background-color = #1B1D1E
-	background-color = #F5F5F7F2
+	background-color = #F5F5F7F7
 
 	# Width of the border outlines in pixels.
 	outline-width = 0
@@ -188,13 +188,13 @@
 	border-color = #00000014
 
 	# Radius of window corners in pixels.
-	corner-radius = 16
+	corner-radius = 12
 
 	# Padding between borders and text. Can be pixels or a percentage.
-	padding-top = 14
-	padding-bottom = 14
-	padding-left = 14
-	padding-right = 14
+	padding-top = 12
+	padding-bottom = 12
+	padding-left = 12
+	padding-right = 12
 
 	# Whether to clip text drawing to be within the specified padding. This
 	# is mostly important for allowing text to be inset from the border,
@@ -230,7 +230,7 @@
 	# Window offset from edge of screen. Only has an effect when anchored
 	# to the relevant edge. Can be pixels or a percentage.
 	margin-top = 15%
-	margin-left = 512
+	margin-left = 576
 	margin-bottom = 0
 	margin-right = 0
 

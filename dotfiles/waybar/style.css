@@ -228,18 +228,22 @@ tooltip label {
     background-color: @mac_hover;
 }
 
+
 #taskbar {
-    min-width: 100px;
-    margin: 0 6px;
+    margin: 0 2px;
 }
 
 #taskbar button {
-    min-width: 38px;
-    min-height: 38px;
     margin: 0 1px;
-    padding: 0 4px;
+    padding: 0 8px;
     border-radius: 12px;
     color: @mac_text;
+}
+
+#taskbar button image,
+#taskbar button label {
+    margin: 0;
+    padding: 0;
 }
 
 #taskbar button.active {
