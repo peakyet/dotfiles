@@ -149,7 +149,7 @@ output "eDP-1" {
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
-    gaps 16
+    gaps 12
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -200,7 +200,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 3
+        width 2
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -208,13 +208,13 @@ layout {
         // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
         // Color of the ring on the active monitor.
-        active-gradient from="#89dceb" to="#cba6f7" angle=45
+        active-color "#0A84FF"
 
         // Color of the ring on inactive monitors.
         //
         // The focus ring only draws around the active window, so the only place
         // where you can see its inactive-color is on other monitors.
-        inactive-color "#505050"
+        inactive-color "#00000024"
 
         // You can also use gradients. They take precedence over solid colors.
         // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
@@ -256,7 +256,7 @@ layout {
     // You can enable drop shadows for windows.
     shadow {
         // Uncomment the next line to enable shadows.
-        // on
+        on
 
         // By default, the shadow draws only around its window, and not behind it.
         // Uncomment this setting to make the shadow draw behind its window.
@@ -272,22 +272,22 @@ layout {
         // window. These will also remove client-side shadows if the window
         // draws any.
         //
-        // draw-behind-window true
+        draw-behind-window true
 
         // You can change how shadows look. The values below are in logical
         // pixels and match the CSS box-shadow properties.
 
         // Softness controls the shadow blur radius.
-        softness 30
+        softness 28
 
         // Spread expands the shadow.
-        spread 5
+        spread 3
 
         // Offset moves the shadow relative to the window.
-        offset x=0 y=5
+        offset x=0 y=8
 
         // You can also change the shadow color and opacity.
-        color "#0007"
+        color "#00000033"
     }
 
     // Struts shrink the area occupied by windows, similarly to layer-shell panels.
@@ -316,8 +316,8 @@ layer-rule {
         // Non-xray blur samples windows below the bar, not only the wallpaper.
         xray false
         blur true
-        noise 0.02
-        saturation 1.35
+        noise 0
+        saturation 1.15
     }
 
     popups {
@@ -326,8 +326,8 @@ layer-rule {
         background-effect {
             xray false
             blur true
-            noise 0.02
-            saturation 1.2
+            noise 0
+            saturation 1.1
         }
     }
 }
@@ -462,7 +462,7 @@ cursor {
 // Make workspaces four times smaller than normal in the overview.
 overview {
     // zoom 0.25
-    // backdrop-color "#777777"
+    backdrop-color "#E8E8ED"
 }
 
 // Animation settings.
@@ -595,7 +595,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+D hotkey-overlay-title="Run an Application: tofi" { spawn "tofi-drun" "--drun-launch=true"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn-sh "swaylock -f -i $HOME/dotfiles/wallpapers/red_circuit.png"; } // own
+    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn-sh "swaylock -f -i $HOME/dotfiles/wallpapers/sleeping-minion-dream-5k-3840x2160-18735.jpg"; } // own
   
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.

@@ -1,26 +1,24 @@
 # Mako notification daemon configuration (managed by dotfiles)
 #
-# Appearance: Catppuccin Latte (light style) with rounded corners.
-# Palette: https://github.com/catppuccin/catppuccin (latte)
+# Appearance: light macOS-inspired cards with translucent surfaces.
 
 # ── appearance ──────────────────────────────────────────────────────
 
 # Light card background, dark text, blue border, rounded corners.
-background-color=#eff1f5
-text-color=#4c4f69
-border-color=#89b4fa
+background-color=#F5F5F7EE
+text-color=#1D1D1F
+border-color=#0A84FF
 border-size=2
-border-radius=12
+border-radius=14
 
-# Same font family as the terminal (kitty: "Maple Mono NF CN" @ 12),
-# bumped up in size for glanceable notifications.
-font=Maple Mono NF CN 14
+# Cantarell is the closest installed sans-serif to the macOS shell.
+font=Cantarell 13
 
 # Notification box width in logical px. Mako keeps one fixed width per rule
 # (it cannot auto-size to the text), so widths are tuned per message type:
 # long question text gets the widest box (the absolute cap), short "finished"
 # pings get a narrow one, everything else sits in between.
-width=400
+width=360
 
 # ── behavior ────────────────────────────────────────────────────────
 #
@@ -37,14 +35,14 @@ default-timeout=5000
 # Exact strings, matching the plugin's notify-send call:
 #   notify-send -a dsh "dsh needs your input" ...
 [app-name=dsh summary="dsh needs your input"]
-width=520
+width=480
 default-timeout=0
-border-color=#d20f39
+border-color=#FF453A
 on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
 
 # ── DSH finished notifications play a completion chime ───────────────
 [app-name=dsh summary="dsh finished"]
-width=320
+width=300
 on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
 
 # ── kitty notifications play a completion chime ──────────────────────

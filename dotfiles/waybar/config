@@ -1,19 +1,35 @@
-{
+[{
+    "name": "macbar",
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 38, // Waybar height (to be removed for auto height)
-    "margin-top": 6,
-    "margin-left": 10,
-    "margin-right": 10,
+    "height": 30, // Waybar height (to be removed for auto height)
+    "margin-top": 0,
+    "margin-left": 0,
+    "margin-right": 0,
     // "width": 1280, // Waybar width
-    "spacing": 5, // Gaps between glass modules
+    "spacing": 6,
     // Choose the order of the modules
     // "modules-left": ["hyprland/workspaces", "tray", "mpd"],
     // "modules-center": ["hyprland/window"],
-    "modules-left": ["niri/workspaces", "mpd"],
+    "modules-left": ["custom/apple", "niri/workspaces"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "bluetooth", "network", "cpu", "memory", "disk", "wireplumber", "backlight", "battery", "clock", "idle_inhibitor", "tray"],
+    "modules-right": ["keyboard-state", "bluetooth", "network", "cpu", "memory", "disk", "mpd", "wireplumber", "backlight", "battery", "clock", "idle_inhibitor", "tray"],
     // Modules configuration
+    "custom/apple": {
+        "format": "",
+        "tooltip": false,
+        "menu": "on-click",
+        "menu-file": "~/.config/waybar/apple-menu.xml",
+        "menu-actions": {
+            "apps": "tofi-drun --drun-launch=true",
+            "terminal": "kitty",
+            "files": "nautilus",
+            "lock": "swaylock -f -i $HOME/dotfiles/wallpapers/sleeping-minion-dream-5k-3840x2160-18735.jpg",
+            "suspend": "systemctl suspend",
+            "restart": "systemctl reboot",
+            "shutdown": "systemctl poweroff"
+        }
+    },
     "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
@@ -80,13 +96,13 @@
     	"format-icons": {
     		// Named workspaces
     		// (you need to configure them in niri)
-            "daily": "",
-            "work": "",
-            "chat": "",
+            "daily": "●",
+            "work": "●",
+            "chat": "●",
 
     		// Icons by state
     		// "active": " ",
-    		"default": " "
+            "default": "●"
     	}
     },
     "niri/window": {
@@ -416,6 +432,37 @@
             "activated": "",
             "deactivated": ""
         },
-        "on-click": "swaylock -f -i $HOME/dotfiles/wallpapers/red_circuit.png"
+        "on-click": "swaylock -f -i $HOME/dotfiles/wallpapers/sleeping-minion-dream-5k-3840x2160-18735.jpg"
     }
-}
+}, {
+    "name": "dock",
+    "layer": "top",
+    "position": "bottom",
+    "height": 58,
+    "margin-bottom": 6,
+    "spacing": 6,
+    "modules-center": ["group/dock"],
+    "exclusive": true,
+
+    "group/dock": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/launcher",
+            "wlr/taskbar"
+        ]
+    },
+    "custom/launcher": {
+        "format": "󰀻",
+        "tooltip": false,
+        "on-click": "tofi-drun --drun-launch=true"
+    },
+    "wlr/taskbar": {
+        "all-outputs": true,
+        "format": "{icon}",
+        "icon-size": 28,
+        "tooltip-format": "{title}",
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "on-click-right": "close"
+    }
+}]
