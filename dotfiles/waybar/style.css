@@ -108,7 +108,8 @@ tooltip label {
 #tray,
 #mpd,
 #keyboard-state,
-#idle_inhibitor {
+#idle_inhibitor,
+#custom-control-center {
     min-height: 24px;
     margin: 0;
     padding: 0 7px;
@@ -231,6 +232,9 @@ tooltip label {
 
 #taskbar {
     margin: 0 2px;
+    padding: 0 5px;
+    /* macOS-style dock divider between the launcher and the running-apps strip */
+    border-left: 1px solid @mac_border;
 }
 
 #taskbar button {
@@ -263,6 +267,6 @@ tooltip label {
     margin-left: 0;
 }
 
-.modules-right > widget:last-child > #tray {
+.modules-right > widget:last-child > #clock {
     margin-right: 0;
 }

@@ -133,11 +133,12 @@ output "eDP-1" {
     // variable-refresh-rate on-demand=true
 
     focus-at-startup
-    backdrop-color "#001100"
+    backdrop-color "#E8E8ED"
 
-    // hot-corners {
-    //     top-left
-    // }
+    // Top-left hot corner opens the Overview (macOS Hot Corners -> Mission Control).
+    hot-corners {
+        top-left
+    }
 
     // override layout for this monitor
     // layout {
@@ -278,16 +279,16 @@ layout {
         // pixels and match the CSS box-shadow properties.
 
         // Softness controls the shadow blur radius.
-        softness 28
+        softness 20
 
         // Spread expands the shadow.
-        spread 3
+        spread 0
 
         // Offset moves the shadow relative to the window.
-        offset x=0 y=8
+        offset x=0 y=6
 
         // You can also change the shadow color and opacity.
-        color "#00000033"
+        color "#0000004D"
     }
 
     // Struts shrink the area occupied by windows, similarly to layer-shell panels.

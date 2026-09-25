@@ -168,7 +168,7 @@
 #
 	# Width and height of the window. Can be pixels or a percentage.
 	width = 32%
-	height = 360
+	height = 280
 
 	# Window background color
 	# background-color = #1B1D1E
@@ -191,10 +191,10 @@
 	corner-radius = 12
 
 	# Padding between borders and text. Can be pixels or a percentage.
-	padding-top = 12
-	padding-bottom = 12
-	padding-left = 12
-	padding-right = 12
+	padding-top = 16
+	padding-bottom = 16
+	padding-left = 16
+	padding-right = 16
 
 	# Whether to clip text drawing to be within the specified padding. This
 	# is mostly important for allowing text to be inset from the border,
@@ -229,8 +229,10 @@
 
 	# Window offset from edge of screen. Only has an effect when anchored
 	# to the relevant edge. Can be pixels or a percentage.
+	# Percentages keep the panel centered at any resolution:
+	# width = 32%, so margin-left = (100 - 32) / 2 = 34%.
 	margin-top = 15%
-	margin-left = 576
+	margin-left = 34%
 	margin-bottom = 0
 	margin-right = 0
 

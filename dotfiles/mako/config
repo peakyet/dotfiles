@@ -4,11 +4,11 @@
 
 # ── appearance ──────────────────────────────────────────────────────
 
-# Light card background, dark text, blue border, rounded corners.
+# Light card background, dark text, hairline border, rounded corners.
 background-color=#F5F5F7EE
 text-color=#1D1D1F
-border-color=#0A84FF
-border-size=2
+border-color=#00000014
+border-size=1
 border-radius=14
 
 # Cantarell is the closest installed sans-serif to the macOS shell.
