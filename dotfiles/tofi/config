@@ -142,7 +142,7 @@
 ### Text layout
 #
 	# Prompt to display.
-	prompt-text = ""
+	prompt-text = "⌕"
 
 	# Extra horizontal padding between prompt and input.
 	prompt-padding = 0
