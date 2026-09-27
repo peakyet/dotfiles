@@ -13,7 +13,7 @@
     // "modules-center": ["hyprland/window"],
     "modules-left": ["custom/apple", "niri/workspaces"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "custom/control-center", "clock"],
+    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "custom/control-center", "custom/calendar"],
     // Modules configuration
     "custom/apple": {
         "format": "",
@@ -300,13 +300,12 @@
         // "icon-size": 21,
         "spacing": 10
     },
-    "clock": {
-        // "timezone": "America/New_York",
-    	"format": "{:%a %d %b  %H:%M}",
-        "timezone": "Asia/Shanghai",
-    	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        // "tooltip-format": "{:%Y-%m-%d}",
-        // "format-alt": "{:%Y-%m-%d}"
+    "custom/calendar": {
+        "exec": "$HOME/.config/waybar/chinese-calendar.py",
+        "return-type": "json",
+        "interval": 60,
+        "tooltip": true,
+        "format": "{}"
     },
     "cpu": {
         "format": " {icon}",

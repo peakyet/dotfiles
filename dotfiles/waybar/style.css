@@ -108,7 +108,7 @@ tooltip label {
     font-weight: 600;
 }
 
-#clock,
+#custom-calendar,
 #battery,
 #cpu,
 #memory,
@@ -285,6 +285,6 @@ tooltip label {
     margin-left: 0;
 }
 
-.modules-right > widget:last-child > #clock {
+.modules-right > widget:last-child > #custom-calendar {
     margin-right: 0;
 }
