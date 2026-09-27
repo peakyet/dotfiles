@@ -1,6 +1,13 @@
 # Mako notification daemon configuration (managed by dotfiles)
 #
 # Appearance: light macOS-inspired cards with translucent surfaces.
+#
+# Sounds: mako has no audio engine of its own -- sound is played by an
+# `on-notify=exec` hook. The chimes live in sounds/ (next to this file, so
+# ~/.config/mako/sounds/) and are synthesised by sounds/generate.py rather
+# than copied from Apple, whose alert tones are copyrighted. Regenerate or
+# retune them with: python3 ~/.config/mako/sounds/generate.py
+# To audition: for f in ~/.config/mako/sounds/*.oga; do paplay "$f"; done
 
 # ── appearance ──────────────────────────────────────────────────────
 
@@ -31,23 +38,27 @@ width=360
 default-timeout=5000
 
 # ── DSH question notifications are sticky + red-bordered + sound ────
-# Urgent questions from the plugin get a red frame and a chime.
+# Urgent questions from the plugin get a red frame and the iPhone alert:
+# an ascending 1-5-8 marimba arpeggio, which cuts through and is instantly
+# recognisable as "something wants you".
 # Exact strings, matching the plugin's notify-send call:
 #   notify-send -a dsh "dsh needs your input" ...
 [app-name=dsh summary="dsh needs your input"]
-width=480
 default-timeout=0
 border-color=#FF453A
-on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 
-# ── DSH finished notifications play a completion chime ───────────────
+# ── agent finished: the iPhone alert, same as the question above ─────
+# `makoctl history` shows both agents arrive under other app names, so a
+# summary match would need one block each; matching app-name=dsh for the
+# DSH "dsh finished" summary and any kitty notification covers them.
 [app-name=dsh summary="dsh finished"]
-width=300
-on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 
-# ── kitty notifications play a completion chime ──────────────────────
-# codex-cli's "agent-turn-complete" notify is forwarded by kitty as a
-# desktop notification whose app-name falls back to "kitty", so match
-# any notification originating from the terminal and play the chime.
+# ── kitty notifications play the same completion chime ───────────────
+# Claude Code and codex both surface here: mako reports Claude Code's
+# "Claude Code" notification and codex's "agent-turn-complete" notify
+# with app-name "kitty", because kitty forwards them and the terminal
+# supplies its own app id. So match the terminal rather than each agent.
 [app-name=kitty]
-on-notify=exec paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
