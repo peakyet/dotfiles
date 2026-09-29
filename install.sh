@@ -27,7 +27,6 @@ excludeConfigs=(
 	# "gitconfig"
 	# "helix"
 	# "hypr"
-	# "DSH-Plugins"
 	"joshuto"
 	# "kitty"
 	# "ncmpcpp"
@@ -68,26 +67,6 @@ linkFile(){
 	fi
 }
 
-linkDSHPlugins(){
-	dshProfileDir="$HOME/.dsh/profiles/web"
-	echo "start linking dsh plugin to $dshProfileDir"
-	if [ ! -d "$dshProfileDir" ]
-	then
-		echo "create $dshProfileDir"
-		mkdir -p "$dshProfileDir"
-	fi
-	for file in $1
-	do
-		if [[ $file = "readme.md" || $file = "README.md" ]]; then
-			continue
-		fi
-
-		sourceFile="$2/$file"
-		toFile="$dshProfileDir/$file"
-		linkFile $sourceFile $toFile $3
-	done
-}
-
 linkDotfiles(){
 	# link all dotfiles in this repo
 	# args: allDotfiles, whether to remove the exist file or linksymbol.
@@ -116,9 +95,6 @@ linkDotfiles(){
 					linkFile "$filePath/$subFile" "$toDir/$subFile" $3
 					echo "-------------------------"
 				done
-			elif [[ $file = "DSH-Plugins" ]]; then
-				filesInFolder=$(ls "$filePath")
-				linkDSHPlugins "$filesInFolder" $filePath $3
 			elif [[ $file = "agents" ]]; then
 				toFile="$HOME/.${file}"
 				linkFile $filePath $toFile $3
