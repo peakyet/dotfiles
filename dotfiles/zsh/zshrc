@@ -88,3 +88,13 @@ function ya() {
 	fi
 	rm -f -- "$tmp"
 }
+
+# Keep the screen unlocked and the machine out of suspend while a long command
+# runs: niri withholds swayidle's lock/DPMS timeouts while awake.py holds the
+# session idle inhibitor, and systemd-inhibit blocks sleep and lid-close suspend.
+# Usage: awake amp    /    awake ./build.sh
+function awake() {
+	systemd-inhibit --what=sleep:handle-lid-switch --mode=block \
+		--why="awake: ${*:-interactive hold}" \
+		python3 "$HOME/.config/niri/awake.py" "$@"
+}
