@@ -62,3 +62,15 @@ on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 # supplies its own app id. So match the terminal rather than each agent.
 [app-name=kitty]
 on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
+
+# ── Amp in the browser: same chime as the terminal ──────────────────
+# The web app has no terminal to forward through, so its notifications
+# come from the browser itself. `makoctl history -j` shows them as
+# app_name "Zen" + desktop_entry "zen", with the thread title as the
+# summary and the reply as the body -- unlike the CLI there is no "amp"
+# string to match on, so match the browser instead (which means every
+# site's notifications chime, the same tradeoff the kitty block makes).
+# desktop_entry is the stable one: app_name is the .desktop Name and
+# would change with a translated/renamed entry.
+[desktop-entry=zen]
+on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
