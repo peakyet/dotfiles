@@ -137,6 +137,8 @@ Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only
 
 ## Setup
 
+> 从零安装并复现这台机器（手动分区安装 Arch Linux、软件包、服务、仓库外的手动步骤）见 [INSTALL.md](INSTALL.md)。
+
 ### Install dotfiles
 
 edit `install.sh` to include the dotfile you need and then run
