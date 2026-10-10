@@ -35,7 +35,8 @@
         "return-type": "json",
         "interval": 5,
         "tooltip": true,
-        "format": "{}"
+        "format": "{}",
+        "on-click": "$HOME/.config/waybar/control-center.sh notify"
     },
     "hyprland/workspaces": {
         "disable-scroll": true,

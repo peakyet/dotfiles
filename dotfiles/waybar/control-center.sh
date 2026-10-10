@@ -1,6 +1,8 @@
 #!/bin/sh
 # Control Center hover panel for waybar (macOS-style).
-# Prints JSON: icon in "text", live stats in "tooltip" (shown on hover).
+# Prints JSON for hover, or shows the stats in a notification with "notify".
+
+action=${1:-}
 
 # CPU %: sample /proc/stat over a quarter second.
 cpu_line() { awk '/^cpu /{print $2+$4, $2+$3+$4+$5+$6+$7+$8}' /proc/stat; }
@@ -43,4 +45,8 @@ fi
 
 tooltip="<b>CPU</b>  ${cpu_pct}%  (load ${load})\n<b>Mem</b>  ${mem}\n<b>Swap</b>  ${swap}\n<b>Disk /</b>  ${disk}\n<b>Temp</b>  ${temp}"
 
-printf '{"text":"","tooltip":"%s"}\n' "$tooltip"
+if [ "$action" = "notify" ]; then
+	notify-send --app-name="Control Center" --expire-time=5000 "System status" "$(printf '%b' "$tooltip")"
+else
+	printf '{"text":"","tooltip":"%s"}\n' "$tooltip"
+fi

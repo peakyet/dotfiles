@@ -2,6 +2,13 @@
 
 This document explains how to configure the `style.css` file for Waybar, a highly customizable Wayland bar for Sway and other Wayland compositors.
 
+## Control Center
+
+Left-click the sliders icon next to the calendar to show current CPU, memory,
+swap, root disk usage, and temperature in a Mako notification. It disappears
+after five seconds, or sooner if clicked, and works even when Waybar's hover tooltip fails.
+Hover still shows the same stats. Both use `control-center.sh`.
+
 ## Overview
 
 The `style.css` file uses a standard CSS syntax to control the appearance of the Waybar and its modules. This allows for a great deal of flexibility in matching the bar to your desktop's theme.

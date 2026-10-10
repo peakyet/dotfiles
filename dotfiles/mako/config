@@ -74,3 +74,7 @@ on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 # would change with a translated/renamed entry.
 [desktop-entry=zen]
 on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
+
+# Control Center: fit the title and all five system-stat lines.
+[app-name="Control Center"]
+height=200
