@@ -97,6 +97,7 @@ my personal dotfiles
   - [x] wechat
 - AI
   - [x] deepseek-harness: agent developped by Deepseek AI
+  - [x] deepseek-harness-desktop
   - [x] zcode
   - [x] openai-codex
   - [x] cc-switch-bin
