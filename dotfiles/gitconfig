@@ -8,3 +8,6 @@
 	rebase = false
 [http]
 	postBuffer = 524288000
+[credential "https://ampcode.com/"]
+	helper = 
+	helper = !amp git-credential-helper
