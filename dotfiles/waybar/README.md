@@ -9,6 +9,38 @@ swap, root disk usage, and temperature in a Mako notification. It disappears
 after five seconds, or sooner if clicked, and works even when Waybar's hover tooltip fails.
 Hover still shows the same stats. Both use `control-center.sh`.
 
+## Pomodoro Timer
+
+The timer in the upper bar's status area, between the battery and Control Center,
+is powered by `pomodoro.py` (Python standard library only). It updates once a
+second without adding another daemon and matches the menu bar's compact styling.
+While inactive or waiting for the next session, it shows only the phase icon.
+Starting expands it to show the countdown; pausing keeps the remaining time
+visible, and resetting collapses it back to the icon.
+
+- **Left click:** start, pause, or resume the countdown.
+- **Right click:** reset to a fresh 25-minute focus session and clear the session count.
+- **Hover:** see the current phase, completed focus sessions, and controls.
+
+Focus sessions last 25 minutes, short breaks 5 minutes, and every fourth completed
+focus session earns a 15-minute break. Mako displays a message and plays the
+tri-tone chime from `mako/sounds/tri-tone.oga` whenever a focus session, short
+break, or long break finishes, using the `[app-name=Pomodoro]` rule in its config.
+Click the timer to start the next phase. The clock icon turns red
+during focus, the coffee icon turns blue during a break, and pause shows a muted
+pause icon. Only completed focus sessions count toward the long break.
+
+State is stored in `$XDG_RUNTIME_DIR/waybar-pomodoro/`, shared across monitors and
+preserved when Waybar reloads. It clears with the runtime directory on logout or
+reboot. Countdown time includes suspend and ignores system clock adjustments.
+Durations are defined in `DURATIONS` in `pomodoro.py`.
+
+After editing the config, reload the running bar with:
+
+```sh
+systemctl --user kill --signal=SIGUSR2 --kill-whom=main waybar.service
+```
+
 ## Overview
 
 The `style.css` file uses a standard CSS syntax to control the appearance of the Waybar and its modules. This allows for a great deal of flexibility in matching the bar to your desktop's theme.

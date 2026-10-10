@@ -123,6 +123,7 @@ tooltip label {
 #mpd,
 #keyboard-state,
 #idle_inhibitor,
+#custom-pomodoro,
 #custom-control-center {
     min-height: 24px;
     margin: 0;
@@ -131,6 +132,20 @@ tooltip label {
     background: transparent;
     color: @mac_text;
     box-shadow: none;
+}
+
+#custom-pomodoro {
+    min-width: 16px;
+    font-family: Maple Mono NF CN, FontAwesome;
+    border-radius: 6px;
+}
+
+#custom-pomodoro:hover {
+    background-color: @mac_hover;
+}
+
+#custom-pomodoro.paused {
+    color: @mac_secondary;
 }
 
 #keyboard-state > label {

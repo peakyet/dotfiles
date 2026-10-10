@@ -13,7 +13,7 @@
     // "modules-center": ["hyprland/window"],
     "modules-left": ["custom/apple", "niri/workspaces"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "custom/control-center", "custom/calendar"],
+    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "custom/pomodoro", "custom/control-center", "custom/calendar"],
     // Modules configuration
     "custom/apple": {
         "format": "",
@@ -29,6 +29,15 @@
             "restart": "systemctl reboot",
             "shutdown": "systemctl poweroff"
         }
+    },
+    "custom/pomodoro": {
+        "exec": "python3 $HOME/.config/waybar/pomodoro.py",
+        "return-type": "json",
+        "interval": 1,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "python3 $HOME/.config/waybar/pomodoro.py toggle",
+        "on-click-right": "python3 $HOME/.config/waybar/pomodoro.py reset"
     },
     "custom/control-center": {
         "exec": "$HOME/.config/waybar/control-center.sh",
