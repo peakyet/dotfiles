@@ -76,9 +76,10 @@ tooltip label {
 }
 
 /* Workspace indicator (cffi/workspace-pips): the module draws its own pips and
-   reads their colour from @mac_ws_pip, so all that is left here is where the
-   band sits in the bar. The falloff, sizes and spacing live in the module's
-   constants (modules/workspace-pips.cpp). */
+   reads their colour from @mac_ws_pip and the focused pip's roman numeral from
+   @mac_ws_text, so all that is left here is where the band sits in the bar. The
+   falloff, sizes and spacing live in the module's constants
+   (modules/workspace-pips.cpp). */
 #workspaces {
     margin: 0 6px;
 }

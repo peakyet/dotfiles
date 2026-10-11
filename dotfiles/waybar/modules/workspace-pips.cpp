@@ -3,6 +3,8 @@
 // Workspace indicator for niri: one rounded pip per workspace, sized and faded
 // by its distance from the focused workspace, so the focused workspace is the
 // widest, strongest pip and its neighbours trail off into small, faint ones.
+// The focused pip carries its workspace's roman numeral, so the bar says which
+// workspace is focused without a hover.
 //
 // This is a module of its own because GTK CSS cannot express it: CSS can only
 // style waybar's workspace buttons by state class (active/focused/empty/urgent),
@@ -11,11 +13,14 @@
 // stream, so it repaints without polling.
 //
 // Geometry and the falloff shape are the constants below; the pip colour comes
-// from `mac_ws_pip` (and `mac_ws_urgent` for urgent workspaces) in style.css, so
-// the palette stays with the rest of the theme. Alpha alone fades with distance,
-// so pointing `mac_ws_pip` at any colour gives that colour a falloff.
+// from `mac_ws_pip` (and `mac_ws_urgent` for urgent workspaces) and the numeral
+// from `mac_ws_text`, all in style.css, so the palette stays with the rest of
+// the theme. Alpha alone fades with distance, so pointing `mac_ws_pip` at any
+// colour gives that colour a falloff. The focused pip grows just enough to hold
+// its numeral, so short indices keep the original pill size.
 #include <gtk/gtk.h>
 #include <gio/gfiledescriptorbased.h>
+#include <pango/pangocairo.h>
 #include <json/json.h>
 
 #include <algorithm>
@@ -51,9 +56,27 @@ constexpr int kSteps = 4;            // distance at which the height and alpha f
 constexpr int kWidthSteps = 4;       // ... and the width falloff
 constexpr double kWidthCurve = 8;    // keep neighbours slim while their height tapers gradually
 constexpr int kBandHeight = 24;      // height the pips are centred in
+constexpr double kNumeralSize = 10;  // the roman numeral inside the focused pip, in px
+constexpr double kNumeralPadding = 6; // px of pill on each side of that numeral
 
 const GdkRGBA kFallbackPip = {0.0, 0.0, 0.0, 0.7};
 const GdkRGBA kFallbackUrgent = {1.0, 0.27, 0.23, 1.0};
+const GdkRGBA kFallbackNumeral = {1.0, 1.0, 1.0, 0.95};
+
+// Roman numerals for a workspace index. niri numbers workspaces from 1, so the
+// table stops at I; anything larger just gets more glyphs.
+std::string roman(int number) {
+    static const std::pair<int, const char*> kTable[] = {
+        {1000, "M"}, {900, "CM"}, {500, "D"}, {400, "CD"}, {100, "C"}, {90, "XC"},
+        {50, "L"},   {40, "XL"},  {10, "X"},  {9, "IX"},   {5, "V"},   {4, "IV"},
+        {1, "I"},
+    };
+    if (number < 1) return std::to_string(number);
+    std::string numeral;
+    for (const auto& [value, glyph] : kTable)
+        for (; number >= value; number -= value) numeral += glyph;
+    return numeral;
+}
 
 // The same softly rounded rectangle outline for focus and the surrounding bars.
 void rounded_pip(cairo_t* cr, double x, double y, double width, double height,
@@ -75,17 +98,21 @@ struct Pips {
     guint watch = 0, retry = 0;
     std::vector<Json::Value> workspaces; // sorted by index
     int focused = 0;                     // index of the focused workspace
+    std::string numeral;                 // the focused workspace's index, in roman numerals
+    mutable PangoLayout* numeral_layout = nullptr;
 
     struct Pip {
         Json::UInt64 id;
         double x, y, width, height;
         double fade; // proximity to the focused workspace: 1 there, 0 at the far end
         bool urgent;
+        bool labelled; // the pip the numeral belongs to
     };
 
     ~Pips() {
         if (watch) g_source_remove(watch);
         if (retry) g_source_remove(retry);
+        if (numeral_layout) g_object_unref(numeral_layout);
         stop_stream();
         gtk_widget_destroy(area);
     }
@@ -163,7 +190,10 @@ struct Pips {
         }
     }
 
-    void set_focused(const Json::Value& workspace) { focused = workspace["idx"].asInt(); }
+    void set_focused(const Json::Value& workspace) {
+        focused = workspace["idx"].asInt();
+        numeral = roman(focused);
+    }
 
     Json::Value* find(Json::UInt64 id) {
         for (auto& workspace : workspaces)
@@ -204,8 +234,40 @@ struct Pips {
     }
 
     double width_of(const Json::Value& workspace) const {
+        if (workspace["idx"].asInt() == focused) return focused_numeral_width();
         return kFaintWidth + (kActiveWidth - kFaintWidth) *
                              proximity_of(workspace, kWidthSteps, kWidthCurve);
+    }
+
+    // The focused pill keeps its usual width unless the numeral needs more.
+    double focused_numeral_width() const {
+        PangoRectangle ink;
+        numeral_ink(ink);
+        return std::max(kActiveWidth, ink.width + 2 * kNumeralPadding);
+    }
+
+    // The layout the numeral is drawn and measured with, with the text applied.
+    PangoLayout* text_layout() const {
+        if (!numeral_layout) {
+            numeral_layout = pango_layout_new(gtk_widget_get_pango_context(area));
+            PangoAttrList* attributes = pango_attr_list_new();
+            // Absolute size, so the numeral ignores the bar's 13px body font while
+            // still taking its family from the theme.
+            pango_attr_list_insert(attributes,
+                pango_attr_size_new_absolute(kNumeralSize * PANGO_SCALE));
+            pango_attr_list_insert(attributes, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+            pango_layout_set_attributes(numeral_layout, attributes);
+            pango_attr_list_unref(attributes);
+        }
+        pango_layout_set_text(numeral_layout, numeral.c_str(), -1);
+        return numeral_layout;
+    }
+
+    // The numeral's bounding box in pixels, empty when there is no numeral yet.
+    void numeral_ink(PangoRectangle& ink) const {
+        ink = PangoRectangle{0, 0, 0, 0};
+        if (numeral.empty()) return;
+        pango_layout_get_pixel_extents(text_layout(), &ink, nullptr);
     }
 
     // Lays the pips out left to right, centred in a band of the given size.
@@ -220,6 +282,7 @@ struct Pips {
             pip.height = kFaintHeight + (kActiveHeight - kFaintHeight) * pip.fade;
             pip.y = (band - pip.height) / 2;
             pip.urgent = workspace["is_urgent"].asBool();
+            pip.labelled = workspace["idx"].asInt() == focused;
             pips.push_back(pip);
             total += pip.width + kGap;
         }
@@ -258,18 +321,33 @@ struct Pips {
         return static_cast<int>(std::ceil(total));
     }
 
+    // The focused workspace's index, in roman numerals, centred in its pip.
+    void draw_numeral(cairo_t* cr, const Pip& pip, const GdkRGBA& colour) const {
+        if (!pip.labelled) return;
+        PangoRectangle ink;
+        numeral_ink(ink);
+        if (ink.width <= 0 || ink.height <= 0) return;
+        gdk_cairo_set_source_rgba(cr, &colour);
+        // Centre the ink box, not the layout box: a numeral has no descender.
+        cairo_move_to(cr, std::round(pip.x + (pip.width - ink.width) / 2.0 - ink.x),
+                          std::round(pip.y + (pip.height - ink.height) / 2.0 - ink.y));
+        pango_cairo_show_layout(cr, text_layout());
+    }
+
     static void on_draw(GtkWidget* widget, cairo_t* cr, gpointer data) {
         auto* pips = static_cast<Pips*>(data);
         auto* style = gtk_widget_get_style_context(widget);
-        GdkRGBA base = kFallbackPip, urgent = kFallbackUrgent;
+        GdkRGBA base = kFallbackPip, urgent = kFallbackUrgent, text = kFallbackNumeral;
         gtk_style_context_lookup_color(style, "mac_ws_pip", &base);
         gtk_style_context_lookup_color(style, "mac_ws_urgent", &urgent);
+        gtk_style_context_lookup_color(style, "mac_ws_text", &text);
         for (const auto& pip : pips->layout()) {
             GdkRGBA colour = colour_of(pip, base, urgent);
             gdk_cairo_set_source_rgba(cr, &colour);
             double radius = std::min(pip.width, pip.height) * 0.35;
             rounded_pip(cr, pip.x, pip.y, pip.width, pip.height, radius);
             cairo_fill(cr);
+            pips->draw_numeral(cr, pip, text);
         }
     }
 
