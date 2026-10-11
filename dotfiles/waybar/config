@@ -110,7 +110,15 @@
         // "icon + brief info": matches windows by app_id (reliable), not by title.
         // The format appends the app_id after an invisible separator (␟, U+241F);
         // the last two rules strip it again, so it never shows.
-        "format": " {title}␟{app_id}",
+        // The spaces after the glyph set the gap between the icon and the title:
+        // every rule's pattern starts at that glyph, so its capture swallows these
+        // spaces and the replacement re-emits them — one place to widen the gap for
+        // all apps instead of editing each of the ~100 replacements. The span pins
+        // them to Cantarell: Pango otherwise takes the spaces from the font of the
+        // next title character, and when that is a glyph like the braille spinner
+        // the Amp CLI puts in front of its title, they come from the wide monospace
+        // nerd cell (8px each instead of 3px), ~3x too wide.
+        "format": " <span font_family='Cantarell'>  </span>{title}␟{app_id}",
         "max-length": 60,
         "rewrite": {
             // Browsers
