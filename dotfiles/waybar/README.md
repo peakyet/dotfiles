@@ -16,16 +16,18 @@ focusing windows updates the dock without polling. Icons come from desktop
 entries and the current icon theme. Middle/right click no longer closes windows,
 since an icon now represents a group.
 
-`install.sh` builds the module automatically. Build dependencies on Arch are
-`base-devel`, `gtk3`, `gtk-layer-shell`, and `jsoncpp`. After changing the C++
-source, rebuild and restart Waybar (a reload may keep the old shared library loaded):
+`install.sh` builds both CFFI modules automatically — this dock and the workspace
+indicator below. Build dependencies on Arch are `base-devel`, `gtk3`,
+`gtk-layer-shell`, and `jsoncpp`. After changing either C++ source, rebuild and
+restart Waybar (a reload may keep the old shared library loaded):
 
 ```sh
 sh ~/dotfiles/dotfiles/waybar/build-grouped-taskbar.sh
+sh ~/dotfiles/dotfiles/waybar/build-workspace-pips.sh
 systemctl --user restart waybar.service
 ```
 
-The generated `grouped-taskbar.so` is ignored by Git. `module_path` is relative
+The generated `.so` files are ignored by Git. `module_path` is relative
 to `$HOME`, the working directory of the user service; when launching Waybar
 manually, run it from `$HOME` too.
 
@@ -70,25 +72,43 @@ systemctl --user kill --signal=SIGUSR2 --kill-whom=main waybar.service
 
 ## Workspace Indicator
 
-The upper bar's `niri/workspaces` module shows the focused workspace as a wide
-accent-coloured capsule and every other workspace as a small neutral dot.
-`format-icons` in `config` defines a single `●` for all workspaces; the shapes
-are drawn by the button's own `background-color` in `style.css`, keyed on the
-`active`/`focused` state classes, so the icon glyph is only a placeholder.
+The upper bar's `cffi/workspace-pips` module (`workspace-pips.cpp`) draws one
+rounded shape per niri workspace and sizes *and* fades each shape by its distance
+from the focused workspace. The focused workspace is a wide pill (24x12px), and
+the shapes around it give up width, height, and opacity as they get further away:
+12.3x10.7px at 55% opacity one workspace away, 5.3x9.3px at 40% two away, then
+3x8px at the 35% alpha floor from three away. The band therefore reads as a lens
+centred on wherever focus is. Width tapers on a curve (`kWidthCurve`) rather than
+straight, so the neighbours closest to the pill are clearly narrower than it
+instead of making the whole band bulge.
 
-Two details matter when editing those rules:
+This is a module of its own because GTK CSS cannot express it. A stylesheet can
+style waybar's workspace buttons by state class only (`active`/`focused`/`empty`/
+`urgent`), so it has no way to know how far a workspace sits from the focused one,
+and the falloff has to be recomputed each time focus moves. The widget follows
+niri's event stream instead — `WorkspacesChanged`, `WorkspaceActivated`, and
+`WorkspaceUrgencyChanged` — so it repaints without polling.
 
-- The buttons are direct children of a `Gtk::Box`, which stretches them to the
-  full bar height. The `10px` vertical margin on `#workspaces button` is what
-  keeps a shape 10px tall instead of 30px; the `32px` `min-width` on the active
-  state is what widens the capsule.
-- The glyph is collapsed with `font-size: 0` on `#workspaces button > label`,
-  otherwise the dot would render inside the capsule. Points, not `em`, keep the
-  geometry independent of the bar's font size.
-
-GTK3 cannot animate `min-width`, so the capsule snaps to its new width when
-focus moves; only `background-color` fades, through the shared `button`
-transition.
+- Geometry, falloff length, and the alpha floor are the constants at the top of
+  `workspace-pips.cpp`: `kActiveWidth`/`kActiveHeight`, `kFaintWidth`/
+  `kFaintHeight`, `kSteps` (height and alpha), `kWidthSteps`/`kWidthCurve`
+  (width), `kFaintAlpha`, `kGap`, and `kBandHeight`.
+- The pip colour is not in the module. It comes from `@mac_ws_pip` in
+  `macos-light.css`, and urgent workspaces use `@mac_ws_urgent`. Only alpha fades
+  with distance, so pointing `@mac_ws_pip` at any colour — the accent blue, say —
+  gives that colour the whole falloff.
+- `#workspaces` in `style.css` only positions the band (`margin: 0 6px`). The
+  module names its widget `workspaces`, the name the stock module used, so that
+  selector keeps applying.
+- The widget asks for exactly the width its pips need and centres them vertically
+  in whatever height the bar hands it, which is what puts the 14px focused pip in
+  the middle of the 30px bar.
+- Left-clicking a pip focuses that workspace, through `niri msg action
+  focus-workspace`.
+- Workspaces from every output land in the one band. The stock module's
+  `all-outputs: false` filtering is not implemented, since Wayland gives GDK no
+  reliable way to map niri's output names (`eDP-1`) to a bar's monitor. Nothing
+  changes on this single-monitor setup.
 
 ## Overview
 

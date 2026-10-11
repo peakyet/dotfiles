@@ -9,7 +9,12 @@
 @define-color mac_glass_highlight rgba(255, 255, 255, 0.72);
 @define-color mac_hover rgba(0, 0, 0, 0.07);
 @define-color mac_selected rgba(10, 132, 255, 0.16);
-@define-color mac_workspace rgba(0, 0, 0, 0.24);
+/* Workspace indicator (cffi/workspace-pips): the pip colour, at full strength
+   for the focused workspace. The module dims it with distance, so the far pips
+   land near the old neutral dot colour, and pointing this at any other colour
+   gives that colour the same falloff. */
+@define-color mac_ws_pip rgba(0, 0, 0, 0.7);
+@define-color mac_ws_urgent #FF453A;
 @define-color mac_orange #FF9F0A;
 @define-color mac_red #FF453A;
 @define-color mac_green #30D158;

@@ -11,7 +11,7 @@
     // Choose the order of the modules
     // "modules-left": ["hyprland/workspaces", "tray", "mpd"],
     // "modules-center": ["hyprland/window"],
-    "modules-left": ["custom/apple", "niri/workspaces"],
+    "modules-left": ["custom/apple", "cffi/workspace-pips"],
     "modules-center": ["niri/window"],
     "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "custom/pomodoro", "custom/control-center", "custom/calendar"],
     // Modules configuration
@@ -107,15 +107,9 @@
 	    },
 	    "separate-outputs": true
     },
-    "niri/workspaces": {
-        // "on-update": "sudo pacman -Syu",
-        // One glyph for every workspace, focused or not: the shape (wide pill
-        // for the focused workspace, dot for the rest) is drawn in style.css
-        // from the button state classes, not from these icons.
-        "format": "{icon}",
-    	"format-icons": {
-            "default": "●"
-    	}
+    "cffi/workspace-pips": {
+        // Relative to $HOME, the working directory of waybar.service.
+        "module_path": ".config/waybar/workspace-pips.so"
     },
     "niri/window": {
         // "icon + brief info": matches windows by app_id (reliable), not by title.

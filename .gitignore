@@ -53,5 +53,6 @@ Makefile
 
 AGENTS.md
 
-# Compiled Waybar dock module (built locally by install.sh).
+# Compiled Waybar modules (built locally by install.sh).
 /dotfiles/waybar/grouped-taskbar.so*
+/dotfiles/waybar/workspace-pips.so*
