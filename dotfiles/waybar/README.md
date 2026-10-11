@@ -68,6 +68,28 @@ After editing the config, reload the running bar with:
 systemctl --user kill --signal=SIGUSR2 --kill-whom=main waybar.service
 ```
 
+## Workspace Indicator
+
+The upper bar's `niri/workspaces` module shows the focused workspace as a wide
+accent-coloured capsule and every other workspace as a small neutral dot.
+`format-icons` in `config` defines a single `●` for all workspaces; the shapes
+are drawn by the button's own `background-color` in `style.css`, keyed on the
+`active`/`focused` state classes, so the icon glyph is only a placeholder.
+
+Two details matter when editing those rules:
+
+- The buttons are direct children of a `Gtk::Box`, which stretches them to the
+  full bar height. The `10px` vertical margin on `#workspaces button` is what
+  keeps a shape 10px tall instead of 30px; the `32px` `min-width` on the active
+  state is what widens the capsule.
+- The glyph is collapsed with `font-size: 0` on `#workspaces button > label`,
+  otherwise the dot would render inside the capsule. Points, not `em`, keep the
+  geometry independent of the bar's font size.
+
+GTK3 cannot animate `min-width`, so the capsule snaps to its new width when
+focus moves; only `background-color` fades, through the shared `button`
+transition.
+
 ## Overview
 
 The `style.css` file uses a standard CSS syntax to control the appearance of the Waybar and its modules. This allows for a great deal of flexibility in matching the bar to your desktop's theme.

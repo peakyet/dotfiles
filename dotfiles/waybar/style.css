@@ -80,25 +80,37 @@ tooltip label {
     padding: 0;
 }
 
+/* Workspace indicator: the focused workspace expands into a pill, the others
+   stay dots. Both shapes are the button's own background, so the icon glyph is
+   collapsed to zero size (label) and the button box carries all the geometry.
+   The vertical margin is what keeps a button from stretching to the full bar
+   height: (30 - 2*10) leaves a 10px-tall shape. GTK3 cannot animate min-width,
+   so only the fill colour fades, via the shared button transition above. */
 #workspaces button {
-    min-width: 15px;
-    min-height: 22px;
-    margin: 0 1px;
-    padding: 0 3px;
-    border-radius: 6px;
-    color: @mac_workspace;
-    font-size: 10px;
+    min-width: 10px;
+    min-height: 10px;
+    margin: 10px 3px;
+    padding: 0;
+    border-radius: 99px;
+    background-color: @mac_workspace;
+}
+
+#workspaces button > label {
+    font-size: 0;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
 }
 
 #workspaces button.active,
 #workspaces button.focused {
-    background-color: @mac_selected;
-    color: @mac_accent;
+    min-width: 32px;
+    background-color: @mac_accent;
 }
 
 #workspaces button.urgent {
     background-color: @mac_red;
-    color: @mac_white;
 }
 
 #window {
