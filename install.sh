@@ -99,6 +99,9 @@ linkDotfiles(){
 				toFile="$HOME/.${file}"
 				linkFile $filePath $toFile $3
 			else
+				if [[ $file = "waybar" ]]; then
+					sh "$filePath/build-grouped-taskbar.sh" || exit 1
+				fi
 				toFile="$HOME/.config/${file}"
 				linkFile $filePath $toFile $3
 			fi

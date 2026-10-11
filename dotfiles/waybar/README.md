@@ -2,6 +2,33 @@
 
 This document explains how to configure the `style.css` file for Waybar, a highly customizable Wayland bar for Sway and other Wayland compositors.
 
+## Grouped Dock
+
+The bottom dock uses `grouped-taskbar.cpp`, a Waybar CFFI module for niri.
+Each app ID has one icon across all workspaces and monitors. A badge shows the
+window count when there is more than one window. Left-click a grouped icon to
+open a menu of window titles, then select one to focus it. An app with one window
+focuses immediately. The menu closes after selection, on Escape, or an outside
+click. Hover does not expand the group.
+
+The module follows niri's event stream, so opening, closing, renaming, and
+focusing windows updates the dock without polling. Icons come from desktop
+entries and the current icon theme. Middle/right click no longer closes windows,
+since an icon now represents a group.
+
+`install.sh` builds the module automatically. Build dependencies on Arch are
+`base-devel`, `gtk3`, `gtk-layer-shell`, and `jsoncpp`. After changing the C++
+source, rebuild and restart Waybar (a reload may keep the old shared library loaded):
+
+```sh
+sh ~/dotfiles/dotfiles/waybar/build-grouped-taskbar.sh
+systemctl --user restart waybar.service
+```
+
+The generated `grouped-taskbar.so` is ignored by Git. `module_path` is relative
+to `$HOME`, the working directory of the user service; when launching Waybar
+manually, run it from `$HOME` too.
+
 ## Control Center
 
 Left-click the sliders icon next to the calendar to show current CPU, memory,

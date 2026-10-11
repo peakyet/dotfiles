@@ -296,6 +296,33 @@ tooltip label {
     color: @mac_white;
 }
 
+#taskbar .window-count {
+    min-width: 13px;
+    border-radius: 7px;
+    background-color: @mac_accent;
+    color: @mac_white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 0 2px;
+}
+
+#dock-window-menu {
+    padding: 5px;
+    border: 1px solid @mac_border;
+    border-radius: 12px;
+    background-color: rgba(252, 252, 254, 0.98);
+    color: @mac_text;
+}
+
+#dock-window-menu menuitem {
+    padding: 8px 12px;
+    border-radius: 7px;
+}
+
+#dock-window-menu menuitem:hover {
+    background-color: @mac_selected;
+}
+
 .modules-left > widget:first-child > #custom-apple {
     margin-left: 0;
 }
