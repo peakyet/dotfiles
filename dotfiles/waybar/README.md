@@ -10,15 +10,15 @@ builds the custom CFFI modules.
 waybar/
 ├── config                       # Both bars, module order, actions and paths
 ├── style.css                    # Layout, typography and state styling
-├── build.sh                     # Build both CFFI modules
+├── build.sh                     # Build all three CFFI modules
 ├── README.md
 ├── modules/
 │   ├── grouped-taskbar.cpp       # Grouped dock with focus-distance sizing
+│   ├── pomodoro.cpp             # Persistent click-controlled focus/break timer
 │   └── workspace-pips.cpp       # Workspace size and opacity falloff
 ├── scripts/
 │   ├── chinese-calendar.py      # Shanghai clock and Chinese holiday calendar
-│   ├── control-center.sh        # System stats for tooltip and notification
-│   └── pomodoro.py              # Click-controlled focus/break timer
+│   └── control-center.sh        # System stats for tooltip and notification
 ├── themes/
 │   ├── macos-light.css          # Active palette, imported by style.css
 │   └── {frappe,latte,macchiato,mocha}.css  # Saved Catppuccin palettes
@@ -28,6 +28,7 @@ waybar/
 │   └── waybar-default/          # Unmodified stock config and stylesheet
 └── build/                      # Generated shared libraries, ignored by Git
     ├── grouped-taskbar.so
+    ├── pomodoro.so
     └── workspace-pips.so
 ```
 
@@ -117,7 +118,10 @@ clicked.
 
 ## Pomodoro Timer
 
-`scripts/pomodoro.py` uses the Python standard library and updates once a second.
+`modules/pomodoro.cpp` runs inside Waybar as `cffi/pomodoro`, with no Python
+process or per-second state-file writes. A GLib timer updates the countdown
+once a second while running; ready and paused states need no timer. Clicks
+update immediately, and file notifications synchronize other monitors.
 An inactive timer shows only the phase icon; starting shows the countdown,
 pausing keeps the remaining time visible, and resetting collapses it again.
 
@@ -132,9 +136,13 @@ notification and plays `mako/sounds/tri-tone.oga` when a phase finishes, via its
 icon, and pause uses a muted pause icon.
 
 State lives in `$XDG_RUNTIME_DIR/waybar-pomodoro/`, shared across monitors and
-preserved through Waybar reloads. It clears on logout or reboot. Countdown time
-includes suspend and ignores wall-clock adjustments. Durations are defined in
-`DURATIONS` in the script.
+preserved through Waybar reloads. The C++ module reads the existing Python JSON
+format, so switching implementations preserves the session and completed count.
+State is written atomically under a shared file lock on clicks and phase changes;
+only the instance that commits a phase transition sends its notification.
+It clears on logout or reboot. Countdown time uses `CLOCK_BOOTTIME`, including
+suspend and ignoring wall-clock adjustments. Durations are defined in `duration()`
+in the module.
 
 ## Calendar and Apple Menu
 

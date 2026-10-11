@@ -13,7 +13,7 @@
     // "modules-center": ["hyprland/window"],
     "modules-left": ["custom/apple", "cffi/workspace-pips"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "custom/pomodoro", "custom/control-center", "custom/calendar"],
+    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "cffi/pomodoro", "custom/control-center", "custom/calendar"],
     // Modules configuration
     "custom/apple": {
         "format": "",
@@ -30,14 +30,9 @@
             "shutdown": "systemctl poweroff"
         }
     },
-    "custom/pomodoro": {
-        "exec": "python3 $HOME/.config/waybar/scripts/pomodoro.py",
-        "return-type": "json",
-        "interval": 1,
-        "format": "{}",
-        "tooltip": true,
-        "on-click": "python3 $HOME/.config/waybar/scripts/pomodoro.py toggle",
-        "on-click-right": "python3 $HOME/.config/waybar/scripts/pomodoro.py reset"
+    "cffi/pomodoro": {
+        // Relative to $HOME, like the other CFFI modules.
+        "module_path": ".config/waybar/build/pomodoro.so"
     },
     "custom/control-center": {
         "exec": "$HOME/.config/waybar/scripts/control-center.sh",
