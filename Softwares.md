@@ -1,0 +1,265 @@
+# Softwares
+
+- [x] telegram
+- [x] zsh
+- [x] xdg-desktop, 
+- [x] docker
+- [x] openssh
+- [x] udiskie
+- [x] kitty
+- [x] waybar, otf-font-awesome, maple nerd font
+- [x] baidunetdisk
+- [x] v2raya
+- [x] zip, unzip
+- [x] fcitx5
+- [x] zen-browser-bin: zen browser, a modern browser.
+- [x] google-chrome: google browser
+- [x] fastfetch
+- [x] foxglove
+- [x] ghostscript: pdf 转换器
+- [x] piliplus-bin: bilibili client
+- [x] 4kvideodownloaderplus
+- [x] tlp: power management
+  - [x] tlp-rdw:
+  - [x] tlpui
+- [x] steam
+- [x] mathematica-light
+- [x] usbip: 貌似没什么用
+- [x] solaar: Logit devices manager
+- [x] shotcut: video editor
+- [x] octave
+  - [x] gcc-fortran
+- [x] luarocks
+- [ ] cava (optional)
+- [ ] wluma
+- [ ] tmux and tqm
+- Nvidia (建议按照wiki上走，也可以看[blog](https://geek-blogs.com/blog/arch-linux-nvidia/#1-%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87%E6%A3%80%E6%9F%A5%E7%A1%AC%E4%BB%B6%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83))
+  - [x] nvidia-dkms
+  - [x] nvidia-settings
+  - [x] nvidia-utils
+  - [x] nvidia-container-toolkit
+- Audio (choose `pipewire` or `pulseaudio`)
+  - [x] pipewire
+    - [x] pipewire-audio: 关键组件
+    - [x] pipewire-jack: 兼容层，支持需要 JACK 音频服务器
+    - [x] wireplumber: 会话管理
+    - [x] pwvucontrol: 音量控制工具
+    - [x] pipewire-pulse: 代替 pulseaudio 和 pulseaudio-bluetooth
+    - [x] pipewire-alsa
+  - [ ] pulseaudio
+    - [ ] alsa-utils
+    - [ ] pavucontrol: PulseAudio Volume Control
+    - [ ] pulseaudio-bluetooth
+    - [ ] pulseaudio-alsa
+    - [ ] pulseaudio
+  - Bluetooth
+    - [ ] blueman
+    - [x] bluez
+    - [x] bluez-utils
+- notification
+  - [ ] dunst
+  - [x] mako: notification daemon (replace dunst)
+- [x] yazi and Überzug++ (some bug with ueberzugpp in hyprland)
+    - [x] ffmpegthumbnailer
+    - [x] unar
+    - [x] jq
+    - [x] poppler
+    - [x] fd
+    - [x] rg
+    - [x] fzf (optional)
+    - [x] zoxide (optional)
+- Pictures and video
+  - [x] photoqt
+  - [ ] grim, slurp, feh
+  - [x] gpu-screen-recorder(-gtk): Screen recording functionality
+- music player
+  - [x] mpd, ncmpcpp
+  - [x] splayer: a online music player
+  - [ ] electron-netease-cloud-music
+- work
+  - [x] wps-office, ttf-wps-fonts, libtiff5
+  - [x] zotero
+  - editor
+  	- [x] neovim
+  - markdown editor
+  	- [x] obsidian
+  	- [x] picgo-appimage: A simple & beautiful tool for pictures uploading built by electron-vue
+- social apps
+  - [x] linuxqq
+  - [x] wechat
+- AI
+  - [x] deepseek-harness: agent developped by Deepseek AI
+  - [x] deepseek-harness-desktop
+  - [x] zcode
+  - [x] openai-codex
+  - [x] cc-switch-bin
+  - [x] claude-code
+  - [x] arxiv-mcp-server, paper-search-mcp (uvx)
+  - [x] ampcode
+- [x] niri
+  - [x] xdg-desktop-portal-gtk, xdg-desktop-portal-gnome, gnome-keyring
+  - [x] polkit-kde-agent: authentication agent (installed before niri)
+  - [x] xwayland-satellite: run X11 apps like Steam or Discord
+  - [x] swaylock, swayidle, swaybg
+  - [ ] gdm: 登陆管理器
+  - [x] cliphist: clipboard history support
+- app launcher
+  - [ ] fuzzel
+  - [x] tofi
+- printer
+  - [ ] cpus-pdf
+  - [ ] system-config-printer
+  - [ ] hpuld for HP Laser 150 (printer)
+- Code
+  - [x] typst
+    - [x] tinymist
+  - [x] clang
+  - [x] lua-languages-servers
+  - [x] pyright
+  - [x] tree-sitter-cli
+  - [x] uv: an extremely fast python package installer and resolver written in Rust.
+  - [x] katex
+
+
+Note: In `./dotfiles/zsh`, `zshrc` is just configuration files for zsh with only three plugins, and `zhsrc_omz` is for `oh-my-zsh`, just pick one to use. Recommend to use `zshrc`.
+
+## Setup
+
+> 从零安装并复现这台机器（手动分区安装 Arch Linux、软件包、服务、仓库外的手动步骤）见 [INSTALL.md](INSTALL.md)。
+
+### Install dotfiles
+
+edit `install.sh` to include the dotfile you need and then run
+```
+./install.sh
+```
+
+`install.sh` 按脚本自身位置定位仓库，所以可以从任意目录、把仓库克隆到任意路径后运行。
+配置里的壁纸统一走 `~/dotfiles/wallpapers/...`（systemd unit 中写作 `%h/dotfiles/...`）；
+如果仓库不在 `~/dotfiles`，脚本会自动建立 `~/dotfiles -> <仓库目录>` 软链接（若该名字已被占用则只告警）。
+
+### gdm
+
+设置
+```
+systemctl enable gdm
+```
+
+## Common knownledge
+
+### 连接网络
+
+- 工具：nmcli
+
+列出网络
+```bash
+nmcli dev wifi list
+```
+
+连接网络
+```bash
+nmcli dev wifi connect host password ****
+```
+
+### 更换国内源
+
+打开[archlinux mirror](https://archlinux.org/mirrors/)，找到国内的源，按照下面的格式添加源到 `/etc/pacman.d/mirrorlist` 中：
+
+```
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+```
+
+### 添加仓库
+
+在 `/etc/pacman.conf`中进行修改。
+
+可以添加
+- extra
+
+### 蓝牙连接
+
+安装 `bluez, bluez-utils`.
+
+开启蓝牙：
+```bash
+bluetooth on
+```
+
+进入控制界面：
+```bash
+bluetoothctl
+```
+
+用 `help` 命令查看，基本上就是
+1. `scan on`
+2. `connect [device]`
+
+### Ghostscript
+
+见[blog](https://www.cnblogs.com/springcoming/p/18796226).
+
+### Steam
+
+安装完成后，第一次打开得挂梯子，他需要下载东西，国内网络一般搞不下来。
+
+使用proton来做兼容。
+
+开启N卡的帧生成 DLSS（40系以上）可以改善帧数。
+
+看参考视频[bilibili](https://www.bilibili.com/video/BV1zyttzPEmp)
+
+### mathematica-light
+
+正常下载激活即可。
+
+若有能力请支持正版。
+
+在线激活见[Mathematica安装激活极简教程 - 科研小飞的文章 - 知乎](https://zhuanlan.zhihu.com/p/632361071)，不过更高版本的激活见[这里](https://wu-yijun.github.io/Mathematica-Keygen-Mechanism/)
+
+### obsidian
+
+安装插件:
+- image auto upload: 自动上传图床
+- Zotero Integration: 导入文献引用
+
+#### 使用 PicGo 配合 Obsidian 实现图片上传
+
+1. 首先得有个图床，使用腾讯云储存，在`对象储存`中创建`储存桶`，然后在`访问限制`中创建密钥。
+2. 安装 PicGo `pacman -S picgo-appimage`，并设置上传的储存桶。
+3. 在Obsidian中安装插件 `Image auto upload`，一般默认配置就行。
+
+### Zotero
+
+安装插件：
+- Better Bibtex for Zotero: 导出文献（与 obsidian 配合）
+
+安装 MCP
+
+```bash
+uv tool install zotero-mcp-server
+```
+
+
+## TroubleShooting
+
+### wireplumber
+
+打开时报错
+```bash
+wp-event-dispatcher: wp_event_dispatcher_unregister_hook: assertion 'already_registered_dispatcher == self' failed
+```
+
+貌似是正常现象。
+
+### obsidian
+
+> [!note]
+> 使用 `niri` 按照配置好环境变量 `ELECTRON_OZONE_PLATFORM_HINT "auto"`，就可以了
+> 不用下面的操作了
+
+- [无法使用中文](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Chromium_.2F_Electron)
+
+无法使用中文，需要使用下面命令打开：
+```bash
+obsidian --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime
+```
