@@ -49,7 +49,6 @@ systemctl --user daemon-reload # update
 systemctl --user add-wants niri.service waybar.service
 systemctl --user add-wants niri.service mako.service
 systemctl --user add-wants niri.service mpd.service
-systemctl --user add-wants niri.service v2raya-lite.service
 systemctl --user add-wants niri.service plasma-polkit-agent.service
 systemctl --user add-wants niri.service swaybg.service
 systemctl --user add-wants niri.service swayidle.service

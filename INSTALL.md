@@ -478,15 +478,17 @@ sh ~/dotfiles/dotfiles/niri/add_wants.sh
 ```
 
 It links `swaybg.service` / `swayidle.service` and calls
-`systemctl --user add-wants niri.service …` for `waybar mako mpd v2raya-lite
-plasma-polkit-agent swaybg swayidle`. The two custom units must go through this
+`systemctl --user add-wants niri.service …` for `waybar mako mpd
+plasma-polkit-agent swaybg swayidle`. (`v2raya-lite.service` is deliberately
+left out — this machine runs the root `v2raya.service` enabled in D.1, and the
+two would fight over port 2017.) The two custom units must go through this
 script because they do not exist in `/usr/lib/systemd/user` and have to be
-linked into `~/.config/systemd/user` first. On this machine those same seven
+linked into `~/.config/systemd/user` first. On this machine those same six
 units are additionally `systemctl --user enable`d, i.e. started via
 `default.target` as well:
 
 ```bash
-systemctl --user enable waybar mako mpd v2raya-lite plasma-polkit-agent \
+systemctl --user enable waybar mako mpd plasma-polkit-agent \
   swaybg swayidle
 ```
 
