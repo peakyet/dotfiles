@@ -1,255 +1,148 @@
-# Waybar Styling Guide
+# Waybar
 
-This document explains how to configure the `style.css` file for Waybar, a highly customizable Wayland bar for Sway and other Wayland compositors.
+Two bars for niri: a macOS-style light menu bar at the top and a glass dock at
+the bottom. `install.sh` links this whole directory to `~/.config/waybar` and
+builds the custom CFFI modules.
 
-## Grouped Dock
+## Layout
 
-The bottom dock uses `grouped-taskbar.cpp`, a Waybar CFFI module for niri.
-Each app ID has one icon across all workspaces and monitors. A badge shows the
-window count when there is more than one window. Left-click a grouped icon to
-open a menu of window titles, then select one to focus it. An app with one window
-focuses immediately. The menu closes after selection, on Escape, or an outside
-click. Hover does not expand the group.
+```text
+waybar/
+├── config                       # Both bars, module order, actions and paths
+├── style.css                    # Layout, typography and state styling
+├── build.sh                     # Build both CFFI modules
+├── README.md
+├── modules/
+│   ├── grouped-taskbar.cpp       # Grouped dock with focus-distance sizing
+│   └── workspace-pips.cpp       # Workspace size and opacity falloff
+├── scripts/
+│   ├── chinese-calendar.py      # Shanghai clock and Chinese holiday calendar
+│   ├── control-center.sh        # System stats for tooltip and notification
+│   └── pomodoro.py              # Click-controlled focus/break timer
+├── themes/
+│   ├── macos-light.css          # Active palette, imported by style.css
+│   └── {frappe,latte,macchiato,mocha}.css  # Saved Catppuccin palettes
+├── menus/
+│   └── apple-menu.xml           # Apple menu structure; actions are in config
+├── legacy/
+│   └── waybar-default/          # Unmodified stock config and stylesheet
+└── build/                      # Generated shared libraries, ignored by Git
+    ├── grouped-taskbar.so
+    └── workspace-pips.so
+```
 
-The module follows niri's event stream, so opening, closing, renaming, and
-focusing windows updates the dock without polling. Icons come from desktop
-entries and the current icon theme. Middle/right click no longer closes windows,
-since an icon now represents a group.
+Edit `config` to change module order or actions, `style.css` for styling, and
+`themes/macos-light.css` for colours. The saved Catppuccin palettes use different
+colour names; changing the import alone does not replace the active macOS theme.
+The stock files in `legacy/` are references and are not loaded by the active bars.
 
-`install.sh` builds both CFFI modules automatically — this dock and the workspace
-indicator below. Build dependencies on Arch are `base-devel`, `gtk3`,
-`gtk-layer-shell`, and `jsoncpp`. After changing either C++ source, rebuild and
-restart Waybar (a reload may keep the old shared library loaded):
+Fonts: Cantarell for text, FontAwesome and Maple Mono NF CN for icons.
+
+## Build and Reload
+
+Arch build dependencies: `base-devel`, `gtk3`, `gtk-layer-shell`, and `jsoncpp`.
+`build.sh` works from any working directory and replaces each shared library
+only after its compilation succeeds.
+
+After editing C++ sources or moving module files, rebuild and restart Waybar:
 
 ```sh
-sh ~/dotfiles/dotfiles/waybar/build-grouped-taskbar.sh
-sh ~/dotfiles/dotfiles/waybar/build-workspace-pips.sh
+sh ~/dotfiles/dotfiles/waybar/build.sh
 systemctl --user restart waybar.service
 ```
 
-The generated `.so` files are ignored by Git. `module_path` is relative
-to `$HOME`, the working directory of the user service; when launching Waybar
-manually, run it from `$HOME` too.
-
-## Control Center
-
-Left-click the sliders icon next to the calendar to show current CPU, memory,
-swap, root disk usage, and temperature in a Mako notification. It disappears
-after five seconds, or sooner if clicked, and works even when Waybar's hover tooltip fails.
-Hover still shows the same stats. Both use `control-center.sh`.
-
-## Pomodoro Timer
-
-The timer in the upper bar's status area, between the battery and Control Center,
-is powered by `pomodoro.py` (Python standard library only). It updates once a
-second without adding another daemon and matches the menu bar's compact styling.
-While inactive or waiting for the next session, it shows only the phase icon.
-Starting expands it to show the countdown; pausing keeps the remaining time
-visible, and resetting collapses it back to the icon.
-
-- **Left click:** start, pause, or resume the countdown.
-- **Right click:** reset to a fresh 25-minute focus session and clear the session count.
-- **Hover:** see the current phase, completed focus sessions, and controls.
-
-Focus sessions last 25 minutes, short breaks 5 minutes, and every fourth completed
-focus session earns a 15-minute break. Mako displays a message and plays the
-tri-tone chime from `mako/sounds/tri-tone.oga` whenever a focus session, short
-break, or long break finishes, using the `[app-name=Pomodoro]` rule in its config.
-Click the timer to start the next phase. The clock icon turns red
-during focus, the coffee icon turns blue during a break, and pause shows a muted
-pause icon. Only completed focus sessions count toward the long break.
-
-State is stored in `$XDG_RUNTIME_DIR/waybar-pomodoro/`, shared across monitors and
-preserved when Waybar reloads. It clears with the runtime directory on logout or
-reboot. Countdown time includes suspend and ignores system clock adjustments.
-Durations are defined in `DURATIONS` in `pomodoro.py`.
-
-After editing the config, reload the running bar with:
+A reload may retain an old shared library. For config-only changes, reload with:
 
 ```sh
 systemctl --user kill --signal=SIGUSR2 --kill-whom=main waybar.service
 ```
 
+`module_path` is relative to `$HOME`, the working directory of the user service.
+When launching Waybar manually, run it from `$HOME` too. The existing directory
+symlink exposes all subfolders; no extra symlinks are needed.
+
+## Grouped Dock
+
+`modules/grouped-taskbar.cpp` shows one icon per app ID across all workspaces and
+monitors. Icons come from desktop entries and the current icon theme. A badge
+shows the window count when an app has more than one window.
+
+- Left-click a single-window app to focus it immediately.
+- Left-click a grouped app to open a window-title menu, then select a window.
+- The menu closes after selection, on Escape, or an outside click.
+- Hover does not expand the group. Middle/right click does not close windows.
+
+The dock contains running apps only. The focused app keeps its original 28px
+icon, its immediate neighbours shrink to 22px, and apps two or more positions
+away shrink to 18px. Distance follows the visible dock order. Buttons remain
+vertically centred; colours and window-count badges stay the same. With no
+focused window, all icons use the smallest size.
+
+The module follows niri's event stream, so opening, closing, renaming, and
+focusing windows updates the dock without polling.
+
 ## Workspace Indicator
 
-The upper bar's `cffi/workspace-pips` module (`workspace-pips.cpp`) draws one
-rounded shape per niri workspace and sizes *and* fades each shape by its distance
-from the focused workspace. The focused workspace is a wide pill (24x12px), and
-the shapes around it give up width, height, and opacity as they get further away:
-12.3x10.7px at 55% opacity one workspace away, 5.3x9.3px at 40% two away, then
-3x8px at the 35% alpha floor from three away. The band therefore reads as a lens
-centred on wherever focus is. Width tapers on a curve (`kWidthCurve`) rather than
-straight, so the neighbours closest to the pill are clearly narrower than it
-instead of making the whole band bulge.
+`modules/workspace-pips.cpp` draws one rounded shape per niri workspace. Size
+and opacity fall with distance from the focused workspace, symmetrically:
 
-This is a module of its own because GTK CSS cannot express it. A stylesheet can
-style waybar's workspace buttons by state class only (`active`/`focused`/`empty`/
-`urgent`), so it has no way to know how far a workspace sits from the focused one,
-and the falloff has to be recomputed each time focus moves. The widget follows
-niri's event stream instead — `WorkspacesChanged`, `WorkspaceActivated`, and
-`WorkspaceUrgencyChanged` — so it repaints without polling.
+| Distance | Width × height | Opacity with the current theme |
+| --- | --- | --- |
+| Focused | 24 × 12px | 70% |
+| 1 | 4.2 × 10px | 56% |
+| 2 | 2.1 × 8px | 42% |
+| 3 | 2 × 6px | 28% |
+| 4+ | 2 × 4px | 14% |
 
-- Geometry, falloff length, and the alpha floor are the constants at the top of
-  `workspace-pips.cpp`: `kActiveWidth`/`kActiveHeight`, `kFaintWidth`/
-  `kFaintHeight`, `kSteps` (height and alpha), `kWidthSteps`/`kWidthCurve`
-  (width), `kFaintAlpha`, `kGap`, and `kBandHeight`.
-- The pip colour is not in the module. It comes from `@mac_ws_pip` in
-  `macos-light.css`, and urgent workspaces use `@mac_ws_urgent`. Only alpha fades
-  with distance, so pointing `@mac_ws_pip` at any colour — the accent blue, say —
-  gives that colour the whole falloff.
-- `#workspaces` in `style.css` only positions the band (`margin: 0 6px`). The
-  module names its widget `workspaces`, the name the stock module used, so that
-  selector keeps applying.
-- The widget asks for exactly the width its pips need and centres them vertically
-  in whatever height the bar hands it, which is what puts the 14px focused pip in
-  the middle of the 30px bar.
-- Left-clicking a pip focuses that workspace, through `niri msg action
-  focus-workspace`.
-- Workspaces from every output land in the one band. The stock module's
-  `all-outputs: false` filtering is not implemented, since Wayland gives GDK no
-  reliable way to map niri's output names (`eDP-1`) to a bar's monitor. Nothing
-  changes on this single-monitor setup.
+All indicators use a corner radius of 35% of their shorter side. Geometry and
+falloff constants live at the top of the C++ source: `kActiveWidth`,
+`kActiveHeight`, `kFaintWidth`, `kFaintHeight`, `kSteps`, `kWidthSteps`,
+`kWidthCurve`, `kFaintAlpha`, `kGap`, and `kBandHeight`.
 
-## Overview
+Colours come from `@mac_ws_pip` and `@mac_ws_urgent` in
+`themes/macos-light.css`. The module multiplies their alpha by the distance
+falloff. `#workspaces` in `style.css` only positions the band. Shapes are
+vertically centred in the 30px bar; left-clicking one focuses its workspace.
 
-The `style.css` file uses a standard CSS syntax to control the appearance of the Waybar and its modules. This allows for a great deal of flexibility in matching the bar to your desktop's theme.
+The module follows `WorkspacesChanged`, `WorkspaceActivated`, and
+`WorkspaceUrgencyChanged` events rather than polling. Workspaces from every
+output appear in one band; per-output filtering is not implemented.
 
-This particular configuration uses the Catppuccin color theme, with the color palette defined in separate files (`mocha.css`, `latte.css`, etc.) and imported into the main `style.css`.
+## Control Center
 
-## File Structure
+`scripts/control-center.sh` supplies CPU, memory, swap, root disk usage, and CPU
+temperature. Hover the sliders icon to see the stats. Left-click it to show the
+same stats in a Mako notification, which disappears after five seconds or when
+clicked.
 
-*   **`style.css`**: The main stylesheet that Waybar loads. It contains the core styling rules.
-*   **`mocha.css` / `latte.css` / etc.**: These files define the color palettes for different themes. The `@import` rule at the top of `style.css` determines which theme is active.
+## Pomodoro Timer
 
-## Basic Configuration
+`scripts/pomodoro.py` uses the Python standard library and updates once a second.
+An inactive timer shows only the phase icon; starting shows the countdown,
+pausing keeps the remaining time visible, and resetting collapses it again.
 
-### Changing the Theme
+- Left-click: start, pause, or resume.
+- Right-click: reset to a fresh 25-minute focus session and clear the count.
+- Hover: see the phase, completed focus sessions, and controls.
 
-To change the color theme, you can modify the `@import` rule at the top of `style.css`. For example, to switch from the "Mocha" theme to the "Latte" theme, you would change:
+Focus sessions last 25 minutes, short breaks 5 minutes, and every fourth focus
+session earns a 15-minute break. Each new phase waits for a click. Mako sends a
+notification and plays `mako/sounds/tri-tone.oga` when a phase finishes, via its
+`[app-name=Pomodoro]` rule. Focus uses a red clock icon, breaks use a blue coffee
+icon, and pause uses a muted pause icon.
 
-```css
-@import "mocha.css";
-```
+State lives in `$XDG_RUNTIME_DIR/waybar-pomodoro/`, shared across monitors and
+preserved through Waybar reloads. It clears on logout or reboot. Countdown time
+includes suspend and ignores wall-clock adjustments. Durations are defined in
+`DURATIONS` in the script.
 
-to:
+## Calendar and Apple Menu
 
-```css
-@import "latte.css";
-```
+`scripts/chinese-calendar.py` displays the clock in `Asia/Shanghai` and supplies
+a monthly tooltip with Chinese public holidays and weekends highlighted. Its
+holiday periods and makeup workdays are defined for 2026; update the tables
+when a new annual schedule is published.
 
-### General Bar Styling
-
-The entire Waybar is styled using the `window#waybar` selector. Here, you can change properties like the background color, borders, and text color for the entire bar.
-
-```css
-window#waybar {
-    background-color: transparent;
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    color: @text;
-}
-```
-
-In this configuration, the bar has a transparent background and a semi-transparent bottom border. The text color is set to the `@text` variable defined in the imported theme file.
-
-### Styling Individual Modules
-
-Each module in Waybar has a unique ID that you can use as a CSS selector to apply specific styles. For example, to style the clock module, you would use the `#clock` selector.
-
-```css
-#clock {
-    background-color: transparent;
-    box-shadow: inset 0 -3px @rosewater;
-    color: @rosewater;
-}
-```
-
-In this configuration, most modules have a transparent background and a colored bottom border created with an inset `box-shadow`. This gives the appearance of a colored underline for each module.
-
-### Styling Module States
-
-Many modules have different states that can be styled individually. These states are represented by CSS classes. For example, the battery module has `.charging`, `.plugged`, and `.critical` states.
-
-```css
-#battery.charging, #battery.plugged {
-    background-color: transparent;
-    box-shadow: inset 0 -3px @pink;
-    color: @pink;
-}
-
-#battery.critical:not(.charging) {
-    color: @pink;
-    box-shadow: inset 0 -3px @pink;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
-```
-
-This allows you to have different styles for when the battery is charging, full, or critically low.
-
-### The #window Module and Animated Backgrounds
-
-A particularly interesting part of this configuration is the styling for the `#window` module, which displays the title of the currently focused window.
-
-```css
-#window {
-    border-radius: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: white;
-    background: radial-gradient(circle, rgba(137,180,250,120) 0%, ...); 
-    background-size: 400% 400%;
-    /* animation: gradient_f 20s cubic-bezier(.72,.39,.21,1) infinite; */
-}
-
-@keyframes gradient_f {
-	0% {
-		background-position: 0% 200%;
-	}
-	50% {
-		background-position: 200% 0%;
-	}
-	100% {
-		background-position: 400% 200%;
-	}
-}
-```
-
-This module has a complex `radial-gradient` as its background, which creates a colorful and dynamic look.
-
-The configuration also includes a commented-out CSS animation (`gradient_f`). If you uncomment the `animation` property in the `#window` selector, this will create a smoothly moving gradient effect.
-
-**Caution:** Enabling this animation may increase CPU usage, as rendering complex animations can be resource-intensive. If you notice performance issues after enabling it, you may want to comment it out again.
-
-### Fonts and Icons
-
-You can set the font and font size for the entire bar in the `*` (universal) selector.
-
-```css
-* {
-    font-family: FontAwesome, Maple Mono NF CN;
-    font-size: 17px;
-}
-```
-
-This configuration uses "FontAwesome" for icons and "Maple Mono NF CN" (a Nerd Font) for text. Make sure you have these fonts installed on your system.
-
-## Customization Example
-
-Let's say you want to change the color of the CPU module to green.
-
-1.  **Find the color:** Look in the imported theme file (e.g., `mocha.css`) for a green color. You'll find `@define-color green #a6e3a1;`.
-2.  **Find the module's CSS:** In `style.css`, find the `#cpu` selector.
-3.  **Change the color:** Modify the `color` and `box-shadow` properties to use the `@green` variable.
-
-```css
-#cpu {
-    background-color: transparent;
-    box-shadow: inset 0 -3px @green;
-    color: @green;
-}
-```
-
-By following these principles, you can customize the look and feel of your Waybar to your liking. For a full list of modules and their styling options, refer to the [Waybar documentation](https://github.com/Alexays/Waybar/wiki/Styling).
+`menus/apple-menu.xml` defines menu entries. Their commands live in
+`custom/apple.menu-actions` in `config`, including the app launcher, terminal,
+files, lock, suspend, restart, and shutdown actions.

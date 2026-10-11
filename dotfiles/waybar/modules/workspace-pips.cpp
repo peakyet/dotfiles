@@ -41,23 +41,23 @@ struct wbcffi_config_entry {
 
 namespace {
 
-constexpr double kActiveWidth = 24;  // the focused workspace: a wide pill
+constexpr double kActiveWidth = 24;  // keep the focused workspace at its original size
 constexpr double kActiveHeight = 12;
-constexpr double kFaintWidth = 3;    // the other workspaces: slim bars
-constexpr double kFaintHeight = 8;
+constexpr double kFaintWidth = 2;    // the other workspaces: slim bars
+constexpr double kFaintHeight = 4;
 constexpr double kGap = 6;           // between pips
-constexpr double kFaintAlpha = 0.35; // how far the fade goes, relative to the theme colour
-constexpr int kSteps = 3;            // distance at which the height and alpha falloff bottoms out
-constexpr int kWidthSteps = 3;       // ... and the width falloff
-constexpr double kWidthCurve = 2;    // above 1, nearer workspaces lose width faster
+constexpr double kFaintAlpha = 0.20; // how far the fade goes, relative to the theme colour
+constexpr int kSteps = 4;            // distance at which the height and alpha falloff bottoms out
+constexpr int kWidthSteps = 4;       // ... and the width falloff
+constexpr double kWidthCurve = 8;    // keep neighbours slim while their height tapers gradually
 constexpr int kBandHeight = 24;      // height the pips are centred in
 
 const GdkRGBA kFallbackPip = {0.0, 0.0, 0.0, 0.7};
 const GdkRGBA kFallbackUrgent = {1.0, 0.27, 0.23, 1.0};
 
-// A capsule outline: two half-circle ends joined by straight edges.
-void capsule(cairo_t* cr, double x, double y, double width, double height) {
-    double radius = std::min(width, height) / 2;
+// The same softly rounded rectangle outline for focus and the surrounding bars.
+void rounded_pip(cairo_t* cr, double x, double y, double width, double height,
+                 double radius) {
     cairo_new_path(cr);
     cairo_arc(cr, x + width - radius, y + radius, radius, -G_PI / 2, 0);
     cairo_arc(cr, x + width - radius, y + height - radius, radius, 0, G_PI / 2);
@@ -267,7 +267,8 @@ struct Pips {
         for (const auto& pip : pips->layout()) {
             GdkRGBA colour = colour_of(pip, base, urgent);
             gdk_cairo_set_source_rgba(cr, &colour);
-            capsule(cr, pip.x, pip.y, pip.width, pip.height);
+            double radius = std::min(pip.width, pip.height) * 0.35;
+            rounded_pip(cr, pip.x, pip.y, pip.width, pip.height, radius);
             cairo_fill(cr);
         }
     }

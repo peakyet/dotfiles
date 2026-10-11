@@ -19,7 +19,7 @@
         "format": "",
         "tooltip": false,
         "menu": "on-click",
-        "menu-file": "~/.config/waybar/apple-menu.xml",
+        "menu-file": "~/.config/waybar/menus/apple-menu.xml",
         "menu-actions": {
             "apps": "tofi-drun --drun-launch=true",
             "terminal": "kitty",
@@ -31,21 +31,21 @@
         }
     },
     "custom/pomodoro": {
-        "exec": "python3 $HOME/.config/waybar/pomodoro.py",
+        "exec": "python3 $HOME/.config/waybar/scripts/pomodoro.py",
         "return-type": "json",
         "interval": 1,
         "format": "{}",
         "tooltip": true,
-        "on-click": "python3 $HOME/.config/waybar/pomodoro.py toggle",
-        "on-click-right": "python3 $HOME/.config/waybar/pomodoro.py reset"
+        "on-click": "python3 $HOME/.config/waybar/scripts/pomodoro.py toggle",
+        "on-click-right": "python3 $HOME/.config/waybar/scripts/pomodoro.py reset"
     },
     "custom/control-center": {
-        "exec": "$HOME/.config/waybar/control-center.sh",
+        "exec": "$HOME/.config/waybar/scripts/control-center.sh",
         "return-type": "json",
         "interval": 5,
         "tooltip": true,
         "format": "{}",
-        "on-click": "$HOME/.config/waybar/control-center.sh notify"
+        "on-click": "$HOME/.config/waybar/scripts/control-center.sh notify"
     },
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -109,7 +109,7 @@
     },
     "cffi/workspace-pips": {
         // Relative to $HOME, the working directory of waybar.service.
-        "module_path": ".config/waybar/workspace-pips.so"
+        "module_path": ".config/waybar/build/workspace-pips.so"
     },
     "niri/window": {
         // "icon + brief info": matches windows by app_id (reliable), not by title.
@@ -300,7 +300,7 @@
         "spacing": 10
     },
     "custom/calendar": {
-        "exec": "$HOME/.config/waybar/chinese-calendar.py",
+        "exec": "$HOME/.config/waybar/scripts/chinese-calendar.py",
         "return-type": "json",
         "interval": 60,
         "tooltip": true,
@@ -452,18 +452,12 @@
     "group/dock": {
         "orientation": "horizontal",
         "modules": [
-            "custom/launcher",
             "cffi/grouped-taskbar"
         ]
-    },
-    "custom/launcher": {
-        "format": "󰀻",
-        "tooltip": false,
-        "on-click": "tofi-drun --drun-launch=true"
     },
 
     "cffi/grouped-taskbar": {
         // Relative to $HOME, the working directory of waybar.service.
-        "module_path": ".config/waybar/grouped-taskbar.so"
+        "module_path": ".config/waybar/build/grouped-taskbar.so"
     }
 }]

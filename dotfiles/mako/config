@@ -76,7 +76,7 @@ on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 
 # ── Pomodoro: chime when a focus session or either break ends ────────
-# waybar/pomodoro.py sends one notification per completed phase.
+# waybar/scripts/pomodoro.py sends one notification per completed phase.
 [app-name=Pomodoro]
 on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 

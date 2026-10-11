@@ -6,6 +6,7 @@
 #include <json/json.h>
 
 #include <algorithm>
+#include <cstdlib>
 #include <map>
 #include <string>
 #include <vector>
@@ -235,8 +236,11 @@ struct Dock {
             std::string app = window["app_id"].asString();
             if (buttons.count(app)) continue;
             GtkWidget* button = gtk_button_new();
+            gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
             GtkWidget* overlay = gtk_overlay_new();
-            gtk_container_add(GTK_CONTAINER(overlay), icon(app));
+            GtkWidget* image = icon(app);
+            gtk_container_add(GTK_CONTAINER(overlay), image);
+            g_object_set_data(G_OBJECT(button), "icon", image);
             GtkWidget* count = gtk_label_new(nullptr);
             gtk_style_context_add_class(gtk_widget_get_style_context(count), "window-count");
             gtk_widget_set_halign(count, GTK_ALIGN_END);
@@ -274,6 +278,25 @@ struct Dock {
             gtk_widget_set_tooltip_text(button, tooltip.c_str());
             atk_object_set_name(gtk_widget_get_accessible(button), app.c_str());
         }
+
+        // Distance follows the visible dock order, rather than the app-ID map.
+        GList* children = gtk_container_get_children(GTK_CONTAINER(box));
+        int focused = -1, index = 0;
+        for (GList* item = children; item; item = item->next, ++index) {
+            if (gtk_style_context_has_class(gtk_widget_get_style_context(GTK_WIDGET(item->data)),
+                                            "active")) {
+                focused = index;
+                break;
+            }
+        }
+        const int sizes[] = {28, 22, 18};
+        index = 0;
+        for (GList* item = children; item; item = item->next, ++index) {
+            int distance = focused < 0 ? 2 : std::min(std::abs(index - focused), 2);
+            auto* image = GTK_IMAGE(g_object_get_data(G_OBJECT(item->data), "icon"));
+            gtk_image_set_pixel_size(image, sizes[distance]);
+        }
+        g_list_free(children);
     }
 };
 

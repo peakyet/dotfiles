@@ -54,5 +54,4 @@ Makefile
 AGENTS.md
 
 # Compiled Waybar modules (built locally by install.sh).
-/dotfiles/waybar/grouped-taskbar.so*
-/dotfiles/waybar/workspace-pips.so*
+/dotfiles/waybar/build/

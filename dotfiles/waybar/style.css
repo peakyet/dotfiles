@@ -1,4 +1,4 @@
-@import "macos-light.css";
+@import "themes/macos-light.css";
 
 * {
     font-family: Cantarell, FontAwesome, Maple Mono NF CN;
@@ -78,7 +78,7 @@ tooltip label {
 /* Workspace indicator (cffi/workspace-pips): the module draws its own pips and
    reads their colour from @mac_ws_pip, so all that is left here is where the
    band sits in the bar. The falloff, sizes and spacing live in the module's
-   constants (workspace-pips.cpp). */
+   constants (modules/workspace-pips.cpp). */
 #workspaces {
     margin: 0 6px;
 }
@@ -230,31 +230,16 @@ tooltip label {
                 0 4px 12px rgba(0, 0, 0, 0.10);
 }
 
-#custom-launcher {
-    min-width: 38px;
-    min-height: 38px;
-    margin: 0 1px;
-    padding: 0;
-    border-radius: 12px;
-    color: @mac_text;
-    font-size: 18px;
-}
-
-#custom-launcher:hover {
-    background-color: @mac_hover;
-}
-
-
 #taskbar {
     margin: 0 2px;
     padding: 0 5px;
-    /* macOS-style dock divider between the launcher and the running-apps strip */
-    border-left: 1px solid @mac_border;
 }
 
 #taskbar button {
+    min-width: 0;
+    min-height: 0;
     margin: 0 1px;
-    padding: 0 8px;
+    padding: 6px;
     border-radius: 12px;
     color: @mac_text;
 }
@@ -266,6 +251,7 @@ tooltip label {
 }
 
 #taskbar button.active {
+    padding: 10px 8px;
     background-color: @mac_selected;
 }
 
