@@ -515,9 +515,12 @@ module toggles the radio through its own click action.
 
 Power management is `tlp` + `tlp-rdw` with `tlp.service` enabled and `tlpui` as
 the GUI. Before a long command, `awake <cmd>` (defined in both the zsh and bash
-configs) inhibits sleep and lets niri keep the screen on through
-`dotfiles/niri/awake.py`; `dotfiles/niri/swayidle.service` supplies the lock and
-DPMS timeouts around it.
+configs) inhibits sleep through `dotfiles/niri/awake.py`, which also holds the
+session idle inhibitor so niri keeps `dotfiles/niri/swayidle.service`'s lock
+timer away while the command runs. Since that mutes swayidle's DPMS timeout as
+well, `awake.py` powers the monitors off itself after 601 s without input (set
+`AWAKE_MONITOR_TIMEOUT` to change that); input brings them back with the
+session still unlocked.
 
 ## Part E — Session environment, GPU, display
 

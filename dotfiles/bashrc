@@ -39,9 +39,11 @@ function proxy_off(){
 			echo -e "Proxy environment variable removed."
 		}
 
-# Keep the screen unlocked and the machine out of suspend while a long command
-# runs: niri withholds swayidle's lock/DPMS timeouts while awake.py holds the
-# session idle inhibitor, and systemd-inhibit blocks sleep and lid-close suspend.
+# Keep the machine out of suspend while a long command runs: systemd-inhibit
+# blocks sleep and lid-close suspend, and awake.py holds the session idle
+# inhibitor so niri keeps swayidle's lock timer away. That inhibitor also mutes
+# swayidle's DPMS timeout, so awake.py powers the monitors off on its own after
+# 601 s without input; any input brings them back, still unlocked.
 # Usage: awake amp    /    awake ./build.sh
 function awake() {
 	systemd-inhibit --what=sleep:handle-lid-switch --mode=block \
