@@ -5,13 +5,14 @@ macOS/iPhone-flavoured alert tones for mako, referenced from `../config` via
 
 | file | used for | character |
 | --- | --- | --- |
-| `tri-tone.oga` | **every agent notification** | iPhone alert: ascending 1–5–8 marimba arpeggio (D5–A5–D6) |
+| `tri-tone.oga` | **every agent notification and Pomodoro phase completion** | iPhone alert: ascending 1–5–8 marimba arpeggio (D5–A5–D6) |
 | `kalimba.oga` | — alternative | the same melody on thumb piano: softer, rounder, wider spacing |
 
 `tri-tone` is the one wired up: it plays for the DSH question *and* for every
 completion (DSH finished, Claude Code, codex) — whether the agent reached mako
 through a terminal (`app-name=kitty`) or through the browser
-(`desktop-entry=zen`, i.e. Amp's web UI). The rest are candidates kept so
+(`desktop-entry=zen`, i.e. Amp's web UI). It also plays when each Pomodoro focus
+session, short break, or long break ends (`app-name=Pomodoro`). The rest are candidates kept so
 that swapping the sound is a one-line edit in `../config` — replace
 `tri-tone.oga` in the relevant block with any name above.
 
