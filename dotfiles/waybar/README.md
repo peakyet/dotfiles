@@ -64,17 +64,19 @@ symlink exposes all subfolders; no extra symlinks are needed.
 
 ## Grouped Dock
 
-`modules/grouped-taskbar.cpp` shows one icon per app ID across all workspaces and
-monitors. Icons come from desktop entries and the current icon theme. A badge
-shows the window count when an app has more than one window.
+`modules/grouped-taskbar.cpp` shows one icon per app per workspace. Icons come
+from desktop entries and the current icon theme. A badge shows the window count
+when an app has more than one window on that workspace.
 
 Icons sit in workspace order, matching the workspace band on the top bar. Within
-one workspace the app whose first window opened earliest comes first, and an app
-with windows on several workspaces takes the earliest of them, so it stays with
-that workspace's icons instead of drifting to the end. The dock reorders itself
-whenever a window opens, closes, or changes workspace; a window on a workspace
-niri has not announced yet sorts last. The window-title menu lists each app's
-windows in the same workspace order.
+one workspace the app whose first window opened earliest comes first. Windows of
+one app stack under a single icon only while they share a workspace, so an app
+open on two workspaces gets an icon in each of them, and the badge never counts
+windows from another workspace. Hovering a grouped icon names the workspace,
+because two icons of one app differ only by it. The dock reorders itself whenever
+a window opens, closes, or changes workspace; a window on a workspace niri has
+not announced yet sorts last. The window-title menu lists the app's windows on
+that workspace, in opening order.
 
 A thin vertical hairline marks each workspace boundary, so the dock reads as
 groups even when no workspace is named. It sits only between icons of different

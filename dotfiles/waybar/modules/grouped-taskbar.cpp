@@ -1,9 +1,10 @@
 // Waybar CFFI ABI v2: https://github.com/Alexays/Waybar/tree/0.15.0/resources/custom_modules/cffi_example
 //
-// Grouped dock for niri: one icon per app ID across every workspace. Icons sit
-// in workspace order, so the dock reads left to right like the workspace band
-// on the top bar, and they slide past each other as windows move between
-// workspaces.
+// Grouped dock for niri: one icon per app per workspace. Icons sit in workspace
+// order, so the dock reads left to right like the workspace band on the top bar,
+// with a hairline between the groups, and they slide past each other as windows
+// move between workspaces. An app's windows stack under one icon only while they
+// share a workspace.
 #include <gtk/gtk.h>
 #include <gtk-layer-shell.h>
 #include <gio/gdesktopappinfo.h>
@@ -15,6 +16,7 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -30,6 +32,18 @@ struct wbcffi_config_entry { const char* key; const char* value; };
 }
 
 struct Dock {
+    // One icon per app per workspace: windows of the same app stack only while
+    // they sit on the same workspace, so an app on two workspaces gets an icon
+    // in each of them rather than one icon spanning both.
+    struct AppKey {
+        std::string app;
+        Json::UInt64 workspace;
+
+        bool operator<(const AppKey& other) const {
+            return std::tie(app, workspace) < std::tie(other.app, other.workspace);
+        }
+    };
+
     GtkWidget* box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget* menu = nullptr;
     GList* apps = g_app_info_get_all();
@@ -37,11 +51,11 @@ struct Dock {
     GIOChannel* channel = nullptr;
     guint watch = 0, retry = 0;
     std::map<Json::UInt64, Json::Value> windows;
-    std::map<std::string, GtkWidget*> buttons;
+    std::map<AppKey, GtkWidget*> buttons;
     std::vector<Json::Value> workspaces;   // niri's list, sorted by index
     std::vector<GtkWidget*> separators;    // hairlines between workspace groups
 
-    struct AppButton { Dock* dock; std::string app; };
+    struct AppButton { Dock* dock; AppKey key; };
 
     ~Dock() {
         if (watch) g_source_remove(watch);
@@ -159,33 +173,37 @@ struct Dock {
         return rank;
     }
 
-    // Where an app sits in the dock: the earliest workspace holding one of its
-    // windows, then the ID of its first window. An app spanning several
-    // workspaces takes the earliest one, so it keeps its place among the apps of
-    // that workspace rather than drifting to the end.
-    std::pair<int, Json::UInt64> dock_order(const std::string& app) const {
-        constexpr auto kLast = std::numeric_limits<Json::UInt64>::max();
-        int rank = std::numeric_limits<int>::max();
-        Json::UInt64 first = kLast;
-        for (const auto& [id, window] : windows) {
-            if (window["app_id"].asString() != app) continue;
-            rank = std::min(rank, workspace_rank(window["workspace_id"].asUInt64()));
-            first = std::min(first, id);
+    // What to call a workspace in a tooltip: its name, or its index when it has
+    // none. Empty when niri has not announced it yet.
+    std::string workspace_label(Json::UInt64 workspace_id) const {
+        for (const auto& workspace : workspaces) {
+            if (workspace["id"].asUInt64() != workspace_id) continue;
+            const std::string name = workspace["name"].asString();
+            return name.empty() ? "workspace " + std::to_string(workspace["idx"].asInt()) : name;
         }
-        return {rank, first};
+        return {};
     }
 
-    std::vector<Json::Value> group(const std::string& app) const {
+    // Where an icon sits in the dock: its workspace's place in the band, then
+    // the ID of its first window. No two icons share a first window, so the
+    // order is total.
+    std::pair<int, Json::UInt64> dock_order(const AppKey& key) const {
+        constexpr auto kLast = std::numeric_limits<Json::UInt64>::max();
+        Json::UInt64 first = kLast;
+        for (const auto& [id, window] : windows)
+            if (window["app_id"].asString() == key.app &&
+                window["workspace_id"].asUInt64() == key.workspace)
+                first = std::min(first, id);
+        return {workspace_rank(key.workspace), first};
+    }
+
+    // The windows behind one icon, in the order they opened.
+    std::vector<Json::Value> group(const AppKey& key) const {
         std::vector<Json::Value> result;
         for (const auto& [id, window] : windows)
-            if (window["app_id"].asString() == app) result.push_back(window);
-        std::sort(result.begin(), result.end(), [this](const Json::Value& a,
-                                                      const Json::Value& b) {
-            return std::make_pair(workspace_rank(a["workspace_id"].asUInt64()),
-                                  a["id"].asUInt64()) <
-                   std::make_pair(workspace_rank(b["workspace_id"].asUInt64()),
-                                  b["id"].asUInt64());
-        });
+            if (window["app_id"].asString() == key.app &&
+                window["workspace_id"].asUInt64() == key.workspace)
+                result.push_back(window);
         return result;
     }
 
@@ -223,8 +241,8 @@ struct Dock {
         }
     }
 
-    void choose(GtkWidget* button, const std::string& app) {
-        auto members = group(app);
+    void choose(GtkWidget* button, const AppKey& key) {
+        auto members = group(key);
         if (members.empty()) return;
         if (members.size() == 1) {
             action("focus-window", members.front()["id"].asUInt64());
@@ -248,7 +266,7 @@ struct Dock {
             GtkWidget* label = gtk_label_new(nullptr);
             std::string title = (window["is_focused"].asBool() ? "●  " : "    ") +
                                 window["title"].asString();
-            if (window["title"].asString().empty()) title += app;
+            if (window["title"].asString().empty()) title += key.app;
             gtk_label_set_text(GTK_LABEL(label), title.c_str());
             gtk_label_set_xalign(GTK_LABEL(label), 0);
             gtk_label_set_max_width_chars(GTK_LABEL(label), 55);
@@ -307,7 +325,8 @@ struct Dock {
         }
         for (const auto& [id, window] : windows) {
             std::string app = window["app_id"].asString();
-            if (buttons.count(app)) continue;
+            AppKey key{app, window["workspace_id"].asUInt64()};
+            if (buttons.count(key)) continue;
             GtkWidget* button = gtk_button_new();
             gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
             GtkWidget* overlay = gtk_overlay_new();
@@ -322,18 +341,18 @@ struct Dock {
             gtk_overlay_set_overlay_pass_through(GTK_OVERLAY(overlay), count, TRUE);
             gtk_container_add(GTK_CONTAINER(button), overlay);
             g_object_set_data(G_OBJECT(button), "count", count);
-            auto* data = new AppButton{this, app};
+            auto* data = new AppButton{this, key};
             g_signal_connect_data(button, "clicked", G_CALLBACK(+[](GtkButton* button, gpointer data) {
                 auto* app = static_cast<AppButton*>(data);
-                app->dock->choose(GTK_WIDGET(button), app->app);
+                app->dock->choose(GTK_WIDGET(button), app->key);
             }), data, [](gpointer data, GClosure*) { delete static_cast<AppButton*>(data); },
             GConnectFlags(0));
             gtk_box_pack_start(GTK_BOX(box), button, FALSE, FALSE, 0);
-            buttons[app] = button;
+            buttons[key] = button;
             gtk_widget_show_all(button);
         }
-        for (auto& [app, button] : buttons) {
-            auto members = group(app);
+        for (auto& [key, button] : buttons) {
+            auto members = group(key);
             auto* style = gtk_widget_get_style_context(button);
             for (const char* state : {"active", "urgent"}) {
                 bool set = std::any_of(members.begin(), members.end(), [state](const auto& window) {
@@ -346,24 +365,32 @@ struct Dock {
             auto* count = GTK_LABEL(g_object_get_data(G_OBJECT(button), "count"));
             gtk_label_set_text(count, std::to_string(members.size()).c_str());
             gtk_widget_set_visible(GTK_WIDGET(count), members.size() > 1);
-            std::string tooltip = app + " · " + std::to_string(members.size()) + " window(s)";
-            if (members.size() == 1) tooltip = members.front()["title"].asString();
+            const std::string label = workspace_label(key.workspace);
+            std::string tooltip;
+            if (members.size() == 1) {
+                tooltip = members.front()["title"].asString();
+            } else {
+                tooltip = key.app + " · " + std::to_string(members.size()) + " window(s)";
+                if (!label.empty()) tooltip += " on " + label;
+            }
             gtk_widget_set_tooltip_text(button, tooltip.c_str());
-            atk_object_set_name(gtk_widget_get_accessible(button), app.c_str());
+            // Two icons of one app differ only by workspace, so name it.
+            const std::string name = label.empty() ? key.app : key.app + " on " + label;
+            atk_object_set_name(gtk_widget_get_accessible(button), name.c_str());
         }
 
         // Rearrange the existing children into dock order, with a separator
         // wherever the workspace changes. A button keeps its widget; only its
         // position changes, so nothing flickers or loses state.
-        std::vector<std::string> order;
+        std::vector<AppKey> order;
         order.reserve(buttons.size());
-        for (const auto& [app, button] : buttons) order.push_back(app);
-        std::sort(order.begin(), order.end(), [this](const std::string& a, const std::string& b) {
+        for (const auto& [key, button] : buttons) order.push_back(key);
+        std::sort(order.begin(), order.end(), [this](const AppKey& a, const AppKey& b) {
             return dock_order(a) < dock_order(b);
         });
         std::vector<int> ranks;
         ranks.reserve(order.size());
-        for (const auto& app : order) ranks.push_back(dock_order(app).first);
+        for (const auto& key : order) ranks.push_back(dock_order(key).first);
         size_t boundaries = 0;
         for (size_t i = 1; i < ranks.size(); ++i) boundaries += ranks[i] != ranks[i - 1];
         separators_to(boundaries);
