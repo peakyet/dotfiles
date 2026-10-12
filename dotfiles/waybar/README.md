@@ -68,15 +68,18 @@ symlink exposes all subfolders; no extra symlinks are needed.
 from desktop entries and the current icon theme. A badge shows the window count
 when an app has more than one window on that workspace.
 
-Icons sit in workspace order, matching the workspace band on the top bar. Within
-one workspace the app whose first window opened earliest comes first. Windows of
-one app stack under a single icon only while they share a workspace, so an app
-open on two workspaces gets an icon in each of them, and the badge never counts
-windows from another workspace. Hovering a grouped icon names the workspace,
-because two icons of one app differ only by it. The dock reorders itself whenever
-a window opens, closes, or changes workspace; a window on a workspace niri has
-not announced yet sorts last. The window-title menu lists the app's windows on
-that workspace, in opening order.
+Icons sit in workspace order, matching the workspace band on the top bar. Inside
+one workspace they follow the layout itself: left to right across the tile
+columns, top to bottom down a single column, and floating windows after the tiled
+ones. An icon takes the place of its leftmost, topmost window. Windows of one app
+stack under a single icon only while they share a workspace, so an app open on two
+workspaces gets an icon in each of them, and the badge never counts windows from
+another workspace. Hovering a grouped icon names the workspace, because two icons
+of one app differ only by it. The dock reorders itself whenever a window opens,
+closes, changes workspace, or moves in the layout — positions arrive on niri's
+separate `WindowLayoutsChanged` event — and windows niri has not laid out yet sort
+last. The window-title menu lists the app's windows on that workspace in layout
+order.
 
 A thin vertical hairline marks each workspace boundary, so the dock reads as
 groups even when no workspace is named. It sits only between icons of different

@@ -4,7 +4,9 @@
 // order, so the dock reads left to right like the workspace band on the top bar,
 // with a hairline between the groups, and they slide past each other as windows
 // move between workspaces. An app's windows stack under one icon only while they
-// share a workspace.
+// share a workspace. Inside a workspace the icons follow the layout itself: left
+// to right across the columns, top to bottom down one column, with floating
+// windows trailing the tiled ones.
 #include <gtk/gtk.h>
 #include <gtk-layer-shell.h>
 #include <gio/gdesktopappinfo.h>
@@ -32,6 +34,17 @@ struct wbcffi_config_entry { const char* key; const char* value; };
 }
 
 struct Dock {
+    // Where a window sits inside its workspace, as far as the dock cares: niri
+    // hands tiled windows a column and a place in that column, and floating
+    // windows a pixel position instead. The leading number keeps those two kinds
+    // apart, so tiled windows always sort before floating ones; a window with
+    // neither sorts last, and the window ID breaks every tie.
+    using WindowOrder = std::tuple<int, double, double, Json::UInt64>;
+
+    // One icon's place in the dock: its workspace's rank in the band, then the
+    // position of its leading window inside that workspace.
+    using DockOrder = std::pair<int, WindowOrder>;
+
     // One icon per app per workspace: windows of the same app stack only while
     // they sit on the same workspace, so an app on two workspaces gets an icon
     // in each of them rather than one icon spanning both.
@@ -138,6 +151,14 @@ struct Dock {
         } else if (event.isMember("WindowClosed")) {
             if (menu) gtk_widget_destroy(menu);
             windows.erase(event["WindowClosed"]["id"].asUInt64());
+        } else if (event.isMember("WindowLayoutsChanged")) {
+            // Layout positions arrive separately from window properties, both on
+            // open and whenever niri moves or resizes a tile, so the dock order
+            // follows a column that moves.
+            for (const auto& change : event["WindowLayoutsChanged"]["changes"]) {
+                auto window = windows.find(change[0].asUInt64());
+                if (window != windows.end()) window->second["layout"] = change[1];
+            }
         } else if (event.isMember("WindowFocusChanged")) {
             const auto& id = event["WindowFocusChanged"]["id"];
             for (auto& [wid, window] : windows)
@@ -184,26 +205,43 @@ struct Dock {
         return {};
     }
 
+    // Where a window sits inside its workspace. niri reports a column and a
+    // place in that column for tiled windows, and a pixel position for floating
+    // ones; a window it has not laid out yet reports neither.
+    static WindowOrder window_order(const Json::Value& window) {
+        const auto& column = window["layout"]["pos_in_scrolling_layout"];
+        if (column.isArray() && column.size() == 2)
+            return {0, column[0].asDouble(), column[1].asDouble(), window["id"].asUInt64()};
+        const auto& pixels = window["layout"]["tile_pos_in_workspace_view"];
+        if (pixels.isArray() && pixels.size() == 2)
+            return {1, pixels[0].asDouble(), pixels[1].asDouble(), window["id"].asUInt64()};
+        return {2, 0, 0, window["id"].asUInt64()};
+    }
+
     // Where an icon sits in the dock: its workspace's place in the band, then
-    // the ID of its first window. No two icons share a first window, so the
-    // order is total.
-    std::pair<int, Json::UInt64> dock_order(const AppKey& key) const {
-        constexpr auto kLast = std::numeric_limits<Json::UInt64>::max();
-        Json::UInt64 first = kLast;
+    // the leftmost-topmost window of the group. No two icons lead with the same
+    // window, so the order is total.
+    DockOrder dock_order(const AppKey& key) const {
+        // A sentinel past every real position; the key has a window by the time
+        // its button exists.
+        WindowOrder leading{std::numeric_limits<int>::max(), 0, 0, 0};
         for (const auto& [id, window] : windows)
             if (window["app_id"].asString() == key.app &&
                 window["workspace_id"].asUInt64() == key.workspace)
-                first = std::min(first, id);
-        return {workspace_rank(key.workspace), first};
+                leading = std::min(leading, window_order(window));
+        return {workspace_rank(key.workspace), leading};
     }
 
-    // The windows behind one icon, in the order they opened.
+    // The windows behind one icon, in the order they sit in the workspace.
     std::vector<Json::Value> group(const AppKey& key) const {
         std::vector<Json::Value> result;
         for (const auto& [id, window] : windows)
             if (window["app_id"].asString() == key.app &&
                 window["workspace_id"].asUInt64() == key.workspace)
                 result.push_back(window);
+        std::sort(result.begin(), result.end(), [](const Json::Value& a, const Json::Value& b) {
+            return window_order(a) < window_order(b);
+        });
         return result;
     }
 
