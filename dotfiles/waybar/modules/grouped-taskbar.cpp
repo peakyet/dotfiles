@@ -289,7 +289,11 @@ struct Dock {
                 break;
             }
         }
-        const int sizes[] = {28, 22, 18};
+        // Focused, neighbour, and two-or-more-away icon sizes. The pane's
+        // content box is 48px tall and the focused button adds 4px of padding
+        // on each side, so 40 is the largest the focused icon can be before it
+        // starts stretching the dock past its configured height.
+        const int sizes[] = {36, 22, 18};
         index = 0;
         for (GList* item = children; item; item = item->next, ++index) {
             int distance = focused < 0 ? 2 : std::min(std::abs(index - focused), 2);

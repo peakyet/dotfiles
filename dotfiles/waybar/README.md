@@ -73,11 +73,13 @@ shows the window count when an app has more than one window.
 - The menu closes after selection, on Escape, or an outside click.
 - Hover does not expand the group. Middle/right click does not close windows.
 
-The dock contains running apps only. The focused app keeps its original 28px
-icon, its immediate neighbours shrink to 22px, and apps two or more positions
-away shrink to 18px. Distance follows the visible dock order. Buttons remain
-vertically centred; colours and window-count badges stay the same. With no
-focused window, all icons use the smallest size.
+The dock contains running apps only. The focused app is drawn at 36px, its
+immediate neighbours shrink to 22px, and apps two or more positions away shrink
+to 18px. Distance follows the visible dock order. Buttons remain vertically
+centred; colours and window-count badges stay the same. With no focused window,
+all icons use the smallest size. The pane's content box is 48px tall and the
+focused button adds 4px of padding per side, so 40px is the largest the focused
+icon can be without stretching the dock past its configured height.
 
 The module follows niri's event stream, so opening, closing, renaming, and
 focusing windows updates the dock without polling.
