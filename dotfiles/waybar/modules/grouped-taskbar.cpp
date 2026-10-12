@@ -1,4 +1,9 @@
 // Waybar CFFI ABI v2: https://github.com/Alexays/Waybar/tree/0.15.0/resources/custom_modules/cffi_example
+//
+// Grouped dock for niri: one icon per app ID across every workspace. Icons sit
+// in workspace order, so the dock reads left to right like the workspace band
+// on the top bar, and they slide past each other as windows move between
+// workspaces.
 #include <gtk/gtk.h>
 #include <gtk-layer-shell.h>
 #include <gio/gdesktopappinfo.h>
@@ -7,8 +12,10 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <limits>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 extern "C" {
@@ -31,6 +38,8 @@ struct Dock {
     guint watch = 0, retry = 0;
     std::map<Json::UInt64, Json::Value> windows;
     std::map<std::string, GtkWidget*> buttons;
+    std::vector<Json::Value> workspaces;   // niri's list, sorted by index
+    std::vector<GtkWidget*> separators;    // hairlines between workspace groups
 
     struct AppButton { Dock* dock; std::string app; };
 
@@ -103,7 +112,9 @@ struct Dock {
     }
 
     bool handle_event(const Json::Value& event) {
-        if (event.isMember("WindowsChanged")) {
+        if (event.isMember("WorkspacesChanged")) {
+            adopt_workspaces(event["WorkspacesChanged"]["workspaces"]);
+        } else if (event.isMember("WindowsChanged")) {
             windows.clear();
             for (const auto& window : event["WindowsChanged"]["windows"])
                 windows[window["id"].asUInt64()] = window;
@@ -127,10 +138,54 @@ struct Dock {
         return true;
     }
 
+    void adopt_workspaces(const Json::Value& list) {
+        workspaces.clear();
+        for (const auto& workspace : list) workspaces.push_back(workspace);
+        std::sort(workspaces.begin(), workspaces.end(),
+                  [](const Json::Value& a, const Json::Value& b) {
+                      return a["idx"].asInt() < b["idx"].asInt();
+                  });
+    }
+
+    // How far along the workspace band a workspace sits. Windows on a workspace
+    // niri has not announced yet share the last rank, so they collect at the end
+    // of the dock instead of jumping around.
+    int workspace_rank(Json::UInt64 workspace_id) const {
+        int rank = 0;
+        for (const auto& workspace : workspaces) {
+            if (workspace["id"].asUInt64() == workspace_id) return rank;
+            ++rank;
+        }
+        return rank;
+    }
+
+    // Where an app sits in the dock: the earliest workspace holding one of its
+    // windows, then the ID of its first window. An app spanning several
+    // workspaces takes the earliest one, so it keeps its place among the apps of
+    // that workspace rather than drifting to the end.
+    std::pair<int, Json::UInt64> dock_order(const std::string& app) const {
+        constexpr auto kLast = std::numeric_limits<Json::UInt64>::max();
+        int rank = std::numeric_limits<int>::max();
+        Json::UInt64 first = kLast;
+        for (const auto& [id, window] : windows) {
+            if (window["app_id"].asString() != app) continue;
+            rank = std::min(rank, workspace_rank(window["workspace_id"].asUInt64()));
+            first = std::min(first, id);
+        }
+        return {rank, first};
+    }
+
     std::vector<Json::Value> group(const std::string& app) const {
         std::vector<Json::Value> result;
         for (const auto& [id, window] : windows)
             if (window["app_id"].asString() == app) result.push_back(window);
+        std::sort(result.begin(), result.end(), [this](const Json::Value& a,
+                                                      const Json::Value& b) {
+            return std::make_pair(workspace_rank(a["workspace_id"].asUInt64()),
+                                  a["id"].asUInt64()) <
+                   std::make_pair(workspace_rank(b["workspace_id"].asUInt64()),
+                                  b["id"].asUInt64());
+        });
         return result;
     }
 
@@ -224,6 +279,24 @@ struct Dock {
         gdk_event_free(event);
     }
 
+    // Keep one separator per workspace boundary, in a pool that grows and
+    // shrinks with the dock. render() reparents them; they are children of the
+    // box, so the box destroys them with everything else.
+    void separators_to(size_t count) {
+        while (separators.size() > count) {
+            gtk_widget_destroy(separators.back());
+            separators.pop_back();
+        }
+        while (separators.size() < count) {
+            GtkWidget* separator = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
+            gtk_style_context_add_class(gtk_widget_get_style_context(separator), "dock-separator");
+            gtk_widget_set_valign(separator, GTK_ALIGN_CENTER);
+            gtk_box_pack_start(GTK_BOX(box), separator, FALSE, FALSE, 0);
+            gtk_widget_show(separator);
+            separators.push_back(separator);
+        }
+    }
+
     void render() {
         for (auto it = buttons.begin(); it != buttons.end();) {
             if (group(it->first).empty()) {
@@ -279,28 +352,53 @@ struct Dock {
             atk_object_set_name(gtk_widget_get_accessible(button), app.c_str());
         }
 
-        // Distance follows the visible dock order, rather than the app-ID map.
-        GList* children = gtk_container_get_children(GTK_CONTAINER(box));
-        int focused = -1, index = 0;
-        for (GList* item = children; item; item = item->next, ++index) {
-            if (gtk_style_context_has_class(gtk_widget_get_style_context(GTK_WIDGET(item->data)),
-                                            "active")) {
-                focused = index;
-                break;
-            }
+        // Rearrange the existing children into dock order, with a separator
+        // wherever the workspace changes. A button keeps its widget; only its
+        // position changes, so nothing flickers or loses state.
+        std::vector<std::string> order;
+        order.reserve(buttons.size());
+        for (const auto& [app, button] : buttons) order.push_back(app);
+        std::sort(order.begin(), order.end(), [this](const std::string& a, const std::string& b) {
+            return dock_order(a) < dock_order(b);
+        });
+        std::vector<int> ranks;
+        ranks.reserve(order.size());
+        for (const auto& app : order) ranks.push_back(dock_order(app).first);
+        size_t boundaries = 0;
+        for (size_t i = 1; i < ranks.size(); ++i) boundaries += ranks[i] != ranks[i - 1];
+        separators_to(boundaries);
+        int position = 0;
+        size_t separator = 0;
+        for (size_t i = 0; i < order.size(); ++i) {
+            if (i > 0 && ranks[i] != ranks[i - 1])
+                gtk_box_reorder_child(GTK_BOX(box), separators[separator++], position++);
+            gtk_box_reorder_child(GTK_BOX(box), buttons.at(order[i]), position++);
         }
+
+        // Distance follows the visible dock order, rather than the app-ID map.
+        // Separators are children too, so the walk skips anything without an icon.
+        std::vector<GtkWidget*> icons;
+        GList* children = gtk_container_get_children(GTK_CONTAINER(box));
+        int focused = -1;
+        for (GList* item = children; item; item = item->next) {
+            auto* widget = GTK_WIDGET(item->data);
+            if (!g_object_get_data(G_OBJECT(widget), "icon")) continue;
+            if (focused < 0 && gtk_style_context_has_class(gtk_widget_get_style_context(widget),
+                                                           "active"))
+                focused = static_cast<int>(icons.size());
+            icons.push_back(widget);
+        }
+        g_list_free(children);
         // Focused, neighbour, and two-or-more-away icon sizes. The pane's
         // content box is 48px tall and the focused button adds 4px of padding
         // on each side, so 40 is the largest the focused icon can be before it
         // starts stretching the dock past its configured height.
         const int sizes[] = {36, 22, 18};
-        index = 0;
-        for (GList* item = children; item; item = item->next, ++index) {
-            int distance = focused < 0 ? 2 : std::min(std::abs(index - focused), 2);
-            auto* image = GTK_IMAGE(g_object_get_data(G_OBJECT(item->data), "icon"));
-            gtk_image_set_pixel_size(image, sizes[distance]);
+        for (size_t i = 0; i < icons.size(); ++i) {
+            int distance = focused < 0 ? 2 : std::min(std::abs(static_cast<int>(i) - focused), 2);
+            gtk_image_set_pixel_size(GTK_IMAGE(g_object_get_data(G_OBJECT(icons[i]), "icon")),
+                                     sizes[distance]);
         }
-        g_list_free(children);
     }
 };
 

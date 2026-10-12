@@ -280,6 +280,15 @@ tooltip label {
     padding: 0 2px;
 }
 
+/* Hairline between the icons of different workspaces: shorter than the icons
+   and centred, so it reads as a gap in the row rather than a cut through it. */
+#taskbar .dock-separator {
+    min-width: 1px;
+    min-height: 14px;
+    margin: 0 4px;
+    background-color: rgba(0, 0, 0, 0.18);
+}
+
 #dock-window-menu {
     padding: 5px;
     border: 1px solid @mac_border;

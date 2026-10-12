@@ -68,6 +68,19 @@ symlink exposes all subfolders; no extra symlinks are needed.
 monitors. Icons come from desktop entries and the current icon theme. A badge
 shows the window count when an app has more than one window.
 
+Icons sit in workspace order, matching the workspace band on the top bar. Within
+one workspace the app whose first window opened earliest comes first, and an app
+with windows on several workspaces takes the earliest of them, so it stays with
+that workspace's icons instead of drifting to the end. The dock reorders itself
+whenever a window opens, closes, or changes workspace; a window on a workspace
+niri has not announced yet sorts last. The window-title menu lists each app's
+windows in the same workspace order.
+
+A thin vertical hairline marks each workspace boundary, so the dock reads as
+groups even when no workspace is named. It sits only between icons of different
+workspaces, is shorter than the icons, and disappears with the last window of a
+workspace. Colour and size are in `#taskbar .dock-separator` in `style.css`.
+
 - Left-click a single-window app to focus it immediately.
 - Left-click a grouped app to open a window-title menu, then select a window.
 - The menu closes after selection, on Escape, or an outside click.
