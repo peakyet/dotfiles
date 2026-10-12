@@ -221,7 +221,9 @@ tooltip label {
     margin: 0;
     padding: 4px 8px;
     border: 1px solid @mac_glass_rim;
-    border-radius: 28px;
+    /* Squarer than the capsule this used to be (28px, i.e. half the 58px pane
+       height, so the ends were full semicircles) but still clearly softened. */
+    border-radius: 20px;
     background-color: @mac_dock_surface;
     /* specular sheen: brighter top edge fading down through the glass */
     background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 55%);
@@ -251,8 +253,11 @@ tooltip label {
     padding: 0;
 }
 
+/* The focused app's highlight is a flat pill behind the icon: 10px/8px of
+   padding made it 48x44 around a 28px icon, which read as a panel of its own.
+   4px keeps a 36x36 square, matching the reference's tight hug of its icon. */
 #taskbar button.active {
-    padding: 10px 8px;
+    padding: 4px;
     background-color: @mac_selected;
 }
 
