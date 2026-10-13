@@ -46,10 +46,16 @@ scale is whichever is smaller of "peak to −0.4 dBFS" and "RMS to −16 dBFS",
 so a percussive chime is not left far quieter than a sustained one, and
 nothing clips.
 
+That normalisation is deliberately hot — `tri-tone` measures −15 LUFS with a
+−1.7 dBFS true peak, i.e. alert-tone loud — and the level actually heard is
+set at playback by the `paplay --volume=` in `../config` (currently 26000,
+about −8 dB). So the two are separate levers: **edit `generate.py` to change
+how a chime sounds, edit `../config` to change how loud it plays.**
+
 ## Auditioning
 
 ```sh
-for f in ~/.config/mako/sounds/*.oga; do echo "$(basename "$f")"; paplay "$f"; done
+for f in ~/.config/mako/sounds/*.oga; do echo "$(basename "$f")"; paplay --volume=26000 "$f"; done
 ```
 
 To retune, edit the chime functions in `generate.py` and re-run it. Note

@@ -7,7 +7,16 @@
 # ~/.config/mako/sounds/) and are synthesised by sounds/generate.py rather
 # than copied from Apple, whose alert tones are copyrighted. Regenerate or
 # retune them with: python3 ~/.config/mako/sounds/generate.py
-# To audition: for f in ~/.config/mako/sounds/*.oga; do paplay "$f"; done
+#
+# Playback level lives in the hooks, as `paplay --volume=N` (linear, 0...65536
+# where 65536 is 100%). The files themselves are normalised loud (about
+# -15 LUFS, true peak -1.7 dBFS), which was too loud, so every hook scales
+# them to --volume=26000 -- about 40%, i.e. -8 dB, taking the peak to
+# -9.7 dBFS. That applies at play time, so retuning needs no regeneration:
+# change the number in the hooks below. It is per-hook, so a single block can
+# be made louder without touching the others.
+# To audition at the level actually played:
+#     for f in ~/.config/mako/sounds/*.oga; do paplay --volume=26000 "$f"; done
 
 # ── appearance ──────────────────────────────────────────────────────
 
@@ -46,14 +55,14 @@ default-timeout=5000
 [app-name=dsh summary="dsh needs your input"]
 default-timeout=0
 border-color=#FF453A
-on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
+on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
 
 # ── agent finished: the iPhone alert, same as the question above ─────
 # `makoctl history` shows both agents arrive under other app names, so a
 # summary match would need one block each; matching app-name=dsh for the
 # DSH "dsh finished" summary and any kitty notification covers them.
 [app-name=dsh summary="dsh finished"]
-on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
+on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
 
 # ── kitty notifications play the same completion chime ───────────────
 # Claude Code and codex both surface here: mako reports Claude Code's
@@ -61,7 +70,7 @@ on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 # with app-name "kitty", because kitty forwards them and the terminal
 # supplies its own app id. So match the terminal rather than each agent.
 [app-name=kitty]
-on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
+on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
 
 # ── Amp in the browser: same chime as the terminal ──────────────────
 # The web app has no terminal to forward through, so its notifications
@@ -73,12 +82,12 @@ on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
 # desktop_entry is the stable one: app_name is the .desktop Name and
 # would change with a translated/renamed entry.
 [desktop-entry=zen]
-on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
+on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
 
 # ── Pomodoro: chime when a focus session or either break ends ────────
 # waybar/modules/pomodoro.cpp sends one notification per completed phase.
 [app-name=Pomodoro]
-on-notify=exec paplay $HOME/.config/mako/sounds/tri-tone.oga
+on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
 
 # Control Center: fit the title and all five system-stat lines.
 [app-name="Control Center"]
