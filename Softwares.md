@@ -1,5 +1,6 @@
 # Softwares
 
+- [x] github-cli
 - [x] telegram
 - [x] zsh
 - [x] xdg-desktop, 
