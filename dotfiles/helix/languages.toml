@@ -5,10 +5,10 @@ use-grammars = { only = ["cpp"] }
 # language-servers = ["mdpls"]
 
 # [language-server.markdown-oxide]
-# command = "/home/chun/.cargo/bin/markdown-oxide"
+# command = "markdown-oxide" # resolved via PATH, e.g. ~/.cargo/bin
 
 # [language-server.mdpls]
-# command = "/home/chun/.cargo/bin/mdpls" 
+# command = "mdpls" # resolved via PATH, e.g. ~/.cargo/bin
 # config = { markdown.preview.auto = false, markdown.preview.browser = "firefox" }
 
 # [language.auto-pairs]
