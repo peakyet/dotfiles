@@ -55,3 +55,10 @@ AGENTS.md
 
 # Compiled Waybar modules (built locally by install.sh).
 /dotfiles/waybar/build/
+
+# Runtime state generated locally by mpd/ncmpcpp and helix grammars.
+/dotfiles/helix/runtime/
+/dotfiles/mpd/database
+/dotfiles/mpd/log
+/dotfiles/mpd/sticker.sql
+/dotfiles/ncmpcpp/error.log
