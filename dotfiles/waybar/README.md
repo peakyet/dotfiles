@@ -144,6 +144,14 @@ temperature. Hover the sliders icon to see the stats. Left-click it to show the
 same stats in a Mako notification, which disappears after five seconds or when
 clicked.
 
+The sliders icon and its tooltip are tinted by CPU load: green below 50%, orange
+from 50%, red from 80%. GTK shares one tooltip widget across the whole bar and
+styles it from the single `tooltip` node in `style.css`, so the module cannot be
+given its own tooltip CSS; the colour therefore rides in the Pango markup the
+script emits, for the tooltip and for the icon alike. It uses Apple's accessible
+system colours (`#248A3D`, `#C93400`, `#D70015`) rather than the bar's brighter
+icon colours, which are too low-contrast as 12px text on the near-white tooltip.
+
 ## Pomodoro Timer
 
 `modules/pomodoro.cpp` runs inside Waybar as `cffi/pomodoro`, with no Python

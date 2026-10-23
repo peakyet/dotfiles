@@ -43,10 +43,29 @@ if [ "$temp" = "n/a" ]; then
 	done
 fi
 
-tooltip="<b>CPU</b>  ${cpu_pct}%  (load ${load})\n<b>Mem</b>  ${mem}\n<b>Swap</b>  ${swap}\n<b>Disk /</b>  ${disk}\n<b>Temp</b>  ${temp}"
+# The tooltip takes the CPU's state colour: calm below 50%, warm from 50%,
+# hot from 80%. GTK builds one tooltip widget for the whole bar and styles
+# every tooltip from a single `tooltip` CSS node, so a module cannot reach it
+# from style.css; the label does honour Pango markup, so the span is the way
+# in. These are Apple's accessible system colours rather than the bar's
+# brighter mac_green/mac_orange/mac_red, which are icon colours and fall to
+# ~2:1 contrast as 12px text on the near-white tooltip.
+if [ "$cpu_pct" -ge 80 ]; then
+	colour='#D70015' # red
+elif [ "$cpu_pct" -ge 50 ]; then
+	colour='#C93400' # orange
+else
+	colour='#248A3D' # green
+fi
+
+stats="<b>CPU</b>  ${cpu_pct}%  (load ${load})\n<b>Mem</b>  ${mem}\n<b>Swap</b>  ${swap}\n<b>Disk /</b>  ${disk}\n<b>Temp</b>  ${temp}"
+tooltip="<span foreground='${colour}'>${stats}</span>"
+# The icon takes the same colour, so the bar itself signals the load; the
+# module renders its text as markup, which also beats the CSS colour.
+icon="<span foreground='${colour}'></span>"
 
 if [ "$action" = "notify" ]; then
-	notify-send --app-name="Control Center" --expire-time=5000 "System status" "$(printf '%b' "$tooltip")"
+	notify-send --app-name="Control Center" --expire-time=5000 "System status" "$(printf '%b' "$stats")"
 else
-	printf '{"text":"","tooltip":"%s"}\n' "$tooltip"
+	printf '{"text":"%s","tooltip":"%s"}\n' "$icon" "$tooltip"
 fi
