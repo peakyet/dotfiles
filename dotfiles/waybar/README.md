@@ -39,6 +39,16 @@ The stock files in `legacy/` are references and are not loaded by the active bar
 
 Fonts: Cantarell for text, FontAwesome and Maple Mono NF CN for icons.
 
+## Volume
+
+The top bar groups the WirePlumber speaker icon with a compact
+horizontal `pulseaudio/slider`. Both follow the default PipeWire output through
+WirePlumber and PipeWire's PulseAudio compatibility service. The blue fill shows
+the volume from 0–100%; click or drag the bar to adjust it. Hover over the icon
+for the exact percentage. The muted icon indicates mute while retaining the saved
+volume. Click the icon to open `pwvucontrol`, or scroll over it to adjust volume.
+The track is styled in `#pulseaudio-slider` in `style.css`.
+
 ## Build and Reload
 
 Arch build dependencies: `base-devel`, `gtk3`, `gtk-layer-shell`, and `jsoncpp`.

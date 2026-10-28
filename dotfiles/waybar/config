@@ -11,9 +11,18 @@
     // Choose the order of the modules
     // "modules-left": ["hyprland/workspaces", "tray", "mpd"],
     // "modules-center": ["hyprland/window"],
-    "modules-left": ["custom/apple", "cffi/workspace-pips"],
+    "modules-left": ["custom/apple", "cffi/workspace-pips", "cffi/pomodoro"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "wireplumber", "backlight", "battery", "cffi/pomodoro", "custom/control-center", "custom/calendar"],
+    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "group/volume", "backlight", "battery", "custom/control-center", "custom/calendar"],
+    "group/volume": {
+        "orientation": "horizontal",
+        "modules": ["wireplumber", "pulseaudio/slider"]
+    },
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
+    },
     // Modules configuration
     "custom/apple": {
         "format": "",

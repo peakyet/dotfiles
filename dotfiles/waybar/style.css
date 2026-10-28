@@ -158,6 +158,36 @@ tooltip label {
     color: @mac_secondary;
 }
 
+#pulseaudio-slider {
+    padding: 0;
+    margin: 0 7px 0 0;
+}
+
+#pulseaudio-slider trough {
+    min-width: 36px;
+    min-height: 4px;
+    border: none;
+    border-radius: 2px;
+    background: @mac_border;
+    box-shadow: none;
+}
+
+#pulseaudio-slider highlight {
+    min-width: 0;
+    border: none;
+    border-radius: 2px;
+    background: @mac_accent;
+}
+
+#pulseaudio-slider slider {
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
 #battery.charging,
 #battery.plugged,
 #battery.full {
