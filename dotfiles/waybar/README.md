@@ -17,7 +17,7 @@ waybar/
 │   ├── pomodoro.cpp             # Persistent click-controlled focus/break timer
 │   └── workspace-pips.cpp       # Workspace size and opacity falloff
 ├── scripts/
-│   ├── chinese-calendar.py      # Shanghai clock and Chinese holiday calendar
+│   ├── trello.py                # Shanghai clock and cached Trello Doing cards
 │   └── control-center.sh        # System stats for tooltip and notification
 ├── themes/
 │   ├── macos-light.css          # Active palette, imported by style.css
@@ -180,12 +180,46 @@ It clears on logout or reboot. Countdown time uses `CLOCK_BOOTTIME`, including
 suspend and ignoring wall-clock adjustments. Durations are defined in `duration()`
 in the module.
 
-## Calendar and Apple Menu
+## Trello Clock and Apple Menu
 
-`scripts/chinese-calendar.py` displays the clock in `Asia/Shanghai` and supplies
-a monthly tooltip with Chinese public holidays and weekends highlighted. Its
-holiday periods and makeup workdays are defined for 2026; update the tables
-when a new annual schedule is published.
+`scripts/trello.py` keeps the clock in `Asia/Shanghai`. Hover to see cards from
+the `03 · Doing (limit 2)` lists across the four personal boards, grouped by
+board and ordered as in Trello. List IDs and board names live in `LISTS` in the
+script. Cards without a due date and cards marked complete remain visible as
+long as they are in Doing; archived cards are excluded. Due dates are converted
+to Shanghai time. At most 12 cards are shown, with an overflow count. Click the
+clock to open Trello. Only Python's standard library is required.
+
+For automatic read-only syncing, run this **on the machine running Waybar**:
+
+```sh copy Copy Trello Setup
+python ~/.config/waybar/scripts/trello.py --setup
+```
+
+The setup prompts for a Trello API key (from https://trello.com/app-key;
+create a Power-Up at https://trello.com/power-ups/admin if needed), prints an
+authorization URL restricted to `scope=read`, and prompts for the resulting
+token. Both inputs are hidden. The token has no expiry; revoke it from your
+Trello account settings when no longer needed. Nothing creates or edits cards.
+
+Credentials and card snapshots are saved with permissions `600` in
+`~/.local/state/waybar/trello/` (or `$XDG_STATE_HOME/waybar/trello/` when set),
+outside Git. Never paste credentials into chat. The API uses authorization
+headers rather than putting the token in a URL. Amp's Trello connection cannot
+be used by Waybar; local authorization is needed even if Amp can read cards.
+
+The clock updates every minute and refreshes all four lists every five minutes.
+Offline, the last complete snapshot survives restarts and reboots; failures
+display `Sync failed · cached` with the last sync time and retry next minute.
+The cache is replaced only after all four lists are fetched successfully.
+An initial snapshot obtained through Amp may be displayed before local setup,
+but is clearly labelled `Setup needed` and does not refresh automatically.
+The old Google Calendar script and its Python dependencies are no longer used;
+any old private feed/cache files are left untouched outside the repository.
+
+Run the Trello contract checks from the repository root with
+`python -B -m unittest discover -s dotfiles/waybar/tests` (no network or token
+required).
 
 `menus/apple-menu.xml` defines menu entries. Their commands live in
 `custom/apple.menu-actions` in `config`, including the app launcher, terminal,

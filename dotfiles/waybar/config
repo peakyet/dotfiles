@@ -303,11 +303,12 @@
         "spacing": 10
     },
     "custom/calendar": {
-        "exec": "$HOME/.config/waybar/scripts/chinese-calendar.py",
+        "exec": "python $HOME/.config/waybar/scripts/trello.py",
         "return-type": "json",
         "interval": 60,
         "tooltip": true,
-        "format": "{}"
+        "format": "{}",
+        "on-click": "xdg-open https://trello.com"
     },
     "cpu": {
         "format": " {icon}",
