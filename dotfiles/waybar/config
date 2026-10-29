@@ -2,18 +2,22 @@
     "name": "macbar",
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 30, // Waybar height (to be removed for auto height)
+    "height": 32,
     "margin-top": 0,
     "margin-left": 0,
     "margin-right": 0,
     // "width": 1280, // Waybar width
-    "spacing": 6,
+    "spacing": 2,
     // Choose the order of the modules
     // "modules-left": ["hyprland/workspaces", "tray", "mpd"],
     // "modules-center": ["hyprland/window"],
     "modules-left": ["custom/apple", "cffi/workspace-pips", "cffi/pomodoro"],
     "modules-center": ["niri/window"],
-    "modules-right": ["keyboard-state", "mpd", "idle_inhibitor", "tray", "bluetooth", "network", "group/volume", "backlight", "battery", "custom/control-center", "custom/calendar"],
+    "modules-right": ["mpd", "group/status", "custom/calendar"],
+    "group/status": {
+        "orientation": "horizontal",
+        "modules": ["tray", "bluetooth", "network", "group/volume", "backlight", "battery", "custom/control-center"]
+    },
     "group/volume": {
         "orientation": "horizontal",
         "modules": ["wireplumber", "pulseaudio/slider"]
@@ -248,22 +252,6 @@
         "separate-outputs": true
     },
 
-    "keyboard-state": {
-        "numlock": false,
-        "capslock": true,
-        "format": "{icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        },
-	"binding-keys": [1, 69, 70]
-    },
-    "backlight/slider": {
-        "min": 0,
-        "max": 100,
-        "orientation": "horizontal",
-        "device": "nvidia_0"
-    },
     "disk": {
         "format": "󰨣",
         "states": {
@@ -273,24 +261,11 @@
 	    "tooltip-format": "Disk: {used}/{total} ({percentage_used}% used)"
     },
     "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} ",
+        "format": "{stateIcon} {artist} ",
         "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "format-stopped": "Stopped ",
         "unknown-tag": "N/A",
         "interval": 2,
-        "consume-icons": {
-            "on": " "
-        },
-        "random-icons": {
-            "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
-        },
-        "repeat-icons": {
-            "on": " "
-        },
-        "single-icons": {
-            "on": "1 "
-        },
         "state-icons": {
             "paused": "",
             "playing": ""
@@ -300,15 +275,7 @@
     	"on-click": "kitty -e ncmpcpp",
     	"max-length": 20
     },
-    // "idle_inhibitor": {
-    //     "format": "{icon}",
-    //     "format-icons": {
-    //         "activated": "",
-    //         "deactivated": ""
-    //     }
-    // },
     "tray": {
-        // "icon-size": 21,
         "spacing": 10
     },
     "custom/calendar": {
@@ -347,7 +314,6 @@
 	"tooltip-format": "Temperature: {temperatureC}°C"
     },
     "backlight": {
-        // "device": "acpi_video1",
         "format": "{icon}",
         "format-icons": ["󰃞", "󰃝", "󰃟", "󰃠"],
         "tooltip-format": "Brightness: {percent}%"
@@ -443,14 +409,6 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        },
-        "on-click": "swaylock -f -i $HOME/dotfiles/wallpapers/sleeping-minion-dream-5k-3840x2160-18735.jpg"
     }
 }, {
     "name": "dock",

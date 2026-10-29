@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Fcitx 5
+Exec=/usr/bin/fcitx5 --disable=notificationitem
+Icon=fcitx
+NoDisplay=true
+Terminal=false

@@ -4,6 +4,26 @@ Two bars for niri: a macOS-style light menu bar at the top and a glass dock at
 the bottom. `install.sh` links this whole directory to `~/.config/waybar` and
 builds the custom CFFI modules.
 
+The 32px top bar uses a translucent pearl surface: Apple menu, workspace pips,
+and Pomodoro on the left; the active window centred; music, a compact system
+status group, and the Shanghai clock on the right. Hairline separators divide
+music, status, and clock. Routine status icons stay neutral; colour highlights
+the volume fill, timer phases, and battery/load states. Both bars use a 42%
+base-opacity pearl surface, a soft white rim, and a restrained highlight;
+the dock retains its layout, rounded shape, and floating shadow.
+
+The status group keeps app-tray indicators, Bluetooth, network, volume,
+brightness, battery, and system stats. The separate keyboard-state and idle/lock
+indicators are omitted to reduce clutter. To hide only Fcitx's keyboard tray
+icon, `autostart/org.fcitx.Fcitx5.desktop` starts it with
+`fcitx5 --disable=notificationitem`; input methods and the candidate UI remain
+enabled, as do other apps' tray icons. This overrides the system XDG autostart
+entry, so niri does not start a second Fcitx instance. `install.sh` links this
+entry individually without replacing other apps' autostart files.
+Lock remains in the Apple menu and on `Super+Alt+L`; brightness is also
+controlled by the display brightness keys. Music shows only playback state
+and artist, without shuffle/repeat/consume/single-mode flags.
+
 ## Layout
 
 ```text
@@ -141,7 +161,7 @@ falloff constants live at the top of the C++ source: `kActiveWidth`,
 Colours come from `@mac_ws_pip`, `@mac_ws_urgent`, and `@mac_ws_text` in
 `themes/macos-light.css`. The module multiplies the pip's alpha by the distance
 falloff. `#workspaces` in `style.css` only positions the band. Shapes are
-vertically centred in the 30px bar; left-clicking one focuses its workspace.
+vertically centred in the 32px bar; left-clicking one focuses its workspace.
 
 The module follows `WorkspacesChanged`, `WorkspaceActivated`, and
 `WorkspaceUrgencyChanged` events rather than polling. Workspaces from every

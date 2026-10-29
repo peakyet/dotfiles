@@ -12,11 +12,18 @@ window#waybar {
 }
 
 window#waybar.macbar {
-    background-color: @mac_surface;
-    /* specular sheen across the top of the glass */
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 60%);
-    border-bottom: 1px solid @mac_glass_rim;
-    box-shadow: inset 0 1px 0 @mac_glass_highlight;
+    background-color: rgba(245, 245, 247, 0.42);
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.macbar .modules-left {
+    padding-left: 10px;
+}
+
+.macbar .modules-right {
+    padding-right: 10px;
 }
 
 window#waybar.dock {
@@ -68,10 +75,10 @@ tooltip label {
 
 #custom-apple {
     min-width: 22px;
-    margin: 0 2px 0 0;
+    margin: 0 4px 0 0;
     padding: 0 3px;
     font-family: FontAwesome;
-    font-size: 15px;
+    font-size: 16px;
     color: @mac_text;
 }
 
@@ -104,23 +111,42 @@ tooltip label {
 #pulseaudio,
 #tray,
 #mpd,
-#keyboard-state,
-#idle_inhibitor,
 #custom-pomodoro,
 #custom-control-center {
     min-height: 24px;
     margin: 0;
-    padding: 0 7px;
+    padding: 0 5px;
     border: none;
     background: transparent;
     color: @mac_text;
     box-shadow: none;
 }
 
+#status {
+    margin: 4px 6px 4px 8px;
+    padding: 0 4px 0 8px;
+    border-left: 1px solid @mac_border;
+}
+
+#custom-calendar {
+    margin: 4px 0;
+    padding: 0 0 0 12px;
+    border-left: 1px solid @mac_border;
+    font-weight: 600;
+}
+
+.macbar #mpd {
+    color: @mac_secondary;
+    font-size: 12px;
+}
+
 #custom-pomodoro {
     min-width: 16px;
+    margin: 4px 0 4px 8px;
+    padding: 0 8px;
     font-family: Maple Mono NF CN, FontAwesome;
     border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
 #custom-pomodoro:hover {
@@ -131,22 +157,11 @@ tooltip label {
     color: @mac_secondary;
 }
 
-#keyboard-state > label {
-    min-width: 18px;
-    padding: 0 2px;
-}
-
-#keyboard-state > label.locked {
-    border-radius: 6px;
-    background-color: @mac_selected;
-    color: @mac_accent;
-}
-
 #network.wifi,
 #network.ethernet,
 #network.linked,
 #bluetooth.connected {
-    color: @mac_accent;
+    color: @mac_text;
 }
 
 #network.disconnected,
@@ -229,10 +244,6 @@ tooltip label {
     color: @mac_secondary;
 }
 
-#idle_inhibitor.activated {
-    color: @mac_orange;
-}
-
 #tray {
     padding: 0 4px;
 }
@@ -250,15 +261,15 @@ tooltip label {
     min-height: 48px;
     margin: 0;
     padding: 4px 8px;
-    border: 1px solid @mac_glass_rim;
+    border: 1px solid rgba(255, 255, 255, 0.35);
     /* Squarer than the capsule this used to be (28px, i.e. half the 58px pane
        height, so the ends were full semicircles) but still clearly softened. */
     border-radius: 20px;
     background-color: @mac_dock_surface;
     /* specular sheen: brighter top edge fading down through the glass */
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 55%);
-    box-shadow: inset 0 1px 0 @mac_glass_highlight,
-                inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1),
                 0 16px 40px rgba(0, 0, 0, 0.18),
                 0 4px 12px rgba(0, 0, 0, 0.10);
 }

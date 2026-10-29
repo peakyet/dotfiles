@@ -379,7 +379,7 @@ layer-rule {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 // spawn-at-startup "waybar"
-spawn-at-startup "fcitx5"
+// Fcitx is started by autostart/org.fcitx.Fcitx5.desktop, without its tray icon.
 spawn-at-startup "udiskie"
 
 // ------------------------------------------------------------------------

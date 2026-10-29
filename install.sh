@@ -95,6 +95,13 @@ linkDotfiles(){
 					linkFile "$filePath/$subFile" "$toDir/$subFile" $3
 					echo "-------------------------"
 				done
+			elif [[ $file = "autostart" ]]; then
+				# Preserve other apps' autostart entries in the existing directory.
+				toDir="$HOME/.config/autostart"
+				mkdir -p "$toDir"
+				for subFile in "$filePath"/*; do
+					linkFile "$subFile" "$toDir/${subFile##*/}" $3
+				done
 			elif [[ $file = "agents" ]]; then
 				toFile="$HOME/.${file}"
 				linkFile $filePath $toFile $3
