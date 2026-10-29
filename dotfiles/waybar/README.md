@@ -13,16 +13,18 @@ base-opacity pearl surface, a soft white rim, and a restrained highlight;
 the dock retains its layout, rounded shape, and floating shadow.
 
 The status group keeps app-tray indicators, Bluetooth, network, volume,
-brightness, battery, and system stats. The separate keyboard-state and idle/lock
+battery, and system stats. The separate keyboard-state and idle/lock
 indicators are omitted to reduce clutter. To hide only Fcitx's keyboard tray
 icon, `autostart/org.fcitx.Fcitx5.desktop` starts it with
 `fcitx5 --disable=notificationitem`; input methods and the candidate UI remain
 enabled, as do other apps' tray icons. This overrides the system XDG autostart
 entry, so niri does not start a second Fcitx instance. `install.sh` links this
 entry individually without replacing other apps' autostart files.
-Lock remains in the Apple menu and on `Super+Alt+L`; brightness is also
-controlled by the display brightness keys. Music shows only playback state
-and artist, without shuffle/repeat/consume/single-mode flags.
+Lock remains in the Apple menu and on `Super+Alt+L`; display brightness stays
+on the brightness keys, and deliberately has no bar indicator: the module's
+periodic `actual_brightness` reader deadlocks NVIDIA's suspend path on this
+machine. Music shows only playback state and artist, without
+shuffle/repeat/consume/single-mode flags.
 
 ## Layout
 

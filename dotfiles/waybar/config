@@ -16,7 +16,7 @@
     "modules-right": ["mpd", "group/status", "custom/calendar"],
     "group/status": {
         "orientation": "horizontal",
-        "modules": ["tray", "bluetooth", "network", "group/volume", "backlight", "battery", "custom/control-center"]
+        "modules": ["tray", "bluetooth", "network", "group/volume", "battery", "custom/control-center"]
     },
     "group/volume": {
         "orientation": "horizontal",
@@ -312,11 +312,6 @@
              "<span color='#dd532e'></span>"  // red
 	],
 	"tooltip-format": "Temperature: {temperatureC}°C"
-    },
-    "backlight": {
-        "format": "{icon}",
-        "format-icons": ["󰃞", "󰃝", "󰃟", "󰃠"],
-        "tooltip-format": "Brightness: {percent}%"
     },
     "battery": {
     	"bat": "BAT0",
