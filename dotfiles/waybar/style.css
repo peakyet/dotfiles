@@ -127,6 +127,16 @@ tooltip label {
     border-left: 1px solid @mac_border;
 }
 
+/* Use the glyphs' real widths, not Maple Mono's narrower monospace cells.
+   Equal 5px side padding then leaves 10px between neighbouring indicators. */
+#bluetooth,
+#network,
+#wireplumber,
+#battery,
+#custom-control-center {
+    font-family: Symbols Nerd Font;
+}
+
 #custom-calendar {
     margin: 4px 0;
     padding: 0 0 0 12px;
@@ -174,7 +184,7 @@ tooltip label {
 
 #pulseaudio-slider {
     padding: 0;
-    margin: 0 7px 0 0;
+    margin: 0 5px;
 }
 
 #pulseaudio-slider trough {
@@ -244,7 +254,7 @@ tooltip label {
 }
 
 #tray {
-    padding: 0 4px;
+    padding: 0 5px;
 }
 
 #tray > .passive {
