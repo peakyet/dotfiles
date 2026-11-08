@@ -24,7 +24,7 @@ machine, so substitute yours — the parts that matter are structural.
 ## Target state
 
 An Arch box that boots to a tty (no display manager) where logging in and
-running `niri-session` brings up niri with waybar, mako, the swaybg/swayidle
+running `exec niri-session` brings up niri with waybar, mako, the swaybg/swayidle
 user units, fcitx5 + Maple Mono, PipeWire audio, TLP, and the personal apps —
 all driven by symlinks from `~/dotfiles` into `$HOME`.
 
@@ -42,7 +42,7 @@ requirements.
 | OS | Arch Linux (rolling), kernel `linux` (7.2.8-arch1-2) + `intel-ucode` |
 | Locale / TZ | `en_US.UTF-8`, `Asia/Shanghai`, RTC in UTC, hostname `chunfeng` |
 | User | `chun` (uid 1000), shell `/usr/bin/zsh`, groups `wheel input lp video docker` |
-| Session | no display manager: log in on tty1 and run `niri-session` |
+| Session | no display manager: log in on tty1 and run `exec niri-session` |
 
 ### What you must adapt
 
@@ -493,17 +493,27 @@ systemctl --user enable waybar mako mpd plasma-polkit-agent \
 ```
 
 There is **no display manager** (no gdm/greetd/sddm installed). Boot ends on a
-tty; logging in and running `niri-session` starts `niri.service`, and
+tty; logging in and running `exec niri-session` starts `niri.service`, and
 `graphical-session.target` then drags in the portals, `gnome-keyring`,
 `pipewire`/`wireplumber`, `at-spi`, `gvfs` and the seven units above.
 
-Nothing starts niri for you on this machine — `niri-session` is typed by hand.
-To automate it, add this to `~/.zprofile` (which this repo does not manage):
+Start it **manually from the TTY login shell**, not from a terminal inside an
+existing desktop session:
 
-```bash
-# optional: start niri automatically on the first tty
-[[ -z $DISPLAY && ${XDG_VTNR:-0} -eq 1 ]] && exec niri-session
+```sh
+exec niri-session
 ```
+
+`exec` replaces that login shell instead of leaving an authenticated prompt
+underneath niri. When the session launcher exits, there is no parent shell to
+return to; the TTY normally returns to its login prompt. This matters on niri
+26.04, which allows quitting even while the screen is locked, and also protects
+against returning to that shell after a compositor crash.
+
+This applies only to the next session started with this command; it does not
+harden an already-running session. No autologin, automatic niri startup, or
+display manager is configured. Do not restart the current desktop just to apply
+this instruction: use it at your next normal TTY login.
 
 ### D.3 Audio, Bluetooth, power
 
@@ -679,8 +689,9 @@ systemctl is-enabled bluetooth docker tlp sshd NetworkManager
 nvidia-smi
 ```
 
-The composite acceptance test: `niri-session` comes up with the wallpaper and
-waybar, `Mod+T` opens kitty with the Maple Mono prompt, `Mod+D` opens tofi,
+The composite acceptance test: `exec niri-session` from the TTY login shell
+brings up the wallpaper and waybar, `Mod+T` opens kitty with the Maple Mono
+prompt, `Mod+D` opens tofi,
 notifications render as light rounded cards, the audio keys move the volume, and
 `niri msg outputs` reports your real panel.
 

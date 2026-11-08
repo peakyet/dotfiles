@@ -37,7 +37,7 @@
             "apps": "tofi-drun --drun-launch=true",
             "terminal": "kitty",
             "files": "nautilus",
-            "lock": "swaylock -f -i $HOME/dotfiles/wallpapers/sleeping-minion-dream-5k-3840x2160-18735.jpg",
+            "lock": "swaylock -f -i $HOME/dotfiles/wallpapers/hello-typography-gradient-background-colorful-white-3840x2160-5956.jpg",
             "suspend": "systemctl suspend",
             "restart": "systemctl reboot",
             "shutdown": "systemctl poweroff"

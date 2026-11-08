@@ -2,7 +2,26 @@ This is a Brief Intro for Niri
 
 # Overview
 
-To set up niri, you should run `niri-session` in tty.
+After logging in on a TTY, start niri manually with `exec niri-session`.
+`exec` replaces the login shell, so ending the graphical session does not leave
+an authenticated shell underneath it. Do not run this from a terminal inside
+niri; use it at your next normal TTY login. It does not change an already-running
+session. See [the startup instructions](../../INSTALL.md#d2-user-units-and-how-the-session-starts).
+
+## Appearance
+
+The startup config sets Cantarell 11 for the desktop UI, Cantarell 12 for
+documents, Maple Mono NF CN 12 for monospace text, and a light preference via
+GSettings. GTK/libadwaita share those settings. Qt5 and Qt6 use their installed
+GTK3 platform-theme plugins for the same UI font and a light palette; no Qt6
+configuration tool or third-party theme is needed. Apps with their own themes
+can still override the desktop preference. Reopen existing apps when needed.
+
+Kitty keeps its Latte colours and Maple Mono font, with simple separator tabs
+and its original 72% opaque background. `swaylock/config` supplies the pearl/blue lock
+indicator; the niri shortcut, Waybar menu, and swayidle unit use the same hello
+wallpaper as swaybg. Lock authentication and the 600/601-second idle timeouts
+are unchanged. `install.sh` links the swaylock directory like other app configs.
 
 ## Command Keybind
 
@@ -406,4 +425,3 @@ binds {
     Super+Alt+L allow-when-locked=true { spawn "swaylock"; }
 }
 ```
-

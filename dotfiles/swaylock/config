@@ -1,0 +1,25 @@
+# Light pearl indicator; the launch commands use the desktop's hello wallpaper.
+# Keep authentication, lock timing, and suspend handling at their existing values.
+font=Cantarell
+font-size=20
+indicator-radius=48
+indicator-thickness=3
+indicator-idle-visible
+inside-color=f5f5f7ee
+inside-clear-color=f5f5f7ee
+inside-ver-color=f5f5f7ee
+inside-wrong-color=f5f5f7ee
+ring-color=00000024
+ring-clear-color=6e6e73
+ring-ver-color=0a84ff
+ring-wrong-color=ff453a
+line-color=00000000
+line-clear-color=00000000
+line-ver-color=00000000
+line-wrong-color=00000000
+key-hl-color=0a84ff
+bs-hl-color=6e6e73
+text-color=1d1d1f
+text-clear-color=6e6e73
+text-ver-color=1d1d1f
+text-wrong-color=ff453a

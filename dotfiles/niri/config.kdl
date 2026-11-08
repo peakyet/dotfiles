@@ -382,6 +382,9 @@ layer-rule {
 // Fcitx is started by autostart/org.fcitx.Fcitx5.desktop, without its tray icon.
 spawn-at-startup "udiskie"
 
+// Share the shell's light appearance and installed fonts with GTK/libadwaita.
+spawn-sh-at-startup "gsettings set org.gnome.desktop.interface font-name 'Cantarell 11' && gsettings set org.gnome.desktop.interface document-font-name 'Cantarell 12' && gsettings set org.gnome.desktop.interface monospace-font-name 'Maple Mono NF CN 12' && gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'"
+
 // ------------------------------------------------------------------------
 // --------------------- hotkey-overlay -----------------------------------
 // ------------------------------------------------------------------------
@@ -419,6 +422,10 @@ environment {
 
     // set
     ELECTRON_OZONE_PLATFORM_HINT "auto"
+
+    // Both installed Qt versions provide the GTK platform theme: share its
+    // fonts and palette without requiring a separate Qt6 configuration tool.
+    QT_QPA_PLATFORMTHEME "gtk3"
 
     // Nvidia env vars.
     // LIBVA_DRIVER_NAME "nvidia"
@@ -596,7 +603,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+D hotkey-overlay-title="Run an Application: tofi" { spawn "tofi-drun" "--drun-launch=true"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn-sh "swaylock -f -i $HOME/dotfiles/wallpapers/sleeping-minion-dream-5k-3840x2160-18735.jpg"; } // own
+    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn-sh "swaylock -f -i $HOME/dotfiles/wallpapers/hello-typography-gradient-background-colorful-white-3840x2160-5956.jpg"; } // own
   
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
