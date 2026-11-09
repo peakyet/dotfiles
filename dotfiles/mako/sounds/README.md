@@ -11,7 +11,8 @@ macOS/iPhone-flavoured alert tones for mako, referenced from `../config` via
 `tri-tone` is the one wired up: it plays for the DSH question *and* for every
 completion (DSH finished, Claude Code, codex) — whether the agent reached mako
 through a terminal (`app-name=kitty`) or through the browser
-(`desktop-entry=zen`, i.e. Amp's web UI). It also plays when each Pomodoro focus
+(`desktop-entry=zen`, i.e. Amp's web UI), or from native Amp
+(`desktop-entry=amp-desktop`). It also plays when each Pomodoro focus
 session, short break, or long break ends (`app-name=Pomodoro`). The rest are candidates kept so
 that swapping the sound is a one-line edit in `../config` — replace
 `tri-tone.oga` in the relevant block with any name above.

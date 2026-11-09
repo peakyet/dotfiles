@@ -84,6 +84,11 @@ on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
 [desktop-entry=zen]
 on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
 
+# ── Native Amp: same chime, matched separately from the browser ──────
+# Native notifications report app-name "Amp", desktop-entry "amp-desktop".
+[desktop-entry=amp-desktop]
+on-notify=exec paplay --volume=26000 $HOME/.config/mako/sounds/tri-tone.oga
+
 # ── Pomodoro: chime when a focus session or either break ends ────────
 # waybar/modules/pomodoro.cpp sends one notification per completed phase.
 [app-name=Pomodoro]
