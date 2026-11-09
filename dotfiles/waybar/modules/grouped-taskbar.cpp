@@ -147,6 +147,10 @@ struct Dock {
                 windows[window["id"].asUInt64()] = window;
         } else if (event.isMember("WindowOpenedOrChanged")) {
             const auto& window = event["WindowOpenedOrChanged"]["window"];
+            // A focused window opening (including a tray restore) need not
+            // emit WindowFocusChanged. Its focus supersedes the cached one.
+            if (window["is_focused"].asBool())
+                for (auto& [id, previous] : windows) previous["is_focused"] = false;
             windows[window["id"].asUInt64()] = window;
         } else if (event.isMember("WindowClosed")) {
             if (menu) gtk_widget_destroy(menu);

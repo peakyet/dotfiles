@@ -134,6 +134,18 @@ icon can be without stretching the dock past its configured height.
 The module follows niri's event stream, so opening, closing, renaming, and
 focusing windows updates the dock without polling.
 
+The focus regression check replays tray-open and ordinary focus events against
+the GTK widgets, including app/workspace grouping and distance-based icon sizes.
+Run it from the repository root in a graphical session:
+
+```sh
+c++ -std=c++17 -Wall -Wextra dotfiles/waybar/tests/test_grouped_taskbar.cpp \
+    -o /tmp/test-grouped-taskbar \
+    $(pkg-config --cflags --libs gtk+-3.0 gtk-layer-shell-0 gio-unix-2.0 jsoncpp)
+/tmp/test-grouped-taskbar
+rm /tmp/test-grouped-taskbar
+```
+
 ## Workspace Indicator
 
 `modules/workspace-pips.cpp` draws one rounded shape per niri workspace. Size
