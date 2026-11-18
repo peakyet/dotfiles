@@ -503,6 +503,10 @@ window-rule {
     match app-id=r#"^amp-desktop$"#
     opacity 0.9
     draw-border-with-background false
+
+    background-effect {
+        blur true
+    }
 }
 
 // Work around WezTerm's initial configure bug
