@@ -498,17 +498,6 @@ window-rule {
     draw-border-with-background false
 }
 
-// Make the whole Amp window translucent, including text.
-window-rule {
-    match app-id=r#"^amp-desktop$"#
-    opacity 0.9
-    draw-border-with-background false
-
-    background-effect {
-        blur true
-    }
-}
-
 // Work around WezTerm's initial configure bug
 // by setting an empty default-column-width.
 window-rule {
