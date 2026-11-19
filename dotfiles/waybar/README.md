@@ -76,11 +76,11 @@ The track is styled in `#pulseaudio-slider` in `style.css`.
 ## Wi-Fi
 
 Left-click the network icon for a Wi-Fi-only popup with the current network,
-nearby networks, and a Rescan button. Right-click requests a scan without
-opening the popup. Hover still shows the connection stats. The standalone C++
-helper uses GTK 3, gtk-layer-shell, and NetworkManager via libnm. It can join
-open and personal WPA networks directly; enterprise Wi-Fi needs an existing
-NetworkManager profile. The popup shares the bar's palette through
+nearby networks, and a Rescan button. Click outside to dismiss it. Right-click
+requests a scan without opening the popup. Hover still shows the connection
+stats. The standalone C++ helper uses GTK 3, gtk-layer-shell, and NetworkManager
+via libnm. It can join open and personal WPA networks directly; enterprise Wi-Fi
+needs an existing NetworkManager profile. The popup shares the bar's palette through
 `themes/wifi.css`.
 
 ## Build and Reload

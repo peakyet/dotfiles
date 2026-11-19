@@ -89,6 +89,28 @@ struct Panel {
     NMActiveConnection* pending = nullptr;
     GCancellable* cancellable = g_cancellable_new();
 
+    void show_dismiss_layer() {
+        auto backdrop = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_widget_set_name(backdrop, "wifi-popup");
+        gtk_widget_set_visual(backdrop, gdk_screen_get_rgba_visual(gtk_widget_get_screen(backdrop)));
+        gtk_layer_init_for_window(GTK_WINDOW(backdrop));
+        gtk_layer_set_namespace(GTK_WINDOW(backdrop), "waybar-wifi-dismiss");
+        // Cover the output, including reserved bar space, without moving the popup.
+        gtk_layer_set_layer(GTK_WINDOW(backdrop), GTK_LAYER_SHELL_LAYER_TOP);
+        gtk_layer_set_exclusive_zone(GTK_WINDOW(backdrop), -1);
+        for (auto edge : {GTK_LAYER_SHELL_EDGE_TOP, GTK_LAYER_SHELL_EDGE_BOTTOM,
+                          GTK_LAYER_SHELL_EDGE_LEFT, GTK_LAYER_SHELL_EDGE_RIGHT}) {
+            gtk_layer_set_anchor(GTK_WINDOW(backdrop), edge, true);
+        }
+        gtk_widget_add_events(backdrop, GDK_BUTTON_PRESS_MASK);
+        g_signal_connect(backdrop, "button-press-event", G_CALLBACK(+[](GtkWidget*, GdkEventButton*, GtkWidget* popup) -> gboolean {
+            gtk_widget_destroy(popup);
+            return true;
+        }), window);
+        g_signal_connect_object(window, "destroy", G_CALLBACK(gtk_widget_destroy), backdrop, G_CONNECT_SWAPPED);
+        gtk_widget_show(backdrop);
+    }
+
     ~Panel() {
         g_cancellable_cancel(cancellable);
         if (pending) g_signal_handlers_disconnect_by_data(pending, this);
@@ -139,6 +161,18 @@ struct Panel {
         auto panel = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
         gtk_widget_set_size_request(panel, 324, -1);
         gtk_widget_set_name(panel, "wifi-panel");
+        auto update_input_region = +[](GtkWidget* panel, GtkAllocation* size, GtkWidget* popup) {
+            // Leave the transparent CSS margin and shadow clickable by the layer below.
+            auto context = gtk_widget_get_style_context(panel);
+            GtkBorder margin;
+            gtk_style_context_get_margin(context, gtk_style_context_get_state(context), &margin);
+            cairo_rectangle_int_t bounds = {size->x + margin.left, size->y + margin.top,
+                size->width - margin.left - margin.right, size->height - margin.top - margin.bottom};
+            auto region = cairo_region_create_rectangle(&bounds);
+            gtk_widget_input_shape_combine_region(popup, region);
+            cairo_region_destroy(region);
+        };
+        g_signal_connect(panel, "size-allocate", G_CALLBACK(update_input_region), window);
         gtk_container_add(GTK_CONTAINER(window), panel);
         auto header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
         auto title = label("Wi-Fi");
@@ -201,6 +235,7 @@ struct Panel {
             }), this);
         }
         refresh();
+        show_dismiss_layer();
         gtk_widget_show_all(window);
     }
 
