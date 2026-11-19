@@ -1,0 +1,41 @@
+@import "macos-light.css";
+
+#wifi-popup { background: transparent; }
+
+#wifi-panel {
+    margin: 6px 14px 20px;
+    padding: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 16px;
+    background: rgba(249, 249, 252, 0.98);
+    box-shadow: 0 7px 17px rgba(0, 0, 0, 0.20), inset 0 1px white;
+    color: @mac_text;
+    font-family: Cantarell, sans-serif;
+    font-size: 13px;
+}
+
+#wifi-title { font-weight: 800; font-size: 20px; }
+#wifi-caption { margin: 2px 8px 0; font-size: 10px; font-weight: 800; letter-spacing: 0.85px; }
+#wifi-caption, #wifi-status { color: @mac_secondary; }
+
+#wifi-panel button {
+    min-height: 26px;
+    min-width: 18px;
+    padding: 1px 8px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: @mac_text;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+#wifi-panel button:hover, #wifi-panel button:focus-visible { background: @mac_selected; }
+#wifi-panel button:disabled { color: @mac_secondary; }
+#wifi-panel .network-row image { color: @mac_secondary; }
+#wifi-panel .current { padding: 10px; border-radius: 10px; background: @mac_selected; font-weight: 700; }
+#wifi-panel .current image, #wifi-panel .badge { color: #0056A9; }
+#wifi-panel .badge { font-size: 11px; }
+#wifi-panel .join { background: #0063C7; color: white; font-weight: 700; }
+#wifi-panel .join:hover, #wifi-panel .join:focus-visible { background: #0056A9; }
+#wifi-panel .join:disabled { background: @mac_hover; color: @mac_secondary; }

@@ -10,3 +10,9 @@ for module in grouped-taskbar workspace-pips pomodoro; do
         "$directory/modules/$module.cpp" -o "$temporary" $flags
     mv "$temporary" "$directory/build/$module.so"
 done
+
+flags=$(pkg-config --cflags --libs gtk+-3.0 gtk-layer-shell-0 libnm)
+temporary=$(mktemp "$directory/build/wifi.XXXXXX")
+c++ -std=c++17 -O2 -Wall -Wextra "$directory/wifi.cpp" -o "$temporary" $flags
+chmod +x "$temporary"
+mv "$temporary" "$directory/build/wifi"

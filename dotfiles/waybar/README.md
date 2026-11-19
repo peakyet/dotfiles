@@ -32,7 +32,8 @@ shuffle/repeat/consume/single-mode flags.
 waybar/
 ├── config                       # Both bars, module order, actions and paths
 ├── style.css                    # Layout, typography and state styling
-├── build.sh                     # Build all three CFFI modules
+├── build.sh                     # Build the CFFI modules and Wi-Fi helper
+├── wifi.cpp                     # Standalone GTK Wi-Fi popup
 ├── README.md
 ├── modules/
 │   ├── grouped-taskbar.cpp       # Grouped dock with focus-distance sizing
@@ -48,10 +49,11 @@ waybar/
 │   └── apple-menu.xml           # Apple menu structure; actions are in config
 ├── legacy/
 │   └── waybar-default/          # Unmodified stock config and stylesheet
-└── build/                      # Generated shared libraries, ignored by Git
+└── build/                      # Generated libraries and helper, ignored by Git
     ├── grouped-taskbar.so
     ├── pomodoro.so
-    └── workspace-pips.so
+    ├── workspace-pips.so
+    └── wifi
 ```
 
 Edit `config` to change module order or actions, `style.css` for styling, and
@@ -71,18 +73,31 @@ for the exact percentage. The muted icon indicates mute while retaining the save
 volume. Click the icon to open `pwvucontrol`, or scroll over it to adjust volume.
 The track is styled in `#pulseaudio-slider` in `style.css`.
 
+## Wi-Fi
+
+Left-click the network icon for a Wi-Fi-only popup with the current network,
+nearby networks, and a Rescan button. Right-click requests a scan without
+opening the popup. Hover still shows the connection stats. The standalone C++
+helper uses GTK 3, gtk-layer-shell, and NetworkManager via libnm. It can join
+open and personal WPA networks directly; enterprise Wi-Fi needs an existing
+NetworkManager profile. The popup shares the bar's palette through
+`themes/wifi.css`.
+
 ## Build and Reload
 
-Arch build dependencies: `base-devel`, `gtk3`, `gtk-layer-shell`, and `jsoncpp`.
-`build.sh` works from any working directory and replaces each shared library
-only after its compilation succeeds.
+Arch build dependencies: `base-devel`, `gtk3`, `gtk-layer-shell`, `jsoncpp`,
+and `libnm`. `build.sh` works from any working directory and replaces each
+build output only after its compilation succeeds.
 
-After editing C++ sources or moving module files, rebuild and restart Waybar:
+After editing CFFI sources or moving module files, rebuild and restart Waybar:
 
 ```sh
 sh ~/dotfiles/dotfiles/waybar/build.sh
 systemctl --user restart waybar.service
 ```
+
+If only `wifi.cpp` changed, the next time you open the popup it uses the rebuilt
+helper without restarting Waybar.
 
 A reload may retain an old shared library. For config-only changes, reload with:
 
