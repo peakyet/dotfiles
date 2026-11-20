@@ -1,0 +1,42 @@
+@import "macos-light.css";
+
+#bluetooth-popup { background: transparent; }
+
+#bluetooth-panel {
+    margin: 6px 14px 20px;
+    padding: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 16px;
+    background: rgba(249, 249, 252, 0.98);
+    box-shadow: 0 7px 17px rgba(0, 0, 0, 0.20), inset 0 1px white;
+    color: @mac_text;
+    font-family: Cantarell, sans-serif;
+    font-size: 13px;
+}
+
+#bluetooth-panel .title { font-weight: 800; font-size: 20px; }
+#bluetooth-panel .caption { margin: 2px 8px 0; font-size: 10px; font-weight: 800; letter-spacing: 0.85px; }
+#bluetooth-panel .caption, #bluetooth-panel .secondary { color: @mac_secondary; }
+#bluetooth-panel .device { padding: 4px 8px; border-radius: 10px; }
+#bluetooth-panel .connected { background: @mac_selected; font-weight: 700; }
+#bluetooth-panel .connected image, #bluetooth-panel .connected .secondary { color: #0056A9; }
+#bluetooth-panel .device .secondary { font-size: 11px; }
+#bluetooth-panel .prompt { background: @mac_selected; border-radius: 10px; padding: 10px; }
+
+#bluetooth-panel button {
+    min-height: 26px;
+    min-width: 18px;
+    padding: 1px 8px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: @mac_text;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+#bluetooth-panel button:hover, #bluetooth-panel button:focus-visible { background: @mac_selected; }
+#bluetooth-panel button:disabled { color: @mac_secondary; }
+#bluetooth-panel .primary { background: #0063C7; color: white; font-weight: 700; }
+#bluetooth-panel .primary:hover, #bluetooth-panel .primary:focus-visible { background: #0056A9; }
+#bluetooth-panel .primary:disabled { background: @mac_hover; color: @mac_secondary; }

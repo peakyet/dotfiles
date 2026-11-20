@@ -16,3 +16,9 @@ temporary=$(mktemp "$directory/build/wifi.XXXXXX")
 c++ -std=c++17 -O2 -Wall -Wextra "$directory/wifi.cpp" -o "$temporary" $flags
 chmod +x "$temporary"
 mv "$temporary" "$directory/build/wifi"
+
+flags=$(pkg-config --cflags --libs gtk+-3.0 gtk-layer-shell-0 gio-2.0)
+temporary=$(mktemp "$directory/build/bluetooth.XXXXXX")
+c++ -std=c++17 -O2 -Wall -Wextra "$directory/bluetooth.cpp" -o "$temporary" $flags
+chmod +x "$temporary"
+mv "$temporary" "$directory/build/bluetooth"

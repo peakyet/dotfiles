@@ -32,7 +32,8 @@ shuffle/repeat/consume/single-mode flags.
 waybar/
 ├── config                       # Both bars, module order, actions and paths
 ├── style.css                    # Layout, typography and state styling
-├── build.sh                     # Build the CFFI modules and Wi-Fi helper
+├── build.sh                     # Build the CFFI modules and popup helpers
+├── bluetooth.cpp                # Standalone GTK Bluetooth popup
 ├── wifi.cpp                     # Standalone GTK Wi-Fi popup
 ├── README.md
 ├── modules/
@@ -49,7 +50,8 @@ waybar/
 │   └── apple-menu.xml           # Apple menu structure; actions are in config
 ├── legacy/
 │   └── waybar-default/          # Unmodified stock config and stylesheet
-└── build/                      # Generated libraries and helper, ignored by Git
+└── build/                      # Generated libraries and helpers, ignored by Git
+    ├── bluetooth
     ├── grouped-taskbar.so
     ├── pomodoro.so
     ├── workspace-pips.so
@@ -83,6 +85,20 @@ via libnm. It can join open and personal WPA networks directly; enterprise Wi-Fi
 needs an existing NetworkManager profile. The popup shares the bar's palette through
 `themes/wifi.css`.
 
+## Bluetooth
+
+Left-click the Bluetooth icon to open the Bluetooth popup. Click outside it
+on the same screen to dismiss it without activating the bar or app underneath.
+Use **Scan** to discover nearby devices for up to 20 seconds. The popup lists
+connected devices, paired devices and nearby unpaired devices separately.
+Use **Disconnect**, **Connect** or **Pair** on the corresponding row. If BlueZ
+asks for confirmation or a PIN during pairing, respond in the popup; closing
+it cancels an in-progress pairing. After pairing, use **Connect** if needed.
+
+The helper uses BlueZ's system D-Bus API via GIO. Opening the popup never
+changes power or starts discovery. Use **Turn on** or **Turn off** explicitly;
+the helper can reuse Arch's TLP `bluetooth` command to clear a soft radio block.
+
 ## Build and Reload
 
 Arch build dependencies: `base-devel`, `gtk3`, `gtk-layer-shell`, `jsoncpp`,
@@ -96,8 +112,8 @@ sh ~/dotfiles/dotfiles/waybar/build.sh
 systemctl --user restart waybar.service
 ```
 
-If only `wifi.cpp` changed, the next time you open the popup it uses the rebuilt
-helper without restarting Waybar.
+If only a popup helper changed, the next time you open the popup it uses the
+rebuilt helper without restarting Waybar.
 
 A reload may retain an old shared library. For config-only changes, reload with:
 
