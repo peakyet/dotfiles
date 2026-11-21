@@ -404,13 +404,8 @@ hotkey-overlay {
 // After enabling or disabling this, you need to restart the apps for this to take effect.
 prefer-no-csd
 
-// You can change the path where screenshots are saved.
-// A ~ at the front will be expanded to the home directory.
-// The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
-// You can also set this to null to disable saving screenshots to disk.
-// screenshot-path null
+// Keep niri's screenshot shortcuts clipboard-only by default.
+screenshot-path null
 
 // Environment Settings
 environment {
@@ -832,6 +827,9 @@ binds {
     // Mod+Shift+Space { switch-layout "prev"; }
 
     Print { screenshot; }
+    Shift+Print hotkey-overlay-title="Save screenshot to Pictures" {
+        spawn-sh "exec niri msg action screenshot --path \"$HOME/Pictures/Screenshot-$(date +%F_%H-%M-%S).png\""
+    }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
 
