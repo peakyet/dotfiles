@@ -1,23 +1,8 @@
 // Waybar CFFI ABI v2: https://github.com/Alexays/Waybar/tree/0.15.0/resources/custom_modules/cffi_example
 //
-// Workspace indicator for niri: one rounded pip per workspace, sized and faded
-// by its distance from the focused workspace, so the focused workspace is the
-// widest, strongest pip and its neighbours trail off into small, faint ones.
-// The focused pip carries its workspace's roman numeral, so the bar says which
-// workspace is focused without a hover.
-//
-// This is a module of its own because GTK CSS cannot express it: CSS can only
-// style waybar's workspace buttons by state class (active/focused/empty/urgent),
-// never by where a workspace sits relative to the focused one, and the falloff
-// has to be recomputed whenever focus moves. The widget follows niri's event
-// stream, so it repaints without polling.
-//
-// Geometry and the falloff shape are the constants below; the pip colour comes
-// from `mac_ws_pip` (and `mac_ws_urgent` for urgent workspaces) and the numeral
-// from `mac_ws_text`, all in style.css, so the palette stays with the rest of
-// the theme. Alpha alone fades with distance, so pointing `mac_ws_pip` at any
-// colour gives that colour a falloff. The focused pip grows just enough to hold
-// its numeral, so short indices keep the original pill size.
+// Niri's workspaces in a translucent segmented control. The focused tile shows
+// its roman numeral; the other tiles are filled when occupied, outlined when
+// empty, and softly dimmed with distance. Niri's event stream drives repainting.
 #include <gtk/gtk.h>
 #include <gio/gfiledescriptorbased.h>
 #include <pango/pangocairo.h>
@@ -46,22 +31,22 @@ struct wbcffi_config_entry {
 
 namespace {
 
-constexpr double kActiveWidth = 24;  // keep the focused workspace at its original size
-constexpr double kActiveHeight = 12;
-constexpr double kFaintWidth = 2;    // the other workspaces: slim bars
-constexpr double kFaintHeight = 4;
-constexpr double kGap = 6;           // between pips
-constexpr double kFaintAlpha = 0.20; // how far the fade goes, relative to the theme colour
-constexpr int kSteps = 4;            // distance at which the height and alpha falloff bottoms out
-constexpr int kWidthSteps = 4;       // ... and the width falloff
-constexpr double kWidthCurve = 8;    // keep neighbours slim while their height tapers gradually
-constexpr int kBandHeight = 24;      // height the pips are centred in
-constexpr double kNumeralSize = 10;  // the roman numeral inside the focused pip, in px
-constexpr double kNumeralPadding = 6; // px of pill on each side of that numeral
+constexpr double kActiveWidth = 24;
+constexpr double kActiveHeight = 18;
+constexpr double kInactiveWidth = 12;
+constexpr double kInactiveHeight = 9;
+constexpr double kGap = 4;
+constexpr double kTrackPadding = 3;
+constexpr double kTrackHeight = 22;
+constexpr int kBandHeight = 24;
+constexpr double kNumeralSize = 11;
+constexpr double kNumeralPadding = 6;
 
-const GdkRGBA kFallbackPip = {0.0, 0.0, 0.0, 0.7};
+const GdkRGBA kFallbackPip = {0.24, 0.24, 0.26, 0.78};
 const GdkRGBA kFallbackUrgent = {1.0, 0.27, 0.23, 1.0};
-const GdkRGBA kFallbackNumeral = {1.0, 1.0, 1.0, 0.95};
+const GdkRGBA kFallbackNumeral = {0.11, 0.11, 0.12, 1.0};
+const GdkRGBA kFallbackTrack = {0.96, 0.96, 0.97, 0.46};
+const GdkRGBA kFallbackSelection = {1.0, 1.0, 1.0, 0.92};
 
 // Roman numerals for a workspace index. niri numbers workspaces from 1, so the
 // table stops at I; anything larger just gets more glyphs.
@@ -78,7 +63,7 @@ std::string roman(int number) {
     return numeral;
 }
 
-// The same softly rounded rectangle outline for focus and the surrounding bars.
+// Rounded rectangles for the track and its individual tiles.
 void rounded_pip(cairo_t* cr, double x, double y, double width, double height,
                  double radius) {
     cairo_new_path(cr);
@@ -104,8 +89,9 @@ struct Pips {
     struct Pip {
         Json::UInt64 id;
         double x, y, width, height;
-        double fade; // proximity to the focused workspace: 1 there, 0 at the far end
+        double opacity;
         bool urgent;
+        bool occupied;
         bool labelled; // the pip the numeral belongs to
     };
 
@@ -218,25 +204,19 @@ struct Pips {
             Json::Value* workspace = find(change["id"].asUInt64());
             if (!workspace) return false;
             (*workspace)["is_urgent"] = change["urgent"];
+        } else if (event.isMember("WorkspaceActiveWindowChanged")) {
+            const auto& change = event["WorkspaceActiveWindowChanged"];
+            Json::Value* workspace = find(change["workspace_id"].asUInt64());
+            if (!workspace) return false;
+            (*workspace)["active_window_id"] = change["active_window_id"];
         } else {
             return false;
         }
         return true;
     }
 
-    // How close a workspace is to the focused one: 1 at the focused workspace,
-    // 0 once it is `steps` or more away.
-    double proximity_of(const Json::Value& workspace, int steps, double curve = 1) const {
-        int distance = std::abs(workspace["idx"].asInt() - focused);
-        if (steps <= 0) return distance == 0 ? 1 : 0;
-        double proximity = 1 - std::min(distance, steps) / static_cast<double>(steps);
-        return curve == 1 ? proximity : std::pow(proximity, curve);
-    }
-
     double width_of(const Json::Value& workspace) const {
-        if (workspace["idx"].asInt() == focused) return focused_numeral_width();
-        return kFaintWidth + (kActiveWidth - kFaintWidth) *
-                             proximity_of(workspace, kWidthSteps, kWidthCurve);
+        return workspace["idx"].asInt() == focused ? focused_numeral_width() : kInactiveWidth;
     }
 
     // The focused pill keeps its usual width unless the numeral needs more.
@@ -277,12 +257,14 @@ struct Pips {
         for (const auto& workspace : workspaces) {
             Pip pip{};
             pip.id = workspace["id"].asUInt64();
-            pip.fade = proximity_of(workspace, kSteps);
+            const int distance = std::abs(workspace["idx"].asInt() - focused);
+            pip.opacity = 1 - 0.06 * std::min(distance, 4);
             pip.width = width_of(workspace);
-            pip.height = kFaintHeight + (kActiveHeight - kFaintHeight) * pip.fade;
-            pip.y = (band - pip.height) / 2;
             pip.urgent = workspace["is_urgent"].asBool();
-            pip.labelled = workspace["idx"].asInt() == focused;
+            pip.occupied = !workspace["active_window_id"].isNull();
+            pip.labelled = distance == 0;
+            pip.height = pip.labelled ? kActiveHeight : kInactiveHeight;
+            pip.y = (band - pip.height) / 2;
             pips.push_back(pip);
             total += pip.width + kGap;
         }
@@ -301,14 +283,6 @@ struct Pips {
                       gtk_widget_get_allocated_height(area));
     }
 
-    // A pip's colour: the theme's pip colour, or the urgent one, at the alpha
-    // the pip's distance from the focused workspace has earned it.
-    static GdkRGBA colour_of(const Pip& pip, const GdkRGBA& base, const GdkRGBA& urgent) {
-        GdkRGBA colour = pip.urgent ? urgent : base;
-        colour.alpha *= kFaintAlpha + (1 - kFaintAlpha) * pip.fade;
-        return colour;
-    }
-
     void render() {
         gtk_widget_set_size_request(area, natural_width(), kBandHeight);
         gtk_widget_queue_draw(area);
@@ -317,7 +291,7 @@ struct Pips {
     int natural_width() const {
         double total = 0;
         for (const auto& workspace : workspaces) total += width_of(workspace) + kGap;
-        if (!workspaces.empty()) total -= kGap;
+        if (!workspaces.empty()) total += 2 * kTrackPadding - kGap;
         return static_cast<int>(std::ceil(total));
     }
 
@@ -338,16 +312,46 @@ struct Pips {
         auto* pips = static_cast<Pips*>(data);
         auto* style = gtk_widget_get_style_context(widget);
         GdkRGBA base = kFallbackPip, urgent = kFallbackUrgent, text = kFallbackNumeral;
+        GdkRGBA track = kFallbackTrack, selection = kFallbackSelection;
         gtk_style_context_lookup_color(style, "mac_ws_pip", &base);
         gtk_style_context_lookup_color(style, "mac_ws_urgent", &urgent);
-        gtk_style_context_lookup_color(style, "mac_ws_text", &text);
-        for (const auto& pip : pips->layout()) {
-            GdkRGBA colour = colour_of(pip, base, urgent);
+        gtk_style_context_lookup_color(style, "mac_text", &text);
+        gtk_style_context_lookup_color(style, "mac_ws_track", &track);
+        gtk_style_context_lookup_color(style, "mac_ws_selection", &selection);
+
+        const auto tiles = pips->layout();
+        if (tiles.empty()) return;
+        const double x = tiles.front().x - kTrackPadding;
+        const double y = (gtk_widget_get_allocated_height(widget) - kTrackHeight) / 2;
+        const double width = tiles.back().x + tiles.back().width + kTrackPadding - x;
+        cairo_set_line_width(cr, 1);
+        rounded_pip(cr, x + 0.5, y + 0.5, width - 1, kTrackHeight - 1, 7);
+        gdk_cairo_set_source_rgba(cr, &track);
+        cairo_fill_preserve(cr);
+        cairo_set_source_rgba(cr, 1, 1, 1, 0.45);
+        cairo_stroke(cr);
+
+        for (const auto& pip : tiles) {
+            if (pip.labelled) {
+                // A one-pixel shadow lifts the selected tile off the glass track.
+                rounded_pip(cr, pip.x, pip.y + 1, pip.width, pip.height, 5);
+                cairo_set_source_rgba(cr, 0, 0, 0, 0.15);
+                cairo_fill(cr);
+                rounded_pip(cr, pip.x + 0.5, pip.y + 0.5, pip.width - 1, pip.height - 1, 5);
+                gdk_cairo_set_source_rgba(cr, &selection);
+                cairo_fill_preserve(cr);
+                if (pip.urgent) gdk_cairo_set_source_rgba(cr, &urgent);
+                else cairo_set_source_rgba(cr, 1, 1, 1, 0.75);
+                cairo_stroke(cr);
+                pips->draw_numeral(cr, pip, text);
+                continue;
+            }
+            GdkRGBA colour = pip.urgent ? urgent : base;
+            if (!pip.urgent) colour.alpha *= pip.opacity;
             gdk_cairo_set_source_rgba(cr, &colour);
-            double radius = std::min(pip.width, pip.height) * 0.35;
-            rounded_pip(cr, pip.x, pip.y, pip.width, pip.height, radius);
-            cairo_fill(cr);
-            pips->draw_numeral(cr, pip, text);
+            rounded_pip(cr, pip.x + 0.5, pip.y + 0.5, pip.width - 1, pip.height - 1, 2);
+            if (pip.occupied) cairo_fill(cr);
+            else cairo_stroke(cr);
         }
     }
 

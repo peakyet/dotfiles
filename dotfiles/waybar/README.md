@@ -179,38 +179,18 @@ rm /tmp/test-grouped-taskbar
 
 ## Workspace Indicator
 
-`modules/workspace-pips.cpp` draws one rounded shape per niri workspace. Size
-and opacity fall with distance from the focused workspace, symmetrically:
+`modules/workspace-pips.cpp` draws one tile per niri workspace on a translucent
+track. The focused tile is raised and widens to fit its Roman numeral (`I`,
+`II`, `IV`, …). Other tiles are filled when occupied and outlined when empty,
+with a slight fade at a distance. Red still marks urgent workspaces.
 
-| Distance | Width × height | Opacity with the current theme |
-| --- | --- | --- |
-| Focused | 24 × 12px | 70% |
-| 1 | 4.2 × 10px | 56% |
-| 2 | 2.1 × 8px | 42% |
-| 3 | 2 × 6px | 28% |
-| 4+ | 2 × 4px | 14% |
+Geometry lives in the C++ module and the palette in `themes/macos-light.css`.
+`#workspaces` in `style.css` positions the band. Left-clicking a tile focuses
+its workspace; Mod+wheel workspace switching is handled separately by niri.
 
-The focused pill also carries its workspace's index as a roman numeral (`I`,
-`II`, `IV`, …), in bold 10px. It widens just enough to hold that numeral, so
-short indices keep the plain 24px pill. The numeral is drawn in `@mac_ws_text`
-and the pill behind it keeps the pip colour and the usual 12px height; the
-numeral box, not the text layout box, is centred, so a cap-height numeral sits
-optically centred.
-
-All indicators use a corner radius of 35% of their shorter side. Geometry and
-falloff constants live at the top of the C++ source: `kActiveWidth`,
-`kActiveHeight`, `kFaintWidth`, `kFaintHeight`, `kSteps`, `kWidthSteps`,
-`kWidthCurve`, `kFaintAlpha`, `kGap`, `kBandHeight`, `kNumeralSize`, and
-`kNumeralPadding`.
-
-Colours come from `@mac_ws_pip`, `@mac_ws_urgent`, and `@mac_ws_text` in
-`themes/macos-light.css`. The module multiplies the pip's alpha by the distance
-falloff. `#workspaces` in `style.css` only positions the band. Shapes are
-vertically centred in the 32px bar; left-clicking one focuses its workspace.
-
-The module follows `WorkspacesChanged`, `WorkspaceActivated`, and
-`WorkspaceUrgencyChanged` events rather than polling. Workspaces from every
-output appear in one band; per-output filtering is not implemented.
+The module follows niri's workspace, focus, urgency, and active-window events
+rather than polling. Workspaces from every output appear in one band;
+per-output filtering is not implemented.
 
 ## Control Center
 
