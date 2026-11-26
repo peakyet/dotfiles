@@ -357,10 +357,10 @@ sudo usermod -aG docker chun      # <-- your user
 
 ```bash
 paru -S --needed \
-  4kvideodownloaderplus baidunetdisk-bin brightnessctl-git cc-switch-bin claude-code \
+  4kvideodownloaderplus baidunetdisk-bin bowel-bin brightnessctl-git cc-switch-bin claude-code \
   deepseek-harness-bin foxglove-bin google-chrome gpu-screen-recorder-gtk katex \
   lazygit-git libva-nvidia-driver-git linuxqq mathematica-light photoqt picgo-appimage \
-  pwvucontrol splayer ttf-wps-fonts v2raya-bin wechat-universal-bwrap wps-office \
+  pwvucontrol splayer ttf-wps-fonts wechat-universal-bwrap wps-office \
   zen-browser-bin zsh-autosuggestions-git zsh-fast-syntax-highlighting-git
 ```
 
@@ -401,7 +401,7 @@ applies to you:
   `gcc-fortran`, `shotcut`, `foxglove-bin`, `photoqt`, `4kvideodownloaderplus`,
   `baidunetdisk-bin`, `linuxqq`, `wechat-universal-bwrap`, `wps-office` +
   `ttf-wps-fonts`, `picgo-appimage`, `splayer`, `google-chrome`,
-  `zen-browser-bin`, `v2raya-bin`, `cc-switch-bin`, `claude-code`,
+  `zen-browser-bin`, `bowel-bin`, `cc-switch-bin`, `claude-code`,
   `deepseek-harness-bin`, `ampcode`, `openai-codex`, `katex`, `timeshift`
   (which is what drags in `cronie`).
 - Development tooling: `neovim`, `pyright`, `lua-language-server`, `rustup`,
@@ -455,7 +455,7 @@ reference machine it is simply the current state):
 ```bash
 sudo systemctl enable bluetooth cronie docker lm_sensors \
   NetworkManager NetworkManager-dispatcher NetworkManager-wait-online \
-  sshd systemd-timesyncd tlp v2raya
+  sshd systemd-timesyncd tlp
 ```
 
 Everything else under `/etc/systemd/system` is enabled by the packages
@@ -479,11 +479,9 @@ sh ~/dotfiles/dotfiles/niri/add_wants.sh
 
 It links `swaybg.service` / `swayidle.service` and calls
 `systemctl --user add-wants niri.service …` for `waybar mako mpd
-plasma-polkit-agent swaybg swayidle`. (`v2raya-lite.service` is deliberately
-left out — this machine runs the root `v2raya.service` enabled in D.1, and the
-two would fight over port 2017.) The two custom units must go through this
-script because they do not exist in `/usr/lib/systemd/user` and have to be
-linked into `~/.config/systemd/user` first. On this machine those same six
+plasma-polkit-agent swaybg swayidle`. The two custom units must go through
+this script because they do not exist in `/usr/lib/systemd/user` and have to
+be linked into `~/.config/systemd/user` first. On this machine those same six
 units are additionally `systemctl --user enable`d, i.e. started via
 `default.target` as well:
 
@@ -608,9 +606,14 @@ referenced by `swaybg.service` / `swayidle.service` ship in `wallpapers/`.
 sources the repo-packaged plugins — `zsh-fast-syntax-highlighting-git`,
 `zsh-autosuggestions-git`, `zsh-theme-powerlevel10k-git` — plus
 `eval "$(zoxide init zsh)"`, `EDITOR=nvim`, `~/.env` (Part G), the
-`clash_on`/`v2ray_on`/`proxy_off` helpers, and `ya`/`awake`. `p10k` reads
+`proxy_on`/`proxy_off` helpers, and `ya`/`awake`. `p10k` reads
 `~/.p10k.zsh`; `dotfiles/bashrc` keeps a stripped-down bash equivalent. The
 oh-my-zsh variant was removed — do not install it.
+
+Bowel (`bowel-bin`) runs its bundled Mihomo core. Start Bowel and set its mixed
+HTTP/SOCKS proxy port to `7899` to match these dotfiles. In Bash or Zsh, run
+`proxy_on` to use `127.0.0.1:7899` in the current shell and `proxy_off` to clear
+the proxy variables. Neither helper starts Bowel or changes desktop proxy settings.
 
 `~/.zshrc` sources `~/.env` unconditionally (bash guards it with `[ -f ]`), so
 create that file in Part G before you rely on this shell.
@@ -646,7 +649,7 @@ cloned from this repo:
    keygen; see README), `wps-office` + `ttf-wps-fonts`, `zotero-bin`
    (+ Better BibTeX plugin), `obsidian` (+ Image Auto Upload, Zotero
    Integration plugins), `picgo-appimage`, `baidunetdisk-bin`, the QQ/WeChat
-   builds, `zen-browser-bin`/`google-chrome` (sign-in), `v2raya-bin`.
+   builds, `zen-browser-bin`/`google-chrome` (sign-in).
 
 ## Part H — Verify
 

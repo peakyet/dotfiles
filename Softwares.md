@@ -10,7 +10,7 @@
 - [x] kitty
 - [x] waybar, otf-font-awesome, maple nerd font
 - [x] baidunetdisk
-- [x] v2raya
+- [x] bowel-bin: Bowel proxy client
 - [x] zip, unzip
 - [x] fcitx5
 - [x] zen-browser-bin: zen browser, a modern browser.

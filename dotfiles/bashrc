@@ -22,11 +22,11 @@ neofetch
 # set true color in window terminal
 # export COLORTERM='truecolor'
 
-# proxy
+# Bowel proxy
 function proxy_on() {
-	export https_proxy=http://127.0.0.1:7890
-	export http_proxy=http://127.0.0.1:7890
-	export all_proxy=socks5://127.0.0.1:7890
+	export https_proxy=http://127.0.0.1:7899
+	export http_proxy=http://127.0.0.1:7899
+	export all_proxy=socks5://127.0.0.1:7899
 	export ftp_proxy=$http_proxy
 	export rsync_proxy=$http_proxy
 	export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
