@@ -262,62 +262,63 @@ tooltip label {
     background-color: @mac_selected;
 }
 
-#dock {
-    min-height: 48px;
-    margin: 0;
-    padding: 4px 8px;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    /* Squarer than the capsule this used to be (28px, i.e. half the 58px pane
-       height, so the ends were full semicircles) but still clearly softened. */
-    border-radius: 20px;
-    background-color: @mac_dock_surface;
-    /* specular sheen: brighter top edge fading down through the glass */
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.1),
-                0 16px 40px rgba(0, 0, 0, 0.18),
-                0 4px 12px rgba(0, 0, 0, 0.10);
-}
-
 #taskbar {
-    margin: 0 2px;
-    padding: 0 5px;
+    min-height: 64px;
+    padding: 0 8px;
 }
 
-#taskbar button {
+/* Applied by the draw handler only, so the frame does not affect layout. */
+#taskbar.aqua-tray {
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-top-color: rgba(255, 255, 255, 0.65);
+    border-radius: 14px;
+    background-color: @mac_dock_surface;
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.45), rgba(141, 174, 209, 0.20));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+#taskbar button,
+#taskbar button:hover {
     min-width: 0;
     min-height: 0;
     margin: 0 1px;
-    padding: 6px;
-    border-radius: 12px;
-    color: @mac_text;
-}
-
-#taskbar button image,
-#taskbar button label {
-    margin: 0;
     padding: 0;
+    border-radius: 9px;
+    color: @mac_text;
+    background-color: transparent;
 }
 
-/* The focused app's highlight is a flat pill behind the icon: 10px/8px of
-   padding made it 48x44 around a 28px icon, which read as a panel of its own.
-   4px keeps a 36x36 square, matching the reference's tight hug of its icon. */
-#taskbar button.active {
-    padding: 4px;
-    background-color: @mac_selected;
+#taskbar button.active .focus-tile {
+    border-radius: 10px;
+    background-color: rgba(240, 249, 255, 0.52);
+}
+
+#taskbar .running-dot {
+    min-width: 4px;
+    min-height: 3px;
+    margin-bottom: 3px;
+    border-radius: 3px;
+    background-color: rgba(48, 65, 92, 0.62);
+}
+
+#taskbar .active .running-dot {
+    min-width: 12px;
+    background-color: @mac_accent;
 }
 
 #taskbar button.minimized {
     color: @mac_secondary;
 }
 
-#taskbar button.urgent {
+#taskbar button.urgent,
+#taskbar button.urgent:hover {
     background-color: @mac_red;
     color: @mac_white;
 }
 
 #taskbar .window-count {
     min-width: 13px;
+    margin: 0 1px 3px 0;
     border-radius: 7px;
     background-color: @mac_accent;
     color: @mac_white;
@@ -330,8 +331,8 @@ tooltip label {
    and centred, so it reads as a gap in the row rather than a cut through it. */
 #taskbar .dock-separator {
     min-width: 1px;
-    min-height: 14px;
-    margin: 0 4px;
+    min-height: 20px;
+    margin: 8px 4px 0;
     background-color: rgba(0, 0, 0, 0.18);
 }
 

@@ -411,7 +411,9 @@
     "name": "dock",
     "layer": "top",
     "position": "bottom",
-    "height": 58,
+    "height": 64,
+    // The non-anchored top margin trims the automatic exclusive zone, not the tray.
+    "margin-top": -8,
     "margin-bottom": 6,
     "spacing": 6,
     "modules-center": ["group/dock"],

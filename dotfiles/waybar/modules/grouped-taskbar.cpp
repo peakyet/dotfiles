@@ -14,6 +14,7 @@
 #include <json/json.h>
 
 #include <algorithm>
+#include <cmath>
 #include <cstdlib>
 #include <limits>
 #include <map>
@@ -68,11 +69,61 @@ struct Dock {
     std::vector<Json::Value> workspaces;   // niri's list, sorted by index
     std::vector<GtkWidget*> separators;    // hairlines between workspace groups
 
-    struct AppButton { Dock* dock; AppKey key; };
+    struct AppButton {
+        Dock* dock;
+        AppKey key;
+        GtkWidget* face;
+        GIcon* icon;
+        GdkPixbuf* pixels = nullptr;
+        int scale = 0;
+        double lift = 0;
+
+        ~AppButton() {
+            g_clear_object(&pixels);
+            g_object_unref(icon);
+        }
+
+        void draw(cairo_t* cr) {
+            constexpr int largest = 42;
+            const int current_scale = gtk_widget_get_scale_factor(face);
+            if (scale != current_scale) {
+                g_clear_object(&pixels);
+                scale = current_scale;
+                auto* theme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(face));
+                if (auto* info = gtk_icon_theme_lookup_by_gicon_for_scale(
+                        theme, icon, largest, scale, GTK_ICON_LOOKUP_FORCE_SIZE)) {
+                    pixels = gtk_icon_info_load_icon(info, nullptr);
+                    g_object_unref(info);
+                }
+                if (!pixels)
+                    pixels = gtk_icon_theme_load_icon_for_scale(theme, "application-x-executable",
+                        largest, scale, GTK_ICON_LOOKUP_FORCE_SIZE, nullptr);
+            }
+            if (!pixels) return;
+            // Grow into the headroom above the icon, never outside its slot.
+            const double size = 32 + (largest - 32) * lift;
+            const double bottom = 48 - (48 - largest) * lift;
+            const int width = gdk_pixbuf_get_width(pixels), height = gdk_pixbuf_get_height(pixels);
+            const double ratio = size / std::max(width, height);
+            cairo_translate(cr, (gtk_widget_get_allocated_width(face) - width * ratio) / 2,
+                            bottom - (size + height * ratio) / 2);
+            cairo_scale(cr, ratio, ratio);
+            gdk_cairo_set_source_pixbuf(cr, pixels, 0, 0);
+            cairo_paint(cr);
+        }
+    };
+    std::vector<AppButton*> slots;         // visible order, excluding dividers
+    AppButton* hovered = nullptr;
+    guint lens_tick = 0;
+    gint64 lens_frame = 0;
+    cairo_surface_t* lens_tray = nullptr;  // static glass under the moving icons
 
     ~Dock() {
         if (watch) g_source_remove(watch);
         if (retry) g_source_remove(retry);
+        if (lens_tick) gtk_widget_remove_tick_callback(box, lens_tick);
+        g_clear_pointer(&lens_tray, cairo_surface_destroy);
+        slots.clear();
         if (menu) gtk_widget_destroy(menu);
         stop_stream();
         g_list_free_full(apps, g_object_unref);
@@ -249,7 +300,7 @@ struct Dock {
         return result;
     }
 
-    GtkWidget* icon(const std::string& app) const {
+    GIcon* icon(const std::string& app) const {
         for (GList* item = apps; item; item = item->next) {
             if (!G_IS_DESKTOP_APP_INFO(item->data)) continue;
             auto* info = G_DESKTOP_APP_INFO(item->data);
@@ -257,19 +308,45 @@ struct Dock {
             const char* id = g_app_info_get_id(G_APP_INFO(info));
             if ((wmclass && !g_ascii_strcasecmp(wmclass, app.c_str())) ||
                 (id && !g_ascii_strcasecmp(id, (app + ".desktop").c_str()))) {
-                if (GIcon* icon = g_app_info_get_icon(G_APP_INFO(info))) {
-                    GtkWidget* image = gtk_image_new_from_gicon(icon, GTK_ICON_SIZE_DIALOG);
-                    gtk_image_set_pixel_size(GTK_IMAGE(image), 28);
-                    return image;
-                }
+                if (GIcon* icon = g_app_info_get_icon(G_APP_INFO(info)))
+                    return G_ICON(g_object_ref(icon));
             }
         }
-        GtkWidget* image = gtk_image_new_from_icon_name(app.c_str(), GTK_ICON_SIZE_DIALOG);
-        if (!gtk_icon_theme_has_icon(gtk_icon_theme_get_default(), app.c_str()))
-            gtk_image_set_from_icon_name(GTK_IMAGE(image), "application-x-executable",
-                                         GTK_ICON_SIZE_DIALOG);
-        gtk_image_set_pixel_size(GTK_IMAGE(image), 28);
-        return image;
+        return g_themed_icon_new(app.c_str());
+    }
+
+    bool advance_lens(double blend) {
+        auto at = std::find(slots.begin(), slots.end(), menu ? nullptr : hovered);
+        bool moving = false;
+        for (auto it = slots.begin(); it != slots.end(); ++it) {
+            auto& slot = **it;
+            const double target = at == slots.end() ? 0 :
+                it == at ? 1 : std::abs(it - at) == 1 ? 0.3 : 0;
+            if (slot.lift == target) continue;
+            const double next = slot.lift + (target - slot.lift) * blend;
+            slot.lift = std::abs(target - next) < 0.015 ? target : next;
+            moving |= slot.lift != target;
+            gtk_widget_queue_draw(slot.face);
+        }
+        return moving;
+    }
+
+    void refresh_lens() {
+        gboolean animations = TRUE;
+        g_object_get(gtk_widget_get_settings(box), "gtk-enable-animations", &animations, nullptr);
+        if (!advance_lens(animations ? 0 : 1) || lens_tick) return;
+        lens_frame = 0;
+        lens_tick = gtk_widget_add_tick_callback(box,
+            +[](GtkWidget*, GdkFrameClock* clock, gpointer data) -> gboolean {
+                auto& dock = *static_cast<Dock*>(data);
+                const gint64 now = gdk_frame_clock_get_frame_time(clock);
+                const double elapsed = dock.lens_frame ? now - dock.lens_frame : 16667;
+                dock.lens_frame = now;
+                if (dock.advance_lens(1 - std::exp(-elapsed / 35000))) return G_SOURCE_CONTINUE;
+                dock.lens_tick = 0;
+                g_clear_pointer(&dock.lens_tray, cairo_surface_destroy);
+                return G_SOURCE_REMOVE;
+            }, this, nullptr);
     }
 
     static void action(const char* name, Json::UInt64 id) {
@@ -292,6 +369,7 @@ struct Dock {
         }
         if (menu) gtk_widget_destroy(menu);
         menu = gtk_menu_new();
+        refresh_lens();
         gtk_widget_set_name(menu, "dock-window-menu");
         gtk_menu_attach_to_widget(GTK_MENU(menu), button, nullptr);
         auto* bar = GTK_WINDOW(gtk_widget_get_toplevel(box));
@@ -300,6 +378,7 @@ struct Dock {
         g_signal_connect(menu, "destroy", G_CALLBACK(+[](GtkWidget*, gpointer data) {
             auto* dock = static_cast<Dock*>(data);
             dock->menu = nullptr;
+            dock->refresh_lens();
             auto* bar = GTK_WINDOW(gtk_widget_get_toplevel(dock->box));
             gtk_layer_set_keyboard_mode(bar, GTK_LAYER_SHELL_KEYBOARD_MODE_NONE);
         }), this);
@@ -358,9 +437,11 @@ struct Dock {
     }
 
     void render() {
+        slots.clear();
         for (auto it = buttons.begin(); it != buttons.end();) {
             if (group(it->first).empty()) {
                 if (menu) gtk_widget_destroy(menu);
+                if (hovered == g_object_get_data(G_OBJECT(it->second), "slot")) hovered = nullptr;
                 gtk_widget_destroy(it->second);
                 it = buttons.erase(it);
             } else ++it;
@@ -372,9 +453,37 @@ struct Dock {
             GtkWidget* button = gtk_button_new();
             gtk_widget_set_valign(button, GTK_ALIGN_CENTER);
             GtkWidget* overlay = gtk_overlay_new();
-            GtkWidget* image = icon(app);
-            gtk_container_add(GTK_CONTAINER(overlay), image);
-            g_object_set_data(G_OBJECT(button), "icon", image);
+            gtk_widget_set_size_request(overlay, 46, 56);
+            GtkWidget* tile = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_style_context_add_class(gtk_widget_get_style_context(tile), "focus-tile");
+            gtk_widget_set_margin_top(tile, 10);
+            gtk_widget_set_margin_bottom(tile, 3);
+            gtk_widget_set_margin_start(tile, 1);
+            gtk_widget_set_margin_end(tile, 1);
+            gtk_container_add(GTK_CONTAINER(overlay), tile);
+            GtkWidget* face = gtk_drawing_area_new();
+            gtk_widget_set_has_window(face, FALSE);
+            gtk_overlay_add_overlay(GTK_OVERLAY(overlay), face);
+            gtk_overlay_set_overlay_pass_through(GTK_OVERLAY(overlay), face, TRUE);
+            auto* slot = new AppButton{this, key, face, icon(app)};
+            g_object_set_data_full(G_OBJECT(button), "slot", slot,
+                +[](gpointer data) { delete static_cast<AppButton*>(data); });
+            g_object_set_data(G_OBJECT(face), "slot", slot);
+            g_signal_connect(face, "draw", G_CALLBACK(+[](GtkWidget*, cairo_t* cr, gpointer data) {
+                static_cast<AppButton*>(data)->draw(cr);
+                return FALSE;
+            }), slot);
+            g_signal_connect_object(gtk_icon_theme_get_default(), "changed",
+                G_CALLBACK(+[](GtkWidget* face) {
+                    static_cast<AppButton*>(g_object_get_data(G_OBJECT(face), "slot"))->scale = 0;
+                    gtk_widget_queue_draw(face);
+                }), face, G_CONNECT_SWAPPED);
+            GtkWidget* dot = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_style_context_add_class(gtk_widget_get_style_context(dot), "running-dot");
+            gtk_widget_set_halign(dot, GTK_ALIGN_CENTER);
+            gtk_widget_set_valign(dot, GTK_ALIGN_END);
+            gtk_overlay_add_overlay(GTK_OVERLAY(overlay), dot);
+            gtk_overlay_set_overlay_pass_through(GTK_OVERLAY(overlay), dot, TRUE);
             GtkWidget* count = gtk_label_new(nullptr);
             gtk_style_context_add_class(gtk_widget_get_style_context(count), "window-count");
             gtk_widget_set_halign(count, GTK_ALIGN_END);
@@ -383,12 +492,20 @@ struct Dock {
             gtk_overlay_set_overlay_pass_through(GTK_OVERLAY(overlay), count, TRUE);
             gtk_container_add(GTK_CONTAINER(button), overlay);
             g_object_set_data(G_OBJECT(button), "count", count);
-            auto* data = new AppButton{this, key};
-            g_signal_connect_data(button, "clicked", G_CALLBACK(+[](GtkButton* button, gpointer data) {
+            g_signal_connect(button, "clicked", G_CALLBACK(+[](GtkButton* button, gpointer data) {
                 auto* app = static_cast<AppButton*>(data);
                 app->dock->choose(GTK_WIDGET(button), app->key);
-            }), data, [](gpointer data, GClosure*) { delete static_cast<AppButton*>(data); },
-            GConnectFlags(0));
+            }), slot);
+            g_signal_connect(button, "state-flags-changed", G_CALLBACK(+[](
+                GtkWidget* button, GtkStateFlags previous, gpointer data) {
+                auto* slot = static_cast<AppButton*>(data);
+                auto& dock = *slot->dock;
+                const bool inside = gtk_widget_get_state_flags(button) & GTK_STATE_FLAG_PRELIGHT;
+                if (inside == bool(previous & GTK_STATE_FLAG_PRELIGHT)) return;
+                if (inside) dock.hovered = slot;
+                else if (dock.hovered == slot) dock.hovered = nullptr;
+                dock.refresh_lens();
+            }), slot);
             gtk_box_pack_start(GTK_BOX(box), button, FALSE, FALSE, 0);
             buttons[key] = button;
             gtk_widget_show_all(button);
@@ -441,33 +558,11 @@ struct Dock {
         for (size_t i = 0; i < order.size(); ++i) {
             if (i > 0 && ranks[i] != ranks[i - 1])
                 gtk_box_reorder_child(GTK_BOX(box), separators[separator++], position++);
-            gtk_box_reorder_child(GTK_BOX(box), buttons.at(order[i]), position++);
+            auto* button = buttons.at(order[i]);
+            gtk_box_reorder_child(GTK_BOX(box), button, position++);
+            slots.push_back(static_cast<AppButton*>(g_object_get_data(G_OBJECT(button), "slot")));
         }
-
-        // Distance follows the visible dock order, rather than the app-ID map.
-        // Separators are children too, so the walk skips anything without an icon.
-        std::vector<GtkWidget*> icons;
-        GList* children = gtk_container_get_children(GTK_CONTAINER(box));
-        int focused = -1;
-        for (GList* item = children; item; item = item->next) {
-            auto* widget = GTK_WIDGET(item->data);
-            if (!g_object_get_data(G_OBJECT(widget), "icon")) continue;
-            if (focused < 0 && gtk_style_context_has_class(gtk_widget_get_style_context(widget),
-                                                           "active"))
-                focused = static_cast<int>(icons.size());
-            icons.push_back(widget);
-        }
-        g_list_free(children);
-        // Focused, neighbour, and two-or-more-away icon sizes. The pane's
-        // content box is 48px tall and the focused button adds 4px of padding
-        // on each side, so 40 is the largest the focused icon can be before it
-        // starts stretching the dock past its configured height.
-        const int sizes[] = {36, 22, 18};
-        for (size_t i = 0; i < icons.size(); ++i) {
-            int distance = focused < 0 ? 2 : std::min(std::abs(static_cast<int>(i) - focused), 2);
-            gtk_image_set_pixel_size(GTK_IMAGE(g_object_get_data(G_OBJECT(icons[i]), "icon")),
-                                     sizes[distance]);
-        }
+        refresh_lens();
     }
 };
 
@@ -475,6 +570,40 @@ extern "C" {
 void* wbcffi_init(const wbcffi_init_info* info, const wbcffi_config_entry*, size_t) {
     auto* dock = new Dock;
     gtk_widget_set_name(dock->box, "taskbar");
+    for (const char* signal : {"style-updated", "size-allocate", "notify::scale-factor"})
+        g_signal_connect_swapped(dock->box, signal, G_CALLBACK(+[](Dock* dock) {
+            g_clear_pointer(&dock->lens_tray, cairo_surface_destroy);
+        }), dock);
+    g_signal_connect(dock->box, "draw", G_CALLBACK(+[](GtkWidget* box, cairo_t* cr, gpointer data) {
+        auto* dock = static_cast<Dock*>(data);
+        if (dock->slots.empty()) return FALSE;
+        // Leave the top of the layer transparent so the icon can rise above the tray.
+        constexpr int lip = 8;
+        const int width = gtk_widget_get_allocated_width(box);
+        const int height = gtk_widget_get_allocated_height(box);
+        auto paint = [&](cairo_t* target) {
+            auto* style = gtk_widget_get_style_context(box);
+            gtk_style_context_save(style);
+            gtk_style_context_add_class(style, "aqua-tray");
+            gtk_render_background(style, target, 0, lip, width, height - lip);
+            gtk_render_frame(style, target, 0, lip, width, height - lip);
+            gtk_style_context_restore(style);
+        };
+        if (dock->lens_tick) {
+            if (!dock->lens_tray) {
+                dock->lens_tray = gdk_window_create_similar_surface(gtk_widget_get_window(box),
+                    CAIRO_CONTENT_COLOR_ALPHA, width, height);
+                auto* target = cairo_create(dock->lens_tray);
+                paint(target);
+                cairo_destroy(target);
+            }
+            cairo_save(cr);
+            cairo_set_source_surface(cr, dock->lens_tray, 0, 0);
+            cairo_paint(cr);
+            cairo_restore(cr);
+        } else paint(cr);
+        return FALSE; // GTK draws the buttons on top.
+    }), dock);
     gtk_container_add(info->get_root_widget(info->obj), dock->box);
     gtk_widget_show(dock->box);
     dock->connect_stream();

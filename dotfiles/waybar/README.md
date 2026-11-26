@@ -10,7 +10,7 @@ status group, and the Shanghai clock on the right. Hairline separators divide
 music, status, and clock. Routine status icons stay neutral; colour highlights
 the volume fill, timer phases, and battery/load states. Both bars use a 42%
 base-opacity pearl surface, a soft white rim, and a restrained highlight;
-the dock retains its layout, rounded shape, and floating shadow.
+the Dock has a brighter Aqua rim and floats above the screen edge.
 
 The status group keeps app-tray indicators, Bluetooth, network, volume,
 battery, and system stats. The separate keyboard-state and idle/lock
@@ -37,7 +37,7 @@ waybar/
 ├── wifi.cpp                     # Standalone GTK Wi-Fi popup
 ├── README.md
 ├── modules/
-│   ├── grouped-taskbar.cpp       # Grouped dock with focus-distance sizing
+│   ├── grouped-taskbar.cpp       # Grouped Dock with Aqua Lens hover sizing
 │   ├── pomodoro.cpp             # Persistent click-controlled focus/break timer
 │   └── workspace-pips.cpp       # Workspace size and opacity falloff
 ├── scripts/
@@ -154,19 +154,24 @@ workspace. Colour and size are in `#taskbar .dock-separator` in `style.css`.
 - The menu closes after selection, on Escape, or an outside click.
 - Hover does not expand the group. Middle/right click does not close windows.
 
-The dock contains running apps only. The focused app is drawn at 36px, its
-immediate neighbours shrink to 22px, and apps two or more positions away shrink
-to 18px. Distance follows the visible dock order. Buttons remain vertically
-centred; colours and window-count badges stay the same. With no focused window,
-all icons use the smallest size. The pane's content box is 48px tall and the
-focused button adds 4px of padding per side, so 40px is the largest the focused
-icon can be without stretching the dock past its configured height.
+The Aqua Lens Dock contains running apps only. Icons rest at 32px. The icon
+under the pointer grows to 42px and rises above the glass rim; its immediate
+visible neighbours grow to 35px, even across a workspace divider. The glass
+is inset within the layer so resting icons are centered without losing the
+space needed for the lift. The buttons and window-count badges stay put
+within the 64px bar. A dot shows a running app; a pale tile and a longer blue
+mark show the focused app independently of hover. Icons settle while the window
+picker is open. When GTK animations are disabled the lens switches sizes
+immediately.
+The bottom-anchored bar's negative `margin-top` trims its automatic exclusive
+zone by 8px, bringing windows closer without moving the tray or changing niri's
+general window spacing.
 
 The module follows niri's event stream, so opening, closing, renaming, and
 focusing windows updates the dock without polling.
 
 The focus regression check replays tray-open and ordinary focus events against
-the GTK widgets, including app/workspace grouping and distance-based icon sizes.
+the GTK widgets and checks that hover leaves focus and button dimensions alone.
 Run it from the repository root in a graphical session:
 
 ```sh
