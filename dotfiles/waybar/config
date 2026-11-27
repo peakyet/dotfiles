@@ -3,20 +3,24 @@
     "layer": "top", // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
     "height": 32,
-    "margin-top": 0,
-    "margin-left": 0,
-    "margin-right": 0,
+    "margin-top": 5,
+    "margin-left": 8,
+    "margin-right": 8,
     // "width": 1280, // Waybar width
-    "spacing": 2,
+    "spacing": 6,
     // Choose the order of the modules
     // "modules-left": ["hyprland/workspaces", "tray", "mpd"],
     // "modules-center": ["hyprland/window"],
-    "modules-left": ["custom/apple", "cffi/workspace-pips", "cffi/pomodoro"],
+    "modules-left": ["group/navigation", "cffi/pomodoro"],
     "modules-center": ["niri/window"],
-    "modules-right": ["mpd", "group/status", "custom/calendar"],
+    "modules-right": ["tray", "mpd", "group/status"],
+    "group/navigation": {
+        "orientation": "horizontal",
+        "modules": ["custom/apple", "cffi/workspace-pips"]
+    },
     "group/status": {
         "orientation": "horizontal",
-        "modules": ["tray", "bluetooth", "network", "group/volume", "battery", "custom/control-center"]
+        "modules": ["bluetooth", "network", "group/volume", "battery", "custom/control-center", "custom/calendar"]
     },
     "group/volume": {
         "orientation": "horizontal",

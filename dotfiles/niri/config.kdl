@@ -311,7 +311,7 @@ layout {
 // Here are all matchers and properties that a layer rule could have:
 // Let Niri provide the real backdrop blur behind Waybar's translucent glass.
 layer-rule {
-    match namespace="^waybar$"
+    match namespace="^(waybar|macbar)$"
 
     background-effect {
         // Non-xray blur samples windows below the bar, not only the wallpaper.

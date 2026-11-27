@@ -4,16 +4,15 @@ Two bars for niri: a macOS-style light menu bar at the top and a glass dock at
 the bottom. `install.sh` links this whole directory to `~/.config/waybar` and
 builds the custom CFFI modules.
 
-The 32px top bar uses a translucent pearl surface: Apple menu, workspace pips,
-and Pomodoro on the left; the active window centred; music, a compact system
-status group, and the Shanghai clock on the right. Hairline separators divide
-music, status, and clock. Routine status icons stay neutral; colour highlights
-the volume fill, timer phases, and battery/load states. Both bars use a 42%
-base-opacity pearl surface, a soft white rim, and a restrained highlight;
-the Dock has a brighter Aqua rim and floats above the screen edge.
+Glass Islands uses 32px translucent pills inset from the top and sides. The
+Apple menu and workspace pips share a pill beside the Pomodoro on the left.
+The active title sits in the centre when a window is present. On the right,
+the system tray and music each have their own pill, and system status shares
+one with the Shanghai clock. The space between pills is transparent. The
+bottom Dock keeps its brighter Aqua rim.
 
-The status group keeps app-tray indicators, Bluetooth, network, volume,
-battery, and system stats. The separate keyboard-state and idle/lock
+The status group keeps Bluetooth, network, volume, battery, and system stats.
+The separate keyboard-state and idle/lock
 indicators are omitted to reduce clutter. To hide only Fcitx's keyboard tray
 icon, `autostart/org.fcitx.Fcitx5.desktop` starts it with
 `fcitx5 --disable=notificationitem`; input methods and the candidate UI remain
