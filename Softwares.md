@@ -1,7 +1,6 @@
 # Softwares
 
 - [x] github-cli
-- [x] telegram
 - [x] zsh
 - [x] xdg-desktop, 
 - [x] docker
@@ -70,7 +69,6 @@
     - [x] fzf (optional)
     - [x] zoxide (optional)
 - Pictures and video
-  - [x] photoqt
   - [ ] grim, slurp, feh
   - [x] gpu-screen-recorder(-gtk): Screen recording functionality
 - music player
@@ -89,12 +87,6 @@
   - [x] linuxqq
   - [x] wechat
 - AI
-  - [x] deepseek-harness: agent developped by Deepseek AI
-  - [x] deepseek-harness-desktop
-  - [x] zcode
-  - [x] openai-codex
-  - [x] cc-switch-bin
-  - [x] claude-code
   - [x] arxiv-mcp-server, paper-search-mcp (uvx)
   - [x] ampcode
 - [x] niri
