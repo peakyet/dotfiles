@@ -5,16 +5,22 @@
 action=${1:-}
 
 # CPU %: sample /proc/stat over a quarter second.
-cpu_line() { awk '/^cpu /{print $2+$4, $2+$3+$4+$5+$6+$7+$8}' /proc/stat; }
-set -- $(cpu_line); u1=$1; t1=$2
+cpu_sample() {
+	read -r label user nice system idle iowait irq softirq rest < /proc/stat
+	used=$(( user + system ))
+	total=$(( used + nice + idle + iowait + irq + softirq ))
+}
+cpu_sample; u1=$used; t1=$total
 sleep 0.25
-set -- $(cpu_line); u2=$1; t2=$2
-cpu_pct=$(( 100 * (u2 - u1) / (t2 - t1 + 1) ))
-load=$(cut -d' ' -f1-3 /proc/loadavg)
+cpu_sample
+cpu_pct=$(( 100 * (used - u1) / (total - t1 + 1) ))
+read -r load1 load5 load15 rest < /proc/loadavg
+load="$load1 $load5 $load15"
 
-# Memory and swap.
-mem=$(free -h | awk '/^Mem:/ {gsub(/i/,""); print $3"/"$2}')
-swap=$(free -h | awk '/^Swap:/ {gsub(/i/,""); print $3"/"$2}')
+# Memory and swap from the same snapshot.
+read -r mem swap <<EOF
+$(free -h | awk '/^Mem:/ {gsub(/i/,""); mem=$3"/"$2} /^Swap:/ {gsub(/i/,""); print mem, $3"/"$2}')
+EOF
 
 # Root filesystem.
 disk=$(df -h / | awk 'NR==2 {print $3"/"$2" ("$5")"}')
@@ -24,19 +30,21 @@ disk=$(df -h / | awk 'NR==2 {print $3"/"$2" ("$5")"}')
 # zone numbers/glob order are not stable across boots.
 temp="n/a"
 for zone in /sys/class/thermal/thermal_zone*; do
-	[ "$(cat "$zone/type" 2>/dev/null)" = "x86_pkg_temp" ] || continue
-	millideg=$(cat "$zone/temp" 2>/dev/null)
+	read -r type 2>/dev/null < "$zone/type" || continue
+	[ "$type" = "x86_pkg_temp" ] || continue
+	read -r millideg 2>/dev/null < "$zone/temp" || continue
 	[ "$millideg" -gt 0 ] 2>/dev/null || continue
 	temp="$((millideg / 1000))°C"
 	break
 done
 if [ "$temp" = "n/a" ]; then
 	for hw in /sys/class/hwmon/hwmon*; do
-		case "$(cat "$hw/name" 2>/dev/null)" in
+		read -r name 2>/dev/null < "$hw/name" || continue
+		case "$name" in
 		coretemp | k10temp | zenpower) ;;
 		*) continue ;;
 		esac
-		millideg=$(cat "$hw/temp1_input" 2>/dev/null)
+		read -r millideg 2>/dev/null < "$hw/temp1_input" || continue
 		[ "$millideg" -gt 0 ] 2>/dev/null || continue
 		temp="$((millideg / 1000))°C"
 		break
